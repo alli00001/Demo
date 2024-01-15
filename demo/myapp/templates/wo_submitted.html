@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  {% if user.is_authenticated %}
+    <div class="row">
+      <div class="col-md-12">
+        <div class="alert alert-success" role="alert">
+          <h4 class="alert-heading">Success!</h4>
+          <p>A work order has been successfully submitted.</p>
+          <hr>
+          <p class="mb-0">You can now track the status of your work order or submit another.</p>
+        </div>
+        <div class="text-center">
+          <!-- Add links or buttons for further actions -->
+          <a href="{% url 'create_wo' %}" class="btn btn-primary my-2">Submit Another Order</a>
+          <a href="{% url 'overview' %}" class="btn btn-primary my-2">Overview</a>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <div class="row">
+      <div class="col-md-12">
+        <div class="alert alert-warning" role="alert">
+          <h4 class="alert-heading">Unauthorized Access</h4>
+          <p>You must be logged in to submit a work order. Please log in to continue.</p>
+          <hr>
+          <div class="text-center">
+            <a href="{% url 'login' %}" class="btn btn-primary my-2">Login</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

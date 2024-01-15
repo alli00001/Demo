@@ -1,0 +1,639 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+{% extends 'base.html' %}
+
+{% block title %}
+Create New List
+{% endblock %}
+
+{% block content %}
+<style>
+	/*
+	Common invoice styles. These styles will work in a browser or using the HTML
+	to PDF anvil endpoint.
+*/
+.general-information-table {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.general-information-table td {
+    padding: 8px;
+    vertical-align: middle;
+	
+}
+
+.general-information-table input[type="text"], 
+.general-information-table input[type="date"] {
+    width: 100%;
+    padding: 6px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    box-sizing: border-box; /* Include padding in width */
+	text-align: left;
+}
+
+.general-information-table tr:nth-child(even) {
+    background-color: #f2f2f2; /* Zebra striping for rows */
+}
+
+.general-information-table td:nth-child(1) {
+    text-align: left;
+    width: 25%;
+}
+
+.general-information-table td:nth-child(2) {
+    width: 25%;
+}
+
+.general-information-table td:nth-child(3), 
+.general-information-table td:nth-child(4) {
+    text-align: right;
+    width: 25%;
+}
+	.line-items-container {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.line-items-container, .line-items-container th, .line-items-container td {
+  border: 1px solid #ddd;
+  text-align: center;
+  padding: 8px;
+}
+
+.line-items-container th {
+  background-color: #999;
+  color: white;
+  text-align: center;
+}
+
+.line-items-container select,
+.line-items-container input {
+    width: 100%; /* Will fill the cell */
+    box-sizing: border-box; /* Include padding and border in the width */
+}
+@media screen and (max-width: 600px) {
+  .line-items-container, .line-items-container thead, .line-items-container tbody, .line-items-container th, .line-items-container td, .line-items-container tr {
+    text-align: center;
+	display: block;
+  }
+
+  .line-items-container thead tr {
+    text-align: j;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .line-items-container tr {
+    margin: 0 0 1rem 0;
+  }
+
+  .line-items-container td {
+    border: none;
+    position: relative;
+    padding-left: 50%;
+  }
+
+  .line-items-container td:before {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    content: attr(name);
+  }
+}
+
+	.payment-info {
+		width: 38%;
+		font-size: 0.75em;
+		line-height: 1.5;
+	}
+
+	.footer {
+		margin-top: 100px;
+	}
+
+
+	.footer-info {
+		float: right;
+		margin-top: 5px;
+		font-size: 0.75em;
+		color: #ccc;
+	}
+
+	.footer-info span {
+		padding: 0 5px;
+		color: black;
+	}
+
+	.add-new-button {
+		background-color: white;
+		border: 2px solid #008CBA;
+	}
+
+	.add-new-button:hover {
+		background-color: #008CBA;
+		color: white;
+	}
+
+	.payment-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.payment-table, .payment-table th, .payment-table td {
+  border: 1px solid #ddd;
+  text-align: left;
+  padding: 8px;
+}
+
+.payment-table th {
+  background-color: #999;
+  color: white;
+}
+
+.payment-table td input[type="text"], .payment-table td select {
+  width: 100%;
+  padding: 5px;
+  margin: 4px 0;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+
+@media screen and (max-width: 600px) {
+  .payment-table, .payment-table thead, .payment-table tbody, .payment-table th, .payment-table td, .payment-table tr {
+    display: block;
+  }
+
+  .payment-table thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .payment-table tr {
+    margin: 0 0 1rem 0;
+  }
+
+  .payment-table td {
+    border: none;
+    position: relative;
+    padding-left: 50%;
+  }
+
+  .payment-table td:before {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+  }
+
+  .payment-table td:nth-of-type(1):before { content: "PAYMENT"; }
+  .payment-table td:nth-of-type(2):before { content: "PERCENTAGE"; }
+  .payment-table td:nth-of-type(3):before { content: "AMOUNT"; }
+  .payment-table td:nth-of-type(4):before { content: "REMARKS"; }
+}
+
+
+
+</style>
+
+<form id="workOrder" , method="post" enctype="multipart/form-data">
+	{%csrf_token%}
+	{% if error %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+{% endif %}
+<div style="text-align: center; background-color: white">
+    {% if order.company == 'aci' %}
+        <img src="{{ MEDIA_URL }}aci_cmp_logo2.jpg" style="width: 400px;">
+		<input type="hidden" value="aci"  name ="company" id ="company">
+    {% if order.company == 'bks' %}
+
+        <img src="{{ MEDIA_URL }}bks4.png">
+		<input type="hidden" value="bks"  name ="company" id ="company">
+    {% else %}
+
+    <img src="{{ MEDIA_URL }}lki_cmp_logo2.jpg" style="width: 400px;"> <!-- Same width for consistency -->
+		<input type="hidden" value="lki"  name ="company" id ="company">
+    {% endif %}
+</div>
+	  
+	<!-- Title Text -->
+
+	<div style="text-align: center; font-size: 2.0em;">
+		<b>
+			{% if order.company == 'aci' %}
+				PT. ANSINDA COMMUNICATION INDONESIA
+        {% if order.company == 'bks' %}
+				PT. BAHTERA KONSTRUKSI SEJAHTERA
+        {% else %}
+				PT. LEONY KONSTRUKSKI INDONESIA
+			{% endif %}
+		</b>
+	</div>
+	<div style="text-align: center; font-size: 2.5em;">
+		<b>WORK ORDER</b>
+	</div>
+	<table class = "general-information-table"  >
+		<tr>
+			<td style="width: 18%;">DATE</td>
+			<td style="width: 2%; text-align: center;">:</td>
+			<td style="width: 20%; text-align: left;" ><input type ="date" name="wo_date" id ="wo_date" type="date" style="text-align: left; height: 30px" value="{{ order.wo_date|date:'Y-m-d' }}"/></td>
+			
+			<td style ="width:10%"></td>
+
+			<td style ="width:18%">WO NUMBER</td>
+			<td style="width: 2%;">:</td>
+			{% if order.company == 'aci' %}
+			<td style ="width:30%">WO / ACI / EMR / <input name ="shortdate"  value="{{order.shortdate}}" id ="shortdate" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}" type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+      {% if order.company == 'bks' %}
+			<td style ="width:30%">WO / BKS / EMR / <input name ="shortdate" id ="shortdate"  value="{{order.shortdate}}" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}"	 type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+      {% else %}
+			<td style ="width:30%">WO / LKI / EMR / <input name ="shortdate" id ="shortdate"  value="{{order.shortdate}}" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}"	 type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+      {% endif %}		
+    </tr>
+		<tr>
+			<td style="width: 18%;">REQUEST BY</td>
+			<td style="width: 2%; text-align: center;">:</td>
+			<td style="width: 20%; text-align: left;"><input text-transform: uppercase; value="{{order.request_by}}" name="request_by" type="text" style="text-align: left; height: 30px;"></td >
+			<td style ="width:20%">
+				
+			<td>CATEGORY</td>
+			<td style="width: 2%;">:</td>
+			<td style ="width:20%"><input value="{{order.category}}" name="category" type="text" style="text-align: left; height: 30px;" value="MP"></td>
+		</tr>
+		<tr>
+			<td style="text-align: left; width: 25px;">PROJECT</td>
+			<td>:</td>
+			<td style="text-align: left;"><input  value="{{order.project}}" name="project" type="text" style=" height : 30px" value="EMR"> </strong></td>
+			<td></td>
+
+			<td>BANK</td>
+			<td>:</td>
+			<td style="text-align: left;"><select id ="bank" name="bank"style="text-align: left; height: 30px; width: 100%;">
+                <option value="BCA" {% if order.bank == 'BCA' %}selected{% endif %}>BCA</option>
+                <option value="MANDIRI" {% if order.bank == 'MANDIRI' %}selected{% endif %}>MANDIRI</option>
+                <option value="OCBC NISP" {% if order.bank == 'OCBC NISP' %}selected{% endif %}>OCBC</option>
+                <option value="BRI" {% if order.bank == 'BRI' %}selected{% endif %}>BRI</option>
+				<option value="CREATE">CREATE</option>
+
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align: left;">CUSTOMER</td>
+			<td>:</td>
+			<td style="text-align: left;">
+				<select id ="customer"name="customer" style="height : 30px ; width:100%;">
+					<option value = "ZTE"  {% if order.customer == 'ZTE' %}selected{% endif %}>ZTE</option>
+					<option value = "YOFC"  {% if order.customer == 'YOFC' %}selected{% endif %}>YOFC</option>
+					<option value = "FH"  {% if order.customer == 'FH' %}selected{% endif %}>FH</option>
+					<option value="CREATE">CREATE</option>
+			</td>
+
+			<td></td>
+
+			<td style="text-align: left;height: 30px;">ACCOUNT NAME</td>
+			<td>:</td>
+			<td style="text-align: left;"><input value="{{order.account_name}}" name="account_name" type="text" style="height : 30px ;"></td>
+		</tr>
+		<tr>
+			<td style="text-align: left; width: 25px;">DEPARTMENT</td>
+			<td>:</td>
+			<td style="text-align: left;"><input value="{{order.department}}" name="department" type="text" style=" height : 30px" value="PROJECT"></td>
+
+			<td></td>
+
+			<td style="text-align: left">ACCOUNT NUMBER</td>
+			<td>:</td>
+			<td style="text-align: left;"><input value="{{order.account_number}}" name="account_number" type="text" style="height : 30px"></td>
+		</tr>
+		<tr>
+			<td style="text-align: left; width: 25px;">REGION</td>
+			<td>:</td>
+			<td style="text-align: left;"><select id ="region" name="region" style=" height : 30px ;width: 100% ;">
+				<option value="JABO"  {% if order.region == 'JABO' %}selected{% endif %}>JABO</option>
+				<option value="CJ"  {% if order.bank == 'CJ' %}selected{% endif %}>CJ</option>
+				<option value="EJ"  {% if order.bank == 'EJ' %}selected{% endif %}>EJ</option>
+				<option value="WJ"  {% if order.bank == 'WJ' %}selected{% endif %}>WJ</option>
+				<option value="CREATE">CREATE</option>
+
+			</td>
+
+			<td></td>
+
+			<td style="text-align: left">PHONE NUMBER</td>
+			<td>:</td>
+			<td style="text-align: left;"><input value="{{order.phone_number}}" name="phone_number" type="text" style="height : 30px"></td>
+		</tr>
+		<tr>
+			<td style="text-align: left; width: 25px;">CITY</td>
+			<td>:</td>
+			<td style="text-align: left;"><input value="{{order.city}}" name="city" type="text" style=" height : 30px"></td>
+
+			<td></td>
+
+			<td style="text-align: left">NPWP</td>
+			<td>:</td>
+			<td style="text-align: left;"><input value="{{order.npwp}}" name="npwp" type="text" style="height : 30px"></td>
+		</tr>
+	</table>
+
+    {%if order.project == 'EMR'%}
+    
+<table class="line-items-container" id="scopeOfWork" >
+    <thead>
+        <tr>
+			<th style ="width : 4%">NO</th>
+			<th style ="width: 14.65%;">CLUSTER NAME</th>
+			<th style ="width: 14.65%;">SITE ID</th>
+			<th style ="width: 16.65%;">HP</th>
+			<th style ="width : 16.65%">UNIT PRICE</th>
+			<th style ="width : 16.65%">AMOUNT</th>
+			<th style ="width : 16.65%">REMARKS</th>
+        </tr>
+    </thead>
+    <tbody>
+        <td>1</td>
+        <td><input type="text" class="clusterName" name="clusterName" value ="{{order.clusterName}}"></td>
+        <td><input type="text" class="siteId" name="siteId" value ="{{order.siteId}}"></td>
+        <td><input type ="text" id ="hpD" name ="hpD" value ="{{order.hpD}}"></td>
+        <td><input type ="text" id ="unitPriceD" name ="unitPriceD" value ="{{order.unitPriceD}}"></td>
+        <td><input type ="text" id ="amountD" name ="amountD"value ="{{order.amountD}}"></td>
+        <td><input type ="text" id ="remarkD" name ="remarkD"value ="{{order.remarkD}}"></td>
+    </tbody>
+
+</table>
+    {%else%}
+    
+<table class="line-items-container" id="scopeOfWork" >
+    <thead>
+        <tr>
+            <th style ="width : 4%">NO</th>
+            <th style ="width : 14.65%">CLUSTER NAME</th>
+            <th style ="width : 14.65%">ODB ID</th>
+            <th style ="width : 13.32%">SUFFIX ID</th>
+            <th style ="width: 13.32%;">HP</th>
+            <th style ="width : 13.32%">UNIT PRICE</th>
+            <th style ="width : 13.32%">AMOUNT</th>
+            <th style ="width : 13.32%">REMARKS</th>
+        </tr>
+    </thead>
+    <tbody>
+        <td>1</td>
+        <td><input type="text" class="clusterName" name="clusterName" value ="{{order.clusterName}}"></td>
+        <td><input type="text" class="odbId" name="odbId" value ="{{order.odbId}}"></td>
+        <td><input type="text" class="suffixId" name="suffixId" value ="{{order.suffixId}}"></td>
+        <td><input type ="text" id ="hpD" name ="hpD" value ="{{order.hpD}}"></td>
+        <td><input type ="text" id ="unitPriceD" name ="unitPriceD" value ="{{order.unitPriceD}}"></td>
+        <td><input type ="text" id ="amountD" name ="amountD"value ="{{order.amountD}}"></td>
+        <td><input type ="text" id ="remarkD" name ="remarkD"value ="{{order.remarkD}}"></td>
+    </tbody>
+
+</table>
+    {%endif%}
+
+
+ <!-- DOCUMENT --> 
+ <table class="line-items-container"border="1">
+    <thead>
+      <th>DOCUMENT</th>
+	  <th>STATUS</th>
+    </thead>
+	<tbody>
+		<tr>
+			<td>Capture Approval by ZTE   </td>
+			<td>
+				{% if order.capture_approval %}
+					<a href="{{ order.capture_approval.url }}">Attachment Ready</a>
+                    <input type="file" name="capture_approval">
+
+				{% else %}
+					No attachment
+                    <input type="file" name="capture_approval">
+
+				{% endif %}
+			</td>
+		</tr>
+		<tr>
+			<td>Capture DRM Approve									
+			</td>
+			<td>
+				{% if order.capture_drm %}
+					<a href="{{ order.capture_drm.url }}">Attachment Ready</a>
+                    <input type="file" name="capture_drm">
+
+				{% else %}
+					No attachment
+                    <input type="file" name="capture_drm">
+
+				{% endif %}
+			</td>
+		</tr>		
+        <tr>
+			<td>Surat Permohonan Izin Pembangunan Infrastruktur Informasi & Telkekomunikasi									
+			</td>
+			<td>		
+                {{order.surat_izin}}
+			</td>
+		</tr>		
+		<tr>
+			<td>Berita Acara Pertemuan (BAP - Open)									
+			</td>
+			<td>		
+				{{order.bap_open}}
+			</td>
+		</tr>		
+		<tr>
+			<td>Form Survey Cluster										
+			</td>
+			<td>		
+				{{order.form_survey}}
+			</td>
+		</tr>		
+		<tr>
+			<td>Berita Acara Pertemuan (BAP - SND)								
+			</td>
+			<td>
+				{{order.bap_snd}}
+			</td>
+		</tr>		
+        <tr>
+			<td>Berita Acara Kesepakatan (BAK)									
+			</td>
+            <td>
+                {% if order.bak %}
+                    <a href="{{ order.bak.url }}">Attachment Ready</a>
+                    <input type="file" name="bak">
+
+                {% else %}
+                    No attachment
+                    <input type="file" name="bak">
+
+                {% endif %}
+            </td>
+		</tr>
+        <tr>
+			<td>Layout SND Kasar											
+			</td>
+			<td>
+				{{order.layout}}
+			</td>
+		</tr>
+	</tbody>
+  </table>
+
+
+  <!-- SIGN FIELD -->
+  {% if order.company == 'aci'%}
+  <table class="line-items-container">
+    <thead>
+      <th >CREATED BY</th>
+      <th colspan="2" style="text-align: center;">APPROVED BY</th>
+    </thead>
+    <tbody>
+      <tr><td style="height: 200px;"><td></td></td></tr>
+      <tr><td><u>AGUNG SONATA</u></td><td><u>SUNNY</u></td><td><u>STEVEN</u></td></tr>
+      <tr><td>PROCUREMENT</td><td></td><td>CEO</td></tr>
+
+    </tbody>
+  </table>
+  {% elif order.company == 'bks' %}
+
+  <table class="line-items-container">
+    <thead>
+      <th>CREATED BY</th>
+      <th>APPROVED BY</th>
+    </thead>
+    <tbody>
+      <tr><td style="height: 200px;"><td></td></td></tr>
+      <tr><td><u>ELSA MONICA</u></td><td><u>JENNY</u></td></tr>
+      <tr><td>PROCUREMENT</td><td>CEO</td></tr>
+
+    </tbody>
+  </table>
+  {%else%} 
+  <table class="line-items-container">
+    <thead>
+      <th>CREATED BY</th>
+      <th>APPROVED BY</th>
+    </thead>
+    <tbody>
+      <tr><td style="height: 200px;"><td></td></td></tr>
+      <tr><td><u>AGUNG</u></td><td><u>FERONIA</u></td></tr>
+      <tr><td>PROCUREMENT</td><td>CEO</td></tr>
+
+    </tbody>
+  </table>
+  {%endif%}
+
+	<div class="footer">
+		<div class="footer-info">
+		</div>
+	</div>
+
+	<div>
+		<button type="submit" id ="submitBtn"> Submit </button>
+	</div>
+
+</form>
+
+
+
+<script type="text/javascript">
+	document.addEventListener('DOMContentLoaded', function() {
+		document.getElementById('number_of_scopes').value = 0;
+		document.getElementById('number_of_deduction').value =0;
+	});
+	document.addEventListener("DOMContentLoaded", function(){
+            document.getElementById("submitBtn").addEventListener("click", function(e){
+                var woNumber = document.getElementById("wo_number").value;
+                if (!woNumber) {
+                    alert("The work order number cannot be empty.");
+                    e.preventDefault(); // Prevent form submission
+                }
+            });
+        });
+</script>
+
+<script type="text/javascript">
+    var pricingType = "{{ pricing_type }}";
+</script>
+
+
+
+
+<script>
+
+    // Function to calculate and update the 'amount'
+    function calculateAmount() {
+        var hp = document.getElementById('hpD').value;
+        var unitPrice = document.getElementById('unitPriceD').value;
+        var amount = hp * unitPrice;
+    
+        // Update the 'amount' field
+        document.getElementById('amountD').value = amount;
+    }
+    
+    // Add event listener to 'hp' input field
+    document.getElementById('hpD').addEventListener('input', calculateAmount);
+    
+    // Add event listener to 'unitPrice' input field
+    document.getElementById('unitPriceD').addEventListener('input', calculateAmount);
+    
+    
+    document.getElementById('wo_date').addEventListener('input', function () {
+    // Extract the year and month from the date
+    var date = this.value;
+    var yearMonth = date ? date.substr(2, 2) + date.substr(5, 2) : '';
+    
+    // Set the YYMM format to the 'shortdate' input field
+    document.getElementById('shortdate').value = yearMonth;
+    document.getElementById('date-payment-type').value = date
+    });
+    document.getElementById('wo_number').addEventListener('input', function () {
+    // Check if the input is not more than 4 digits and if it is within the 0-9999 range
+    if (this.value.length > 4 || parseInt(this.value, 10) > 9999) {
+    this.value = this.value.slice(0, 4); // Limit to the first 4 digits
+    }
+    });
+    document.getElementsByName('request_by')[0].addEventListener('input', function () {
+    this.value = this.value.toUpperCase();
+    });
+    document.getElementsByName('request_by')[0].addEventListener('input', function () {
+    this.value = this.value.toUpperCase();
+    });document.getElementsByName('city')[0].addEventListener('input', function () {
+    this.value = this.value.toUpperCase();
+    });document.getElementsByName('account_name')[0].addEventListener('input', function () {
+    this.value = this.value.toUpperCase();
+    });document.getElementsByName('category')[0].addEventListener('input', function () {
+    this.value = this.value.toUpperCase();
+    });document.getElementsByName('project')[0].addEventListener('input', function () {
+    this.value = this.value.toUpperCase();
+    });document.getElementsByName('account_number')[0].addEventListener('input', function () {
+    this.value = this.value.toUpperCase();
+    });document.getElementsByName('phone_number')[0].addEventListener('input', function () {
+    this.value = this.value.toUpperCase();
+    });document.getElementsByName('npwp')[0].addEventListener('input', function () {
+    this.value = this.value.toUpperCase();
+    });document.getElementsByName('clusterName')[0].addEventListener('input', function () {
+    this.value = this.value.toUpperCase();
+    });document.getElementsByName('siteId')[0].addEventListener('input', function () {
+    this.value = this.value.toUpperCase();
+    });
+    
+    </script>
+
+{% endblock %}

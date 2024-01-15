@@ -1,0 +1,758 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+  {% if user.is_authenticated %}
+
+  <style>
+ .nested-checklist .dropdown-toggle::after {
+  content: '▼'; /* Unicode character for a down arrow */
+  font-size: 0.8em;
+  padding-left: 5px;
+}
+
+.nested-checklist .nested {
+  display: none;
+  /* additional styles for the nested list */
+}
+
+/* This rule is to ensure that the .nested list is displayed when its parent li has the .expanded class */
+.nested-checklist li.expanded > .nested {
+  display: block;
+}
+
+/* Rotate the arrow when expanded */
+.nested-checklist .expanded > .dropdown-toggle::after {
+  content: '▲'; /* Unicode character for an up arrow */
+}
+#example th {
+    text-align: center;
+  }
+  #example td:nth-child(1){
+    text-align: center;
+    width: 4%;
+  }
+  #example td:nth-child(2){
+    text-align: left;
+    width: 5%;
+  }
+  #example td:nth-child(3){
+    text-align: center;
+    width: 2%;
+
+  }
+  #example td:nth-child(4){
+    text-align: center;
+    width: 2%;
+
+  }
+  #example td:nth-child(5){
+    text-align: center;
+    width: 2%;
+
+  }
+  #example td:nth-child(6){
+    text-align: center;
+    width: 2%;
+
+  }
+  #example td:nth-child(7){
+    text-align: center;
+    width: 8%;
+
+  }
+  #example td:nth-child(8){
+    text-align: center;
+    width: 8%;
+
+  }
+
+  #example td:nth-child(9){
+    text-align: center;
+    width: 16%;
+
+  }
+  #example td:nth-child(10){
+    text-align: center;
+    width: 10%;
+  }
+  #example td:nth-child(11){
+    text-align: center;
+    width: 10%;
+  }
+  #example td:nth-child(12){
+    text-align: left;
+    width: 10%;
+  }
+  #example td:nth-child(13){
+    text-align: center;
+    width: 2%;
+
+  }
+  #example td:nth-child(14){
+    text-align: center;
+    width: 2%;
+
+  }
+  #example td:nth-child(15){
+    text-align: center;
+    width: 4%;
+
+  }
+  #example td:nth-child(16){
+    text-align: center;
+    width: 10%;
+
+  }
+  #example td:nth-child(17){
+    text-align: center;
+    width: 1%;
+
+  }
+  #example td:nth-child(18){
+    text-align: center;
+    width: 2%;
+
+  }
+
+  #example td:nth-child(19){
+    text-align: center;
+    width: 2%;
+
+  }
+
+</style>
+<div class="row py-5">
+  <div class="col-lg-12 mx-auto"> 
+    <div class="card rounded shadow border-0">
+      <div class="card-body p-5 bg-white rounded">
+        <form method ="GET" id = "filter-form">
+          <div class ="table-responsive">
+            <table id="example" border="1" class="table table-striped table-bordered" >
+              <thead>
+                  <tr>
+                    <th >NO</th>
+                    <th>WORK ORDERS </th> 
+                    <th >
+                      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#dateFilterModal">
+                        DATE
+                      </button>
+                      </th>
+                    <th >
+                      CATEGORY
+                      <input type="text" name="category" style="width: 100%;">
+                    </th>
+                    <th >
+                      CUSTOMER
+                      <input type="text" name="customer" style="width: 100%;">
+                    </th>
+                    <th >
+                      PROJECT
+                      <input type="text" name="project" style="width: 100%;">
+                    </th>
+                    <th >
+                      REGION
+                      <input type="text" name="region" style="width: 100%;">
+                    </th>
+                    <th >
+                      CITY
+                      <input type="text" name="city" style="width: 100%;">
+                    </th>
+                    <th >
+                      TYPE
+                      <input type="text" name="type"style="width: 100%;" >
+                    </th>
+                    <th>
+                      CLUSTER
+                      <input type="text" name="cluster"style="width: 100%;">
+                    </th>
+                    <th>
+                      SITE ID
+                      <input type="text" name="siteId" style="width: 100%;">
+                    </th>
+                    <th>
+                      ODB ID
+                      <input type="text" name="odbId" style="width: 100%;">
+                    </th>                         
+                      <th>
+                        SUFFIX ID
+                      <input type="text" name="suffixId" style="width: 100%;">
+                    </th>
+                    <th>
+                      WORK TYPE
+                      <input type="text" name="workType" style="width: 100%;">  
+                    </th>
+                    <th>     
+                      PAYMENT TERM               
+                      <input type="text" name="paymentTerm" style="width: 100%;">
+                    </th> 
+                    <th >%</th>
+                    <th >GRAND TOTAL</button></th>
+                    <th >PD</th>
+                    <th >SUBMIT</th>
+                    <th >EXTEND WO</th>
+                  </tr>
+              </thead>
+              <tbody>
+                {% for order in page_obj %}
+                  <tr>
+                    <td>
+                      {{ forloop.counter|add:starting_index }}                          
+                    </td>
+                    <td>
+                      <input type="hidden" name="order" value="{{ order.id }}">
+                      <input type="hidden" name="order_category" value="{{ order.category }}">
+                      <input type="hidden" name="order_company" value="{{ order.company }}">
+                      <input type="hidden" name="order_project" value="{{ order.project }}">  <!-- Hidden field to carry the ID -->
+                      <a href="{% url 'view_wo' order.id order.category order.company order.project%}">{{ order.wo_string }}</a>
+                    </td>
+                    <td>
+                      {{ order.wo_date|date:"Y-m-d" }}                         
+                      </td>
+                    <td>
+                      {{order.category}}
+                    </td>
+                    
+                    <td>
+                      {{order.customer}}
+                    </td>
+                    <td>
+                      {{order.project}}
+                    </td>
+                    <td>
+                      {{order.region}}
+                    </td>
+                    <td>
+                      {{order.city}} 
+                    </td>
+
+                    <td>
+                      {{order.type}} 
+                    </td>
+                    <td>
+                      {{order.clusterName}}  
+                    </td>
+  
+                    <td>
+                      {{order.siteId}}
+                    </td>
+                    <td>
+                      {{order.odbId}}
+                    </td>
+                    <td>
+                      {{order.suffixId}}
+                    </td>
+                    <td>
+                      {{order.workType}}
+                    </td>
+                    <td>
+                      {{order.paymentTerm}}
+                    </td>
+                    <td>
+                      {{order.termPercentage}}
+                    </td>
+                    <td>
+                      {{order.finalGrandTotal}}
+                    </td>
+                  </form>  
+                    <form method ="POST">
+                      {% csrf_token%}
+                      <input type="hidden" name="order" value="{{ order.id }}">
+                      <td>
+                        <input name ="extendable" type="checkbox" {%if is_rightHand%} name="extendable"{%endif%} {% if order.extendable %}checked="checked"{% endif %} {% if not is_rightHand %}disabled{% endif %}>
+                        <span class="checkmark"></span>
+                      </td>
+                    <td>  
+                      <button type="submit" {% if not is_rightHand %}disabled{% endif %}> Confirm </button>
+                    </td>
+                  </form>
+                  <td>
+                    <input type="hidden" name="order" value="{{ order.id }}">
+                            <input type="hidden" name="order_category" value="{{ order.category }}">
+                            <input type="hidden" name="order_project" value="{{ order.project }}">
+                            {% if order.extendable %}
+                            <a href="{% url 'edit_wo' order.id order.category order.project %}">EXTEND WO</a>
+                          {% else %}
+                            <span class="disabled-link">EXTEND WO</span>
+                          {% endif %}                 
+                  </td>     
+                </tr>
+                {% empty %}
+                <tr><td colspan="19">No work orders available.</td></tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+          </div>
+        <!-- Export to CSV Button -->
+        <button onclick="exportTableToXSLX('example', 'finished_wo_data.xlsx')">Download Table</button>
+
+    </div>
+    </div>
+  </div>
+</div>
+  
+ <!-- Modal -->
+<div id="dateFilterModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Payment Date</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <ul id="year-list" class="nested-checklist">
+          <li>
+            <span class="dropdown-toggle">2024</span>
+            <input type ="checkbox">
+            <ul class="nested" id="months2024">
+            </ul>
+          </li>
+          <li>
+            <span class="dropdown-toggle">2025</span>
+            <input type ="checkbox">
+            <ul class="nested" id="months2025">
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" onclick="applyDateFilter()">Apply Filter</button>
+      </div>
+    </div>
+  </div>
+</div>
+              
+<div class="pagination">
+  <span class="step-links">
+      {% if page_obj.has_previous %}
+          <a href="?page=1">&laquo; first</a>
+          <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+      {% endif %}
+
+      <span class="current">
+          Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+      </span>
+
+      {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}">next</a>
+          <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+      {% endif %}
+  </span>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"  crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script lang="javascript" src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+
+<script>
+  /** Function to export table data to XSLX file **/
+function prepareTable(table) {
+
+var newTable = table.cloneNode(true);
+
+// Exclude irrelevant columns for xlsx export
+var lastColumnIndex = newTable.rows[0].cells.length - 1;
+for (var i = lastColumnIndex; i > lastColumnIndex - 3; i--) {
+    for (var j = 0; j < newTable.rows.length; j++) {
+        newTable.rows[j].deleteCell(i);
+    }
+}
+
+// Define custom header names for xlsx export
+var customHeaderNames = [
+    'No',
+    'Work Orders',
+    'Date',
+    'Category',
+    'Customer',
+    'Project',
+    'Region',
+    'City',
+    'Type',
+    'Cluster Name',
+    'Site ID',
+    'ODB ID',
+    'Suffix ID',
+    'Work Type',
+    'Payment Term',
+    'Percentage',
+    'Grand Total'
+  ];
+for (var i = 0; i < customHeaderNames.length; i++) {
+    newTable.rows[0].cells[i].textContent = customHeaderNames[i];
+}
+
+return newTable;
+}
+
+function exportTableToXSLX(tableID, filename) {
+    const table = prepareTable(document.getElementById(tableID));
+
+    // Convert HTML table to XSLX workbook
+    var worksheet = XLSX.utils.table_to_sheet(table);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Work Orders");
+
+    // Download the XSLX file
+    XLSX.writeFile(workbook, filename, { compression: true });
+}
+var is_rightHand = {{ is_rightHand|yesno:"true,false" }};
+
+function applyDateFilter() {
+  // Initialize an array to hold the selected dates
+  var selectedDates = [];
+
+  // Iterate over each checked checkbox within the year-list
+  $('#year-list input[type="checkbox"]:checked').each(function() {
+    var date = $(this).nextAll('.nested').find('input[type="checkbox"]:checked').map(function() {
+      // Assuming the data-date attribute of each checkbox represents the date
+      return $(this).data('field-date'); // Adjust this to match your HTML structure
+    }).get();
+    selectedDates = selectedDates.concat(date);
+  });
+
+  // Construct the query string for the GET request
+  var queryString = selectedDates.map(function(date) {
+    return 'dates[]=' + encodeURIComponent(date);
+  }).join('&');
+
+  // If there are no dates selected, return early
+  if (queryString === '') {
+    console.log('No dates selected.');
+    return;
+  }
+
+  // Perform the fetch request to the backend
+  fetch('/finished_wo/?' + queryString, {
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest'
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    updateTable(data);
+  })
+  .catch(error => console.error('Error:', error));
+  
+  // Close the modal if needed
+}
+
+
+$(document).ready(function() {
+  $(document).on('click', '.nested-checklist .dropdown-toggle', function() {
+    const parentLi = this.parentElement;
+    const year = this.textContent.trim();
+    const monthUl = parentLi.querySelector('.nested');
+    if (monthUl.children.length === 0) {
+      populateMonths(year, monthUl);
+    }
+    parentLi.classList.toggle('expanded');
+  });
+
+    $(document).on('change', 'input[type="checkbox"]', function() {
+    const daysCheckboxes = $(this).siblings('.nested').find('input[type="checkbox"]');
+    daysCheckboxes.prop('checked', this.checked);
+  });
+
+// When a day is checked or unchecked, toggle the month's checkbox (excluding 'extendable')
+  $(document).on('change', '.nested .nested input[type="checkbox"]', function() {
+    const monthCheckbox = $(this).closest('.nested').siblings('input[type="checkbox"]');
+    const isAnyDayChecked = $(this).closest('.nested').find('input[type="checkbox"]:checked').length > 0;
+    monthCheckbox.prop('checked', isAnyDayChecked);
+  });
+});
+
+function populateMonths(year, monthUl) {
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  months.forEach(month => {
+    const isYearChecked = $(monthUl).siblings('input[type="checkbox"]').prop('checked');
+    const monthLi = document.createElement('li');
+    const monthCheckbox = document.createElement('input');
+    monthCheckbox.type = 'checkbox';
+    monthCheckbox.id = `${month}${year}`;
+    monthCheckbox.checked = isYearChecked;
+    const monthToggle = document.createElement('span');
+    monthToggle.className = 'dropdown-toggle';
+
+    const monthLabel = document.createElement('label');
+    monthLabel.htmlFor = monthCheckbox.id;
+    monthLabel.textContent = month;
+
+    const daysUl = document.createElement('ul');
+    daysUl.className = 'nested';
+    daysUl.id = `${month.toLowerCase()}-days`;
+
+    monthLi.appendChild(monthCheckbox);
+    monthLi.appendChild(monthToggle);
+    monthLi.appendChild(monthLabel);
+    monthLi.appendChild(daysUl);
+    monthUl.appendChild(monthLi);
+
+    $(monthToggle).click(function(event) {
+     event.stopPropagation(); 
+
+    console.log('Month Dropdown toggle clicked.');
+
+    // Toggle the expanded class for the month and days
+    $(monthLi).toggleClass('expanded');
+
+    // Populate days if they haven't been populated yet and the month is expanded
+    if (!$(daysUl).children().length && $(monthLi).hasClass('expanded')) {
+      populateDays(year, month, daysUl, monthCheckbox.checked);    }
+  });
+    monthUl.appendChild(monthLi);
+  });
+}
+
+function populateDays(year, month, daysUl, isChecked) {
+  // Assuming month is a string like 'January', you'd need to convert this to a numerical month
+  const monthNumber = new Date(`${month} 1, 2021`).getMonth() + 1; // '+ 1' because getMonth() is zero-indexed
+  if(month == 'January' || month == 'March' ||month == 'May' || month == 'July' || month =='August' || month == 'October' || month == 'December'){
+    for (let day = 1; day <= 31; day++) { 
+      const dayLi = document.createElement('li');
+      const dayCheckbox = document.createElement('input');
+      dayCheckbox.type = 'checkbox';
+      dayCheckbox.checked = isChecked;
+      const fieldDate = `${year}-${monthNumber.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+      dayCheckbox.id = `date-${fieldDate}`;
+      dayCheckbox.dataset.fieldDate = fieldDate;
+
+      const dayLabel = document.createElement('label');
+      dayLabel.htmlFor = dayCheckbox.id;
+      dayLabel.textContent = day.toString().padStart(2, '0');
+
+      dayLi.appendChild(dayCheckbox);
+      dayLi.appendChild(dayLabel);
+      daysUl.appendChild(dayLi);
+    }
+  }
+  if(month == 'April' || month == 'June' ||month == 'September' || month == 'November' ){
+    for (let day = 1; day <= 30; day++) { 
+      const dayLi = document.createElement('li');
+      const dayCheckbox = document.createElement('input');
+      dayCheckbox.type = 'checkbox';
+      dayCheckbox.checked = isChecked;
+      const fieldDate = `${year}-${monthNumber.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+      dayCheckbox.id = `date-${fieldDate}`;
+      dayCheckbox.dataset.fieldDate = fieldDate;
+
+      const dayLabel = document.createElement('label');
+      dayLabel.htmlFor = dayCheckbox.id;
+      dayLabel.textContent = day.toString().padStart(2, '0');
+
+      dayLi.appendChild(dayCheckbox);
+      dayLi.appendChild(dayLabel);
+      daysUl.appendChild(dayLi);
+    }
+  }
+  if(month == 'February'  ){
+    for (let day = 1; day <= 29; day++) { 
+      const dayLi = document.createElement('li');
+      const dayCheckbox = document.createElement('input');
+      dayCheckbox.type = 'checkbox';
+      dayCheckbox.checked = isChecked;
+      const fieldDate = `${year}-${monthNumber.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+      dayCheckbox.id = `date-${fieldDate}`;
+      dayCheckbox.dataset.fieldDate = fieldDate;
+
+      const dayLabel = document.createElement('label');
+      dayLabel.htmlFor = dayCheckbox.id;
+      dayLabel.textContent = day.toString().padStart(2, '0');
+
+      dayLi.appendChild(dayCheckbox);
+      dayLi.appendChild(dayLabel);
+      daysUl.appendChild(dayLi);
+    }
+  }
+}
+function updateTable(data) {
+  // Get the table body element where the orders will be listed
+  var tbody = document.querySelector('#example tbody');
+
+  // Clear the existing rows
+  tbody.innerHTML = '';
+
+  // Loop through the data and create table rows
+  data.forEach(function(order, index) {
+    console.log(order.data)
+    var row = tbody.insertRow();
+    // Set the cell contents
+    row.insertCell().textContent = index + 1; // No
+    row.insertCell().innerHTML = '<a href="/view_wo/' + order.id + '/' + order.category + '/' + order.company + '/' + order.project + '">' + order.wo_string + '</a>'; 
+    row.insertCell().textContent = order.wo_date;
+    row.insertCell().textContent = order.category; // WO
+
+    row.insertCell().textContent = order.customer; // Customer
+    row.insertCell().textContent = order.project; // project
+    row.insertCell().textContent = order.region; // region
+
+    row.insertCell().textContent = order.city; // city
+    row.insertCell().textContent = order.type; // type
+
+    row.insertCell().textContent = order.clusterName; // clusterName
+
+    row.insertCell().textContent = order.siteId; // siteId
+    row.insertCell().textContent = order.odbID; // odbID
+    row.insertCell().textContent = order.suffixId; // suffixId
+    row.insertCell().textContent = order.workType; // workType
+    row.insertCell().textContent = order.paymentTerm; // paymentTerm
+    row.insertCell().textContent = order.termPercentage; // termPercentage
+    row.insertCell().textContent = order.finalGrandTotal; // finalGrandTotal
+    var checkboxCell = row.insertCell();
+    var checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.checked = order.extendable; 
+    checkbox.name = 'extendable'
+    checkbox.disabled = !is_rightHand; // Assuming is_rightHand determines if checkbox is enabled
+    checkboxCell.appendChild(checkbox);    
+
+
+    
+    
+    var submitCell = row.insertCell();
+    var submitButton = document.createElement('button');
+    submitButton.type = 'button'; // Change to 'button' to prevent form submission
+    submitButton.textContent = 'Confirm';
+    submitButton.disabled = !is_rightHand;
+    submitButton.dataset.orderId = order.id;
+    submitButton.addEventListener('click', function() {
+      // AJAX POST request to submit the data
+      var formData = new FormData();
+      // Retrieve the order number from the button dataset
+      formData.append('order', this.dataset.orderId);
+      // Check the checkbox state and set 'extendable' accordingly
+      formData.append('extendable', checkbox.checked ? 'on' : 'off');
+
+      fetch('/finished_wo/', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'X-CSRFToken': getCsrfToken()
+        },
+        credentials: 'include'
+      })
+      .then(response => {
+        if (!response.ok) {
+        }
+        return response.json(); // or handle the response as needed
+      })
+      .then(data => {
+        console.log('Success:', data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    });
+    submitCell.appendChild(submitButton);
+    var extendCell = row.insertCell();
+    var hiddenId = document.createElement('input');
+    hiddenId.type = 'hidden';
+    hiddenId.name = 'id';
+    hiddenId.value = order.id;
+    console.log(hiddenId)
+    extendCell.appendChild(hiddenId);
+
+    var hiddenCategory = document.createElement('input');
+    hiddenCategory.type = 'hidden';
+    hiddenCategory.name = 'order_category';
+    hiddenCategory.value = order.category;
+    console.log(hiddenCategory)
+    extendCell.appendChild(hiddenCategory);
+
+    var hiddenProject = document.createElement('input');
+    hiddenProject.type = 'hidden';
+    hiddenProject.name = 'order_project';
+    hiddenProject.value = order.project;
+    console.log(hiddenProject)
+    extendCell.appendChild(hiddenProject);
+
+    if (order.extendable) {
+        var extendLink = document.createElement('a');
+        extendLink.href = '/edit_wo/' + order.id + '/' + order.category + '/' + order.project; // Update URL as needed
+        extendLink.textContent = 'EXTEND WO';
+        extendCell.appendChild(extendLink);
+    } else {
+        var disabledSpan = document.createElement('span');
+        disabledSpan.className = 'disabled-link';
+        disabledSpan.textContent = 'EXTEND WO';
+        extendCell.appendChild(disabledSpan);
+    }
+  } );
+
+
+
+
+  // If data is empty, show a message
+  if (data.length === 0) {
+    var row = tbody.insertRow();
+    var cell = row.insertCell(0);
+    cell.textContent = 'No work orders available.';
+    cell.colSpan = 19; // Span across all columns
+  
+  }
+}
+
+function getCsrfToken() {
+  // Assuming you have the CSRF token in a cookie
+  return document.cookie.split('; ').find(row => row.startsWith('csrftoken')).split('=')[1];
+}
+
+document.getElementById('filter-form').addEventListener('input', function(event) {
+  if (event.target.tagName === 'SELECT' || event.target.tagName === 'INPUT' && event.target.name != 'extendable') {
+    updateTableWithFilters();
+  }
+});
+
+  function updateTableWithFilters() {
+  var queryString = '?';
+
+  var selectedDates = $('#year-list input[type="checkbox"]:checked').map(function() {
+    return $(this).nextAll('.nested').find('input[type="checkbox"]:checked').map(function() {
+      return 'dates[]=' + encodeURIComponent($(this).data('field-date'));
+    }).get().join('&');
+  }).get().join('&');
+
+  if (selectedDates) {
+    queryString += selectedDates + '&';
+  }
+
+  // Construct Other Filters
+  var formElements = document.getElementById('filter-form').elements;
+  for (let element of formElements) {
+    if (element.name && element.value) {
+      if (element.name.includes('year') || element.name.includes('month') || element.name.includes('day')) {
+        // Skip individual year, month, day dropdowns; handle them separately
+        continue;
+      }
+      queryString += `${encodeURIComponent(element.name)}=${encodeURIComponent(element.value)}&`;
+    }
+  }
+
+  // Remove the trailing '&'
+  queryString = queryString.replace(/&$/, '');
+
+  // Perform the fetch request to the backend
+  fetch('/finished_wo/' + queryString, {
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest'
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    updateTable(data);  
+  })
+  .catch(error => console.error('Error:', error));
+}
+
+</script>
+  {% else %}
+    {% with 'login' as login_url %}
+      {% load static %}
+      {% load i18n %}
+      {% load tz %}
+    {% endwith %}
+  {% endif %}
+{% endblock %}

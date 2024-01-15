@@ -1,0 +1,422 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Create New List
+{% endblock %}
+
+{% block content %}
+<div class = "company-selection" id ="company-selection">
+<img src="{{MEDIA_URL}}acix.png" alt="Ansinda Company Logo" id="ansinda-company-logo" width="100px" height="100px">
+<img src = "{{MEDIA_URL}}bksx.png" alt = "BKS Company Logo" id = "bks-company-logo" width="100px" height="100px">
+<img src = "{{MEDIA_URL}}acix.png" alt = "LKI Company Logo" id = "lki-company-logo" width="100px" height="100px">
+
+</div>
+
+  <div id="wo-category-aci" style="display: none;">
+    <img src="{{MEDIA_URL}}mp.png"  id="wo-category-aci-mp" width="100px" height="100px">
+    <img src="{{MEDIA_URL}}donation2.png"  id="wo-category-aci-donation"  width="100px" height="100px">
+    <img src="{{MEDIA_URL}}material.png"  id="wo-category-aci-material"  width="100px" height="100px">
+    <img src="{{MEDIA_URL}}oc2.png"  id="wo-category-aci-oc"  width="100px" height="100px">
+  </div>
+
+
+  <div id="wo-category-aci-mp-subcompany" style="display: none;">
+
+    <img src="{{MEDIA_URL}}emrx.png"  id="wo-category-aci-mp-emr"  width="100px" height="100px">
+    <img src="{{MEDIA_URL}}linknet.png" id="wo-category-aci-mp-ln"  width="100px" height="100px">
+  
+  </div>
+
+  <div id="wo-category-aci-donation-subcompany" style="display: none;">
+    <img src="{{MEDIA_URL}}emrx.png"  id="wo-category-aci-donation-emr"  width="100px" height="100px" onclick="setTypesDonationEmr( 'aci')">
+    <img src="{{MEDIA_URL}}linknet.png" id="wo-category-aci-donation-ln"  width="100px" height="100px" onclick="setTypesDonationLn( 'aci')">
+  </div>  
+  <div id="wo-category-aci-material-subcompany" style="display: none;">
+    <img src="{{MEDIA_URL}}emrx.png"  id="wo-category-aci-material-emr"  width="100px" height="100px" onclick="setTypesMaterialEmr('aci')">
+    <img src="{{MEDIA_URL}}linknet.png" id="wo-category-aci-material-ln"  width="100px" height="100px" onclick="setTypesMaterialLn('aci')">
+  </div>  
+  
+  <div id="wo-category-aci-oc-subcompany" style="display: none;">
+    <img src="{{MEDIA_URL}}emrx.png"  id="wo-category-aci-oc-emr"  width="100px" height="100px"  onclick="setTypesOcEmr( 'aci')">
+    <img src="{{MEDIA_URL}}linknet.png" id="wo-category-aci-oc-ln"  width="100px" height="100px"  onclick="setTypesOcLn( 'aci')">
+  </div>
+
+
+  <!--END POINT -->
+
+  <div id="wo-category-aci-mp-emr-type" style="display: none;">
+    <img src="{{MEDIA_URL}}EMR-traditional-mandor.png"  width="100px" height="100px"  onclick="setTypesMpEmr('traditional', 'aci')">
+    <img src="{{MEDIA_URL}}EMR-traditional-internal.png"  width="100px" height="100px"  onclick="setTypesMpEmr('internal', 'aci')">
+  </div>
+
+
+
+  <div id="wo-category-aci-mp-ln-type" style="display: none;">
+    <img src="{{MEDIA_URL}}ln-traditional-mandor.png"  id="ln-tr"  width="100px" height="100px"  onclick="setTypesMpLn('traditional', 'aci')">
+    <img src="{{MEDIA_URL}}ln-traditional-internal.png" id="ln-int"  width="100px" height="100px"  onclick="setTypesMpLn('internal', 'aci')">
+    <img src="{{MEDIA_URL}}ln-quick-odn.png" id="ln-odn"  width="100px" height="100px" onclick="setTypesMpLn('odn', 'aci')">
+  </div>
+
+
+
+
+  <!-- BKS HERE -->
+
+  <div id="wo-category-bks" style="display: none;">
+    <img src="{{MEDIA_URL}}mp.png"  id="wo-category-bks-mp" width="100px" height="100px">
+    <img src="{{MEDIA_URL}}donation2.png"  id="wo-category-bks-donation"  width="100px" height="100px">
+    <img src="{{MEDIA_URL}}material.png"  id="wo-category-bks-material"  width="100px" height="100px">
+    <img src="{{MEDIA_URL}}oc2.png"  id="wo-category-bks-oc"  width="100px" height="100px">
+  </div>
+
+
+  <div id="wo-category-bks-mp-subcompany" style="display: none;">
+
+    <img src="{{MEDIA_URL}}emrx.png"  id="wo-category-bks-mp-emr"  width="100px" height="100px">
+    <img src="{{MEDIA_URL}}linknet.png" id="wo-category-bks-mp-ln"  width="100px" height="100px">
+  
+  </div>
+
+  <div id="wo-category-bks-donation-subcompany" style="display: none;">
+    <img src="{{MEDIA_URL}}emrx.png"  id="wo-category-bks-donation-emr"  width="100px" height="100px"  onclick="setTypesDonationEmr( 'bks')">
+    <img src="{{MEDIA_URL}}linknet.png" id="wo-category-bks-donation-ln"  width="100px" height="100px"  onclick="setTypesDonationLn( 'bks')">
+  </div>  
+  <div id="wo-category-bks-material-subcompany" style="display: none;">
+    <img src="{{MEDIA_URL}}emrx.png"  id="wo-category-bks-material-emr"  width="100px" height="100px" onclick="setTypesMaterialEmr( 'bks')">
+    <img src="{{MEDIA_URL}}linknet.png" id="wo-category-bks-material-ln"  width="100px" height="100px" onclick="setTypesMaterialLn('bks')">
+  </div>  
+  
+  <div id="wo-category-bks-oc-subcompany" style="display: none;">
+    <img src="{{MEDIA_URL}}emrx.png"  id="wo-category-bks-oc-emr"  width="100px" height="100px"  onclick="setTypesOcEmr( 'bks')">
+    <img src="{{MEDIA_URL}}linknet.png" id="wo-category-bks-oc-ln"  width="100px" height="100px"  onclick="setTypesOcLn( 'bks')">
+  </div>
+
+
+  <!--END POINT -->
+
+  <div id="wo-category-bks-mp-emr-type" style="display: none;">
+    <img src="{{MEDIA_URL}}EMR-traditional-mandor.png"  width="100px" height="100px"  onclick="setTypesMpEmr('traditional', 'bks')">
+    <img src="{{MEDIA_URL}}EMR-traditional-internal.png"  width="100px" height="100px"  onclick="setTypesMpEmr('internal', 'bks')">
+  </div>
+
+
+  <div id="wo-category-bks-mp-ln-type" style="display: none;">
+    <img src="{{MEDIA_URL}}ln-traditional-mandor.png"  id="ln-tr"  width="100px" height="100px"  onclick="setTypesMpLn('traditional' , 'bks')">
+    <img src="{{MEDIA_URL}}ln-traditional-internal.png" id="ln-int"  width="100px" height="100px" onclick="setTypesMpLn('internal' , 'bks')">
+    <img src="{{MEDIA_URL}}ln-quick-odn.png" id="ln-odn"  width="100px" height="100px"  onclick="setTypesMpLn('odn' , 'bks')">
+  </div>
+
+    <!-- BKS HERE -->
+
+  <div id="wo-category-bks" style="display: none;">
+    <img src="{{MEDIA_URL}}mp.png"  id="wo-category-bks-mp" width="100px" height="100px">
+    <img src="{{MEDIA_URL}}donation2.png"  id="wo-category-bks-donation"  width="100px" height="100px">
+    <img src="{{MEDIA_URL}}material.png"  id="wo-category-bks-material"  width="100px" height="100px">
+    <img src="{{MEDIA_URL}}oc2.png"  id="wo-category-bks-oc"  width="100px" height="100px">
+  </div>
+
+
+  <div id="wo-category-bks-mp-subcompany" style="display: none;">
+
+    <img src="{{MEDIA_URL}}emrx.png"  id="wo-category-bks-mp-emr"  width="100px" height="100px">
+    <img src="{{MEDIA_URL}}linknet.png" id="wo-category-bks-mp-ln"  width="100px" height="100px">
+  
+  </div>
+
+  <div id="wo-category-bks-donation-subcompany" style="display: none;">
+    <img src="{{MEDIA_URL}}emrx.png"  id="wo-category-bks-donation-emr"  width="100px" height="100px"  onclick="setTypesDonationEmr( 'bks')">
+    <img src="{{MEDIA_URL}}linknet.png" id="wo-category-bks-donation-ln"  width="100px" height="100px"  onclick="setTypesDonationLn( 'bks')">
+  </div>  
+  <div id="wo-category-bks-material-subcompany" style="display: none;">
+    <img src="{{MEDIA_URL}}emrx.png"  id="wo-category-bks-material-emr"  width="100px" height="100px" onclick="setTypesMaterialEmr( 'bks')">
+    <img src="{{MEDIA_URL}}linknet.png" id="wo-category-bks-material-ln"  width="100px" height="100px" onclick="setTypesMaterialLn('bks')">
+  </div>  
+  
+  <div id="wo-category-bks-oc-subcompany" style="display: none;">
+    <img src="{{MEDIA_URL}}emrx.png"  id="wo-category-bks-oc-emr"  width="100px" height="100px"  onclick="setTypesOcEmr( 'bks')">
+    <img src="{{MEDIA_URL}}linknet.png" id="wo-category-bks-oc-ln"  width="100px" height="100px"  onclick="setTypesOcLn( 'bks')">
+  </div>
+
+
+  <!--END POINT -->
+
+  <div id="wo-category-bks-mp-emr-type" style="display: none;">
+    <img src="{{MEDIA_URL}}EMR-traditional-mandor.png"  width="100px" height="100px"  onclick="setTypesMpEmr('traditional', 'bks')">
+    <img src="{{MEDIA_URL}}EMR-traditional-internal.png"  width="100px" height="100px"  onclick="setTypesMpEmr('internal', 'bks')">
+  </div>
+
+
+  <div id="wo-category-bks-mp-ln-type" style="display: none;">
+    <img src="{{MEDIA_URL}}ln-traditional-mandor.png"  id="ln-tr"  width="100px" height="100px"  onclick="setTypesMpLn('traditional' , 'bks')">
+    <img src="{{MEDIA_URL}}ln-traditional-internal.png" id="ln-int"  width="100px" height="100px" onclick="setTypesMpLn('internal' , 'bks')">
+    <img src="{{MEDIA_URL}}ln-quick-odn.png" id="ln-odn"  width="100px" height="100px"  onclick="setTypesMpLn('odn' , 'bks')">
+  </div>
+
+
+    <!-- lki HERE -->
+
+    <div id="wo-category-lki" style="display: none;">
+      <img src="{{MEDIA_URL}}mp.png"  id="wo-category-lki-mp" width="100px" height="100px">
+      <img src="{{MEDIA_URL}}donation2.png"  id="wo-category-lki-donation"  width="100px" height="100px">
+      <img src="{{MEDIA_URL}}material.png"  id="wo-category-lki-material"  width="100px" height="100px">
+      <img src="{{MEDIA_URL}}oc2.png"  id="wo-category-lki-oc"  width="100px" height="100px">
+    </div>
+  
+  
+    <div id="wo-category-lki-mp-subcompany" style="display: none;">
+  
+      <img src="{{MEDIA_URL}}emrx.png"  id="wo-category-lki-mp-emr"  width="100px" height="100px">
+      <img src="{{MEDIA_URL}}linknet.png" id="wo-category-lki-mp-ln"  width="100px" height="100px">
+    
+    </div>
+  
+    <div id="wo-category-lki-donation-subcompany" style="display: none;">
+      <img src="{{MEDIA_URL}}emrx.png"  id="wo-category-lki-donation-emr"  width="100px" height="100px"  onclick="setTypesDonationEmr( 'lki')">
+      <img src="{{MEDIA_URL}}linknet.png" id="wo-category-lki-donation-ln"  width="100px" height="100px"  onclick="setTypesDonationLn( 'lki')">
+    </div>  
+    <div id="wo-category-lki-material-subcompany" style="display: none;">
+      <img src="{{MEDIA_URL}}emrx.png"  id="wo-category-lki-material-emr"  width="100px" height="100px" onclick="setTypesMaterialEmr( 'lki')">
+      <img src="{{MEDIA_URL}}linknet.png" id="wo-category-lki-material-ln"  width="100px" height="100px" onclick="setTypesMaterialLn('lki')">
+    </div>  
+    
+    <div id="wo-category-lki-oc-subcompany" style="display: none;">
+      <img src="{{MEDIA_URL}}emrx.png"  id="wo-category-lki-oc-emr"  width="100px" height="100px"  onclick="setTypesOcEmr( 'lki')">
+      <img src="{{MEDIA_URL}}linknet.png" id="wo-category-lki-oc-ln"  width="100px" height="100px"  onclick="setTypesOcLn( 'lki')">
+    </div>
+  
+  
+    <!--END POINT -->
+  
+    <div id="wo-category-lki-mp-emr-type" style="display: none;">
+      <img src="{{MEDIA_URL}}EMR-traditional-mandor.png"  width="100px" height="100px"  onclick="setTypesMpEmr('traditional', 'lki')">
+      <img src="{{MEDIA_URL}}EMR-traditional-internal.png"  width="100px" height="100px"  onclick="setTypesMpEmr('internal', 'lki')">
+    </div>
+  
+  
+    <div id="wo-category-lki-mp-ln-type" style="display: none;">
+      <img src="{{MEDIA_URL}}ln-traditional-mandor.png"  id="ln-tr"  width="100px" height="100px"  onclick="setTypesMpLn('traditional' , 'lki')">
+      <img src="{{MEDIA_URL}}ln-traditional-internal.png" id="ln-int"  width="100px" height="100px" onclick="setTypesMpLn('internal' , 'lki')">
+      <img src="{{MEDIA_URL}}ln-quick-odn.png" id="ln-odn"  width="100px" height="100px"  onclick="setTypesMpLn('odn' , 'lki')">
+    </div>
+
+<script>
+
+  // MANDOR PAYMENT
+    var baseUrlMpEmr = "{% url 'mp_emr_traditional_internal' 'TYPE' 'COMPANY' %}";
+    baseUrlMpEmr = baseUrlMpEmr.replace('TYPE', 'pricingType').replace('COMPANY', 'companyType');
+
+    function setTypesMpEmr(pricingType, companyType, projectType) {
+        var newUrl = baseUrlMpEmr.replace('pricingType', pricingType).replace('companyType', companyType);
+        location.href = newUrl;
+    }
+
+    var baseUrlMpLn = "{% url 'mp_ln_traditional_internal_odn' 'TYPE' 'COMPANY' %}";
+    baseUrlMpLn = baseUrlMpLn.replace('TYPE', 'pricingType').replace('COMPANY', 'companyType');
+
+    function setTypesMpLn(pricingType, companyType) {
+        var newUrl = baseUrlMpLn.replace('pricingType', pricingType).replace('companyType', companyType);
+        location.href = newUrl;
+    }
+
+  // MATERIAL
+    var baseUrlMaterialEmr = "{% url 'material_emr' 'COMPANY' %}";
+    baseUrlMaterialEmr = baseUrlMaterialEmr.replace('COMPANY', 'companyType');
+
+    function setTypesMaterialEmr(companyType) {
+        var newUrl = baseUrlMaterialEmr.replace('companyType', companyType);
+        location.href = newUrl;
+    }
+
+    var baseUrlMaterialLn = "{% url 'material_ln' 'COMPANY' %}";
+    baseUrlMaterialLn = baseUrlMaterialLn.replace('COMPANY', 'companyType');
+
+    function setTypesMaterialLn(companyType) {
+        var newUrl = baseUrlMaterialLn.replace('companyType', companyType);
+        location.href = newUrl;
+    }
+  // OTHER COST
+  var baseUrlOcEmr = "{% url 'oc_emr' 'COMPANY' %}";
+    baseUrlOcEmr = baseUrlOcEmr.replace('COMPANY', 'companyType');
+
+    function setTypesOcEmr(companyType) {
+        var newUrl = baseUrlOcEmr.replace('companyType', companyType);
+        location.href = newUrl;
+    }
+
+    var baseUrlOcLn = "{% url 'oc_ln' 'COMPANY' %}";
+    baseUrlOcLn = baseUrlOcLn.replace('COMPANY', 'companyType');
+
+    function setTypesOcLn(companyType) {
+        var newUrl = baseUrlOcLn.replace('companyType', companyType);
+        location.href = newUrl;
+    }
+  // Dpnation
+
+    var baseUrlDonationEmr = "{% url 'donation_emr' 'COMPANY' %}";
+    baseUrlDonationEmr = baseUrlDonationEmr.replace('COMPANY', 'companyType');
+
+    function setTypesDonationEmr(companyType) {
+        var newUrl = baseUrlDonationEmr.replace('companyType', companyType);
+        location.href = newUrl;
+    }
+
+    var baseUrlDonationLn = "{% url 'donation_ln' 'COMPANY' %}";
+    baseUrlDonationLn = baseUrlDonationLn.replace('COMPANY', 'companyType');
+
+    function setTypesDonationLn(companyType) {
+        var newUrl = baseUrlDonationLn.replace('companyType', companyType);
+        location.href = newUrl;
+    }
+  document.getElementById('ansinda-company-logo').addEventListener('click', function() {
+      document.getElementById('company-selection').style.display = 'none';
+      document.getElementById('wo-category-aci').style.display = 'block';
+  });
+  document.getElementById('wo-category-aci-mp').addEventListener('click', function() {
+      document.getElementById('company-selection').style.display = 'none';
+      document.getElementById('wo-category-aci').style.display = 'none';
+      document.getElementById('wo-category-aci-mp-subcompany').style.display = 'block'
+  });
+
+  document.getElementById('wo-category-aci-mp-emr').addEventListener('click', function() {
+      document.getElementById('company-selection').style.display = 'none';
+      document.getElementById('wo-category-aci-donation').style.display = 'none';
+      document.getElementById('wo-category-aci-mp-subcompany').style.display = 'none'
+      document.getElementById('wo-category-aci-mp-emr-type').style.display = 'block'
+  });
+  document.getElementById('wo-category-aci-mp-ln').addEventListener('click', function() {
+      document.getElementById('company-selection').style.display = 'none';
+      document.getElementById('wo-category-aci-donation').style.display = 'none';
+      document.getElementById('wo-category-aci-mp-subcompany').style.display = 'none'
+      document.getElementById('wo-category-aci-mp-ln-type').style.display = 'block'
+  });
+
+ // ACI - DONATION
+  document.getElementById('wo-category-aci-donation').addEventListener('click', function() {
+      document.getElementById('company-selection').style.display = 'none';
+      document.getElementById('wo-category-aci').style.display = 'none';
+      document.getElementById('wo-category-aci-donation-subcompany').style.display = 'block'
+  });
+
+
+ // ACI - MATERIAL
+
+
+  document.getElementById('wo-category-aci-material').addEventListener('click', function() {
+      document.getElementById('company-selection').style.display = 'none';
+      document.getElementById('wo-category-aci').style.display = 'none';
+      document.getElementById('wo-category-aci-material-subcompany').style.display = 'block'
+  });
+
+ // ACI - OC
+
+  document.getElementById('wo-category-aci-oc').addEventListener('click', function() {
+      document.getElementById('company-selection').style.display = 'none';
+      document.getElementById('wo-category-aci').style.display = 'none';
+      document.getElementById('wo-category-aci-oc-subcompany').style.display = 'block'
+  });
+
+
+
+
+  // BKS
+
+  document.getElementById('bks-company-logo').addEventListener('click', function() {
+      document.getElementById('company-selection').style.display = 'none';
+      document.getElementById('wo-category-bks').style.display = 'block';
+  });
+  document.getElementById('wo-category-bks-mp').addEventListener('click', function() {
+      document.getElementById('company-selection').style.display = 'none';
+      document.getElementById('wo-category-bks').style.display = 'none';
+      document.getElementById('wo-category-bks-mp-subcompany').style.display = 'block'
+  });
+
+  document.getElementById('wo-category-bks-mp-emr').addEventListener('click', function() {
+      document.getElementById('company-selection').style.display = 'none';
+      document.getElementById('wo-category-bks-donation').style.display = 'none';
+      document.getElementById('wo-category-bks-mp-subcompany').style.display = 'none'
+      document.getElementById('wo-category-bks-mp-emr-type').style.display = 'block'
+  });
+  document.getElementById('wo-category-bks-mp-ln').addEventListener('click', function() {
+      document.getElementById('company-selection').style.display = 'none';
+      document.getElementById('wo-category-bks-donation').style.display = 'none';
+      document.getElementById('wo-category-bks-mp-subcompany').style.display = 'none'
+      document.getElementById('wo-category-bks-mp-ln-type').style.display = 'block'
+  });
+
+ // BKS - DONATION
+  document.getElementById('wo-category-bks-donation').addEventListener('click', function() {
+      document.getElementById('company-selection').style.display = 'none';
+      document.getElementById('wo-category-bks').style.display = 'none';
+      document.getElementById('wo-category-bks-donation-subcompany').style.display = 'block'
+  });
+
+
+ // BKS - MATERIAL
+
+
+  document.getElementById('wo-category-bks-material').addEventListener('click', function() {
+      document.getElementById('company-selection').style.display = 'none';
+      document.getElementById('wo-category-bks').style.display = 'none';
+      document.getElementById('wo-category-bks-material-subcompany').style.display = 'block'
+  });
+
+ // BKS - OC
+
+  document.getElementById('wo-category-bks-oc').addEventListener('click', function() {
+      document.getElementById('company-selection').style.display = 'none';
+      document.getElementById('wo-category-bks').style.display = 'none';
+      document.getElementById('wo-category-bks-oc-subcompany').style.display = 'block'
+  });
+
+    // lki
+
+    document.getElementById('lki-company-logo').addEventListener('click', function() {
+      document.getElementById('company-selection').style.display = 'none';
+      document.getElementById('wo-category-lki').style.display = 'block';
+  });
+  document.getElementById('wo-category-lki-mp').addEventListener('click', function() {
+      document.getElementById('company-selection').style.display = 'none';
+      document.getElementById('wo-category-lki').style.display = 'none';
+      document.getElementById('wo-category-lki-mp-subcompany').style.display = 'block'
+  });
+
+  document.getElementById('wo-category-lki-mp-emr').addEventListener('click', function() {
+      document.getElementById('company-selection').style.display = 'none';
+      document.getElementById('wo-category-lki-donation').style.display = 'none';
+      document.getElementById('wo-category-lki-mp-subcompany').style.display = 'none'
+      document.getElementById('wo-category-lki-mp-emr-type').style.display = 'block'
+  });
+  document.getElementById('wo-category-lki-mp-ln').addEventListener('click', function() {
+      document.getElementById('company-selection').style.display = 'none';
+      document.getElementById('wo-category-lki-donation').style.display = 'none';
+      document.getElementById('wo-category-lki-mp-subcompany').style.display = 'none'
+      document.getElementById('wo-category-lki-mp-ln-type').style.display = 'block'
+  });
+
+ // lki - DONATION
+  document.getElementById('wo-category-lki-donation').addEventListener('click', function() {
+      document.getElementById('company-selection').style.display = 'none';
+      document.getElementById('wo-category-lki').style.display = 'none';
+      document.getElementById('wo-category-lki-donation-subcompany').style.display = 'block'
+  });
+
+
+ // lki - MATERIAL
+
+
+  document.getElementById('wo-category-lki-material').addEventListener('click', function() {
+      document.getElementById('company-selection').style.display = 'none';
+      document.getElementById('wo-category-lki').style.display = 'none';
+      document.getElementById('wo-category-lki-material-subcompany').style.display = 'block'
+  });
+
+ // lki - OC
+
+  document.getElementById('wo-category-lki-oc').addEventListener('click', function() {
+      document.getElementById('company-selection').style.display = 'none';
+      document.getElementById('wo-category-lki').style.display = 'none';
+      document.getElementById('wo-category-lki-oc-subcompany').style.display = 'block'
+  });
+
+</script>
+{% endblock %}

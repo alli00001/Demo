@@ -1,0 +1,640 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+{% extends 'base.html' %}
+
+{% block title %}
+Create New List
+{% endblock %}
+
+{% block content %}
+<style>
+	/*
+	Common invoice styles. These styles will work in a browser or using the HTML
+	to PDF anvil endpoint.
+*/
+td {
+	word-wrap: break-word; /* Allows long words to be able to break and wrap onto the next line */
+  white-space: normal; /* Allows whitespace to behave normally, i.e., wrapping the text */
+}
+.fit-cell {
+    width: 100%;
+    height: auto;
+}
+.general-information-table {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.general-information-table td {
+    padding: 8px;
+    vertical-align: middle;
+	
+}
+
+.general-information-table input[type="text"], 
+.general-information-table input[type="date"] {
+    width: 100%;
+    padding: 6px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    box-sizing: border-box; /* Include padding in width */
+	text-align: left;
+}
+
+.general-information-table tr:nth-child(even) {
+    background-color: #f2f2f2; /* Zebra striping for rows */
+}
+
+.general-information-table td:nth-child(1) {
+    text-align: left;
+    width: 25%;
+}
+
+.general-information-table td:nth-child(2) {
+    width: 25%;
+}
+
+.general-information-table td:nth-child(3), 
+.general-information-table td:nth-child(4) {
+    text-align: right;
+    width: 25%;
+}
+	.line-items-container {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.line-items-container, .line-items-container th, .line-items-container td {
+  border: 1px solid #ddd;
+  text-align: center;
+  padding: 8px;
+}
+
+.line-items-container th {
+  background-color: #999;
+  color: white;
+  text-align: center;
+}
+
+.line-items-container select,
+.line-items-container input {
+    width: 100%; /* Will fill the cell */
+    box-sizing: border-box; /* Include padding and border in the width */
+}
+
+@media screen and (max-width: 600px) {
+  .line-items-container, .line-items-container thead, .line-items-container tbody, .line-items-container th, .line-items-container td, .line-items-container tr {
+    text-align: center;
+	display: block;
+  }
+
+  .line-items-container thead tr {
+    text-align: j;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .line-items-container tr {
+    margin: 0 0 1rem 0;
+  }
+
+  .line-items-container td {
+    border: none;
+    position: relative;
+    padding-left: 50%;
+  }
+
+  .line-items-container td:before {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    content: attr(name);
+  }
+}
+
+	.payment-info {
+		width: 38%;
+		font-size: 0.75em;
+		line-height: 1.5;
+	}
+
+	.footer {
+		margin-top: 100px;
+	}
+
+
+	.footer-info {
+		float: right;
+		margin-top: 5px;
+		font-size: 0.75em;
+		color: #ccc;
+	}
+
+	.footer-info span {
+		padding: 0 5px;
+		color: black;
+	}
+
+	.add-new-button {
+		background-color: white;
+		border: 2px solid #008CBA;
+	}
+
+	.add-new-button:hover {
+		background-color: #008CBA;
+		color: white;
+	}
+
+	.payment-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.payment-table, .payment-table th, .payment-table td {
+  border: 1px solid #ddd;
+  text-align: left;
+  padding: 8px;
+}
+
+.payment-table th {
+  background-color: #999;
+  color: white;
+}
+
+.payment-table td input[type="text"], .payment-table td select {
+  width: 100%;
+  padding: 5px;
+  margin: 4px 0;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+
+@media screen and (max-width: 600px) {
+  .payment-table, .payment-table thead, .payment-table tbody, .payment-table th, .payment-table td, .payment-table tr {
+    display: block;
+  }
+
+  .payment-table thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .payment-table tr {
+    margin: 0 0 1rem 0;
+  }
+
+  .payment-table td {
+    border: none;
+    position: relative;
+    padding-left: 50%;
+  }
+
+  .payment-table td:before {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+  }
+
+  .payment-table td:nth-of-type(1):before { content: "PAYMENT"; }
+  .payment-table td:nth-of-type(2):before { content: "PERCENTAGE"; }
+  .payment-table td:nth-of-type(3):before { content: "AMOUNT"; }
+  .payment-table td:nth-of-type(4):before { content: "REMARKS"; }
+}
+
+
+
+</style>
+<form id="workOrder" , method="post">
+	{% csrf_token %}
+	<!-- Company Logo -->
+	<div style="text-align: center; background-color: white">
+		{% if order.company == 'aci' %}
+			<img src="{{ MEDIA_URL }}aci_cmp_logo2.jpg" style="width: 400px;">
+		
+		{%elif order.company == 'bks'%}
+		<img src="{{ MEDIA_URL }}bks4.png">
+
+		{% else %}
+		<img src="{{ MEDIA_URL }}lki_cmp_logo2.jpg" style="width: 400px;"> <!-- Same width for consistency -->
+
+		{% endif %}
+	</div>
+	<!-- Title Text -->
+
+	<div style="text-align: center; font-size: 2.0em;">
+		<b>
+			{% if order.company == 'aci' %}
+			PT. ANSINDA COMMUNICATION INDONESIA
+		{% elif order.company == 'bks' %}
+			PT. BAHTERA KONSTRUKSI SEJAHTERA
+		{% else %}
+			PT. LEONY KONSTRUKSKI INDONESIA
+		{% endif %}
+		</b>
+	</div>
+  <div style="text-align: center; font-size: 2.5em;">
+		<b>REQUEST FORM</b>
+	</div>
+	<table class = "general-information-table" >
+		<tr>
+			<td style="width: 18%;">DATE</td>
+			<td style="width: 2%; text-align: center;">:</td>
+			<td style="width: 20%; text-align: left;" >{{ order.wo_date |date:'Y-m-d'}}</td>
+			
+			<td style ="width:10%"></td>
+
+			<td style ="width:18%">WO NUMBER</td>
+			<td style="width: 2%;">:</td>
+			{% if order.company == 'aci' %}
+			<td style ="width:30%">WO / ACI / EMR / {{order.shortdate}} / {{order.wo_number}}</td>
+			{% elif order.company == 'bks' %}
+
+			<td style ="width:30%">WO / BKS / EMR / {{order.shortdate}} / {{order.wo_number}}</td>
+			{% else %}
+			<td style ="width:30%">WO / LKI / EMR / {{order.shortdate}} / {{order.wo_number}}</td>
+
+			{%endif%}		</tr>
+		<tr>
+			<td style="width: 18%;">REQUEST BY</td>
+			<td style="width: 2%; text-align: center;">:</td>
+			<td style="width: 20%; text-align: left;">{{order.request_by}}</td >
+			<td style ="width:20%">
+				
+			<td>CATEGORY</td>
+			<td style="width: 2%;">:</td>
+			<td style ="width:20%">{{order.category}}</td>
+		</tr>
+		<tr>
+			<td style="text-align: left; width: 25px;">PROJECT</td>
+			<td>:</td>
+			<td style="text-align: left;">{{order.project}}</td>
+			<td></td>
+
+			<td>BANK</td>
+			<td>:</td>
+			<td style="text-align: left;">{{order.bank}}
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align: left;">CUSTOMER</td>
+			<td>:</td>
+			<td style="text-align: left;"> {{order.customer}}
+			</td>
+
+			<td></td>
+
+			<td style="text-align: left;height: 30px;">ACCOUNT NAME</td>
+			<td>:</td>
+			<td style="text-align: left;">{{order.account_name}}</td>
+		</tr>
+		<tr>
+			<td style="text-align: left; width: 25px;">DEPARTMENT</td>
+			<td>:</td>
+			<td style="text-align: left;">{{order.department}}</td>
+
+			<td></td>
+
+			<td style="text-align: left">ACCOUNT NUMBER</td>
+			<td>:</td>
+			<td style="text-align: left;">{{order.account_number}}</td>
+		</tr>
+		<tr>
+			<td style="text-align: left; width: 25px;">REGION</td>
+			<td>:</td>
+			<td style="text-align: left;">{{order.region}}
+
+			</td>
+
+			<td></td>
+
+			<td style="text-align: left">PHONE NUMBER</td>
+			<td>:</td>
+			<td style="text-align: left;">{{order.phone_number}}</td>
+		</tr>
+		<tr>
+			<td style="text-align: left; width: 25px;">CITY</td>
+			<td>:</td>
+			<td style="text-align: left;">{{order.city}}</td>
+
+			<td></td>
+
+			<td style="text-align: left">NPWP</td>
+			<td>:</td>
+			<td style="text-align: left;">{{order.npwp}}</td>
+		</tr>
+	</table>
+
+
+	{% if order.project == 'EMR'%}
+	<table class="line-items-container" id="scopeOfWork" >
+		<thead>
+			<tr>
+				<th style ="width : 4%">NO</th>
+				<th style ="width: 14.65%;">CLUSTER NAME</th>
+				<th style ="width: 14.65%;">SITE ID</th>
+				<th style ="width: 16.65%;">HP</th>
+				<th style ="width : 16.65%">UNIT PRICE</th>
+				<th style ="width : 16.65%">AMOUNT</th>
+				<th style ="width : 16.65%">REMARKS</th>
+			</tr>
+		</thead>
+		<tbody>
+			<td>1</td>
+			<td>{{order.clusterName}}</td>
+			<td>{{order.siteId}}</td>
+			<td>{{order.hpD}}</td>
+			<td>{{order.unitPriceD}}</td>
+			<td>{{order.amountD}}</td>
+			<td>{{order.remarkD}}</td>
+		</tbody>
+	</table>
+
+	
+	{% else %}
+	<table class="line-items-container" id="scopeOfWork" >
+		<thead>
+			<tr>
+				<th style ="width : 4%">NO</th>
+				<th style ="width : 14.65%">CLUSTER NAME</th>
+				<th style ="width : 14.65%">ODB ID</th>
+				<th style ="width : 13.32%">SUFFIX ID</th>
+				<th style ="width: 13.32%;">HP</th>
+				<th style ="width : 13.32%">UNIT PRICE</th>
+				<th style ="width : 13.32%">AMOUNT</th>
+				<th style ="width : 13.32%">REMARKS</th>
+			</tr>
+		</thead>
+		<tbody>
+			<td>1</td>
+			<td>{{order.clusterName}}</td>
+			<td>{{order.odbId}}</td>
+			<td>{{order.suffixId}}</td>
+			<td>{{order.hpD}}</td>
+			<td>{{order.unitPriceD}}</td>
+			<td>{{order.amountD}}</td>
+			<td>{{order.remarkD}}</td>
+		</tbody>
+	</table>
+
+	
+	{% endif%}
+
+  
+  <!-- SIGN FIELD -->
+  {% if order.company == 'aci' %}
+  {% if order.project == 'EMR' %}
+    <table class="line-items-container">
+      <thead>
+        <th>CREATED BY</th>
+        <th colspan="2" style="text-align: center;">APPROVED BY</th>
+      </thead>
+      <tbody>
+        <tr>
+          <td > <img src="{{ MEDIA_URL }}agung_sign.jpg"style="height: 30%; width: 30%;" ></td>
+		  
+		  
+		  {% if order.rightHandCheck%}
+		  <td><img src="{{ MEDIA_URL }}tony_sign.jpg" ></td>
+		  {%else%}
+		  <td></td>
+		  {%endif%}
+
+
+		  {% if order.ceoCheck%}
+		  <td><img src="{{ MEDIA_URL }}steven_signn.jpg" style="height: 30%; width: 30%;" ></td>
+		  {%else%}
+		  <td></td>
+		  {%endif%}
+        </tr>
+        <tr>
+          <td><u>AGUNG SONATA</u></td>
+          <td><u>TONY</u></td>
+          <td><u>STEVEN</u></td>
+        </tr>
+        <tr>
+          <td>PROCUREMENT</td>
+          <td></td>
+          <td>CEO</td>
+        </tr>
+      </tbody>
+    </table>
+  {% endif %}
+  {% if order.project == 'LN' %}
+    <table class="line-items-container">
+      <thead>
+        <th>CREATED BY</th>
+        <th colspan="2" style="text-align: center;">APPROVED BY</th>
+      </thead>
+      <tbody>
+        <tr>
+          <td ><img src="{{ MEDIA_URL }}agung_sign.jpg" style="height: 30%; width: 30%;"></td>
+
+		  {% if order.rightHandCheck%}
+          <td><img src="{{ MEDIA_URL }}sunny_sign.jpg" style="height: 20%; width: 20%;"></td>
+		  {%else%}
+			<td></td>
+		  {%endif%}
+		  
+		  {% if order.ceoCheck%}
+		  <td><img src="{{ MEDIA_URL }}steven_signn.jpg"  style="height: 30%; width: 30%;"></td>
+		  {%else%}
+		  <td></td>
+		  {%endif%} 
+		</tr>
+        <tr>
+          <td><u>AGUNG SONATA</u></td>
+          <td><u>SUNNY</u></td>
+          <td><u>STEVEN</u></td>
+        </tr>
+        <tr>
+          <td>PROCUREMENT</td>
+          <td></td>
+          <td>CEO</td>
+        </tr>
+      </tbody>
+    </table>
+  {% endif %}
+{% elif order.company == 'bks' %}
+  <table class="line-items-container">
+    <thead>
+      <th>CREATED BY</th>
+      <th>APPROVED BY</th>
+    </thead>
+    <tbody>
+      <tr>
+        <td><img src="{{ MEDIA_URL }}elsa_sign.jpg"  style="height: 20%; width: 20%;" ></td>
+		
+		
+		{% if order.ceoCheck%}
+		<td><img src="{{ MEDIA_URL }}jenny_sign.jpg"  style="height: 8%; width: 8%;" ></td>
+		{%else%}
+		<td></td>
+		{%endif%}
+      </tr>
+      <tr>
+        <td><u>ELSA MONICA</u></td>
+        <td><u>JENNY</u></td>
+      </tr>
+      <tr>
+        <td>PROCUREMENT</td>
+        <td>CEO</td>
+      </tr>
+    </tbody>
+  </table>
+{%else%}
+<table class="line-items-container">
+    <thead>
+      <th>CREATED BY</th>
+      <th>APPROVED BY</th>
+    </thead>
+    <tbody>
+      <tr>
+        <td><img src="{{ MEDIA_URL }}agung_sign.jpg" style="height: 20%; width: 20%;"></td>
+		
+		
+		{% if order.ceoCheck%}
+		<td><img src="{{ MEDIA_URL }}feronia_sign.jpg" style="height: 15%; width: 15%;"></td>
+		{%else%}
+		<td></td>
+		{%endif%}
+      </tr>
+      <tr>
+        <td><u>AGUNG</u></td>
+        <td><u>FERONIA</u></td>
+      </tr>
+      <tr>
+        <td>PROCUREMENT</td>
+        <td>CEO</td>
+      </tr>
+    </tbody>
+  </table>
+{% endif %}
+<button onclick="generatePDF(event)" type="button" class="generatePDFButton">Generate PDF</button>
+
+</form>
+<script>
+
+	
+	async function generatePDF(event) {
+	  event.preventDefault(); // Prevent the default form action
+	  const {
+	  jsPDF
+	  } = window.jspdf;
+	
+	  // Get the form element
+	  const form = document.getElementById('workOrder'); // Replace with your actual form ID
+	  form.style.width = '100%';
+	  form.style.maxWidth = '100%';
+	  form.style.padding = "30";
+	  const tables = form.querySelectorAll('table');
+	  tables.forEach(table => {
+		table.style.width = '100%'; // Ensure tables use the full width of the form
+	  table.style.maxWidth = '100%';
+	  });
+	
+	  // Apply borders to the cells of the specific class table
+	  const tableCells = form.querySelectorAll('.line-items-container th, .line-items-container td');
+	  tableCells.forEach(cell => {
+		cell.style.border = '1px solid black';
+	  });
+	  const workOrderTable = form.querySelectorAll('.scopeOfWork');
+	  workOrderTable.forEach(table => {
+		table.style.borderCollapse = 'collapse';
+	  });
+	
+	  // Apply borders to the cells of the specific class table
+	  const workOrderTableCells = form.querySelectorAll('.scopeOfWork th, .scopeOfWork td');
+	  workOrderTableCells.forEach(cell => {
+		cell.style.border = '1px solid black';
+	  });
+	  const inputs = form.querySelectorAll('input');
+	inputs.forEach(input => {
+		// Skip hidden inputs or specific inputs by ID
+		if (input.type !== 'hidden' && input.id !== 'number_of_scopes' && input.id !== 'number_of_deduction') {
+			const textSpan = document.createElement('span');
+			textSpan.textContent = input.value;
+			textSpan.style.display = 'inline-block';
+			textSpan.style.minWidth = input.offsetWidth + 'px';
+			input.parentNode.replaceChild(textSpan, input);
+		} else {
+			// Ensure inputs to be hidden are not displayed
+			input.style.display = 'none';
+		}
+	});
+	
+	
+	  var buttons = document.querySelectorAll('button');
+	
+	  // Hide buttons
+	  buttons.forEach(function(button) {
+	  button.style.visibility = 'hidden';
+	  });
+	
+	  // Replace selects with the selected text
+	  const selects = form.querySelectorAll('select');
+	  selects.forEach(select => {
+		const selectedText = select.options[select.selectedIndex].text;
+		const textNode = document.createTextNode(selectedText);
+		select.parentNode.replaceChild(textNode, select);
+	  });
+	  // Capture the form as a canvas
+	  const canvas = await html2canvas(form, {
+	  scale: 1 // Start with a normal scale
+	  });
+	
+	  const imgData = canvas.toDataURL('image/png');
+	  const imgWidth = canvas.width;
+	  const imgHeight = canvas.height;
+	
+	  // Initialize jsPDF
+	  const pdf = new jsPDF('p', 'mm', 'a4');
+	  const pageWidth = pdf.internal.pageSize.getWidth();
+	  const pageHeight = pdf.internal.pageSize.getHeight();
+	
+	  // Set desired margins (in mm)
+	  const marginLeft = 0;
+	  const marginRight = 0;
+	  const marginTop = 0;
+	  const marginBottom = 0;
+	
+	  // Calculate the available space considering the margins
+	  const availableWidth = pageWidth - marginLeft - marginRight ;
+	  const availableHeight = pageHeight - marginTop - marginBottom;
+	  const horizontalScale = availableWidth / imgWidth;
+	  const verticalScale = availableHeight / imgHeight;
+	  const scale = Math.min(horizontalScale, verticalScale);
+	
+	  // If the content height is less than page height, we can allow for a larger width.
+	  const finalScale = imgHeight * horizontalScale > availableHeight ? verticalScale : horizontalScale;
+	
+	  // Calculate the scaled dimensions
+	  const scaledWidth = imgWidth * finalScale;
+	  const scaledHeight = imgHeight * finalScale;
+	
+	  // Calculate centered positions
+	  const xCentered = (pageWidth - scaledWidth) / 2;
+	  const yCentered = (pageHeight - scaledHeight) / 2;
+	
+	  // Add the image to the PDF, scaled and centered
+	  pdf.addImage(imgData, 'PNG', xCentered, yCentered, scaledWidth, scaledHeight);
+	
+	  // Save the PDF
+	  pdf.save('form.pdf');
+	}
+	
+	</script>
+{%endblock%}

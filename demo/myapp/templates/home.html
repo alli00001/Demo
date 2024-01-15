@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}  <!-- Ensure you have this line if you need to use static files -->
+Home
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  {% if user.is_authenticated %}
+    <div class="jumbotron text-center">
+      <h1 class="display-4">Welcome, {{ user.username }}!</h1>
+      <hr class="my-4">
+    </div>
+    {% else %}
+    <div class="text-center">
+      <h2>You are not logged in</h2>
+      <p><a href="{% url 'login' %}">Click here to log in</a></p>
+    </div>
+  {% endif %}
+</div>
+</div>
+{% endblock %}

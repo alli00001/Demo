@@ -1,0 +1,1286 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+{% extends 'base.html' %}
+
+{% block title %}
+Create New List
+{% endblock %}
+
+{% block content %}
+<style>
+	/*
+	Common invoice styles. These styles will work in a browser or using the HTML
+	to PDF anvil endpoint.
+*/
+.general-information-table {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+td {
+  word-wrap: break-word; /* Allows long words to be able to break and wrap onto the next line */
+  white-space: normal; /* Allows whitespace to behave normally, i.e., wrapping the text */
+}
+.general-information-table td {
+    padding: 8px;
+    vertical-align: middle;
+	
+}
+
+.general-information-table input[type="text"], 
+.general-information-table input[type="date"] {
+    width: 100%;
+    padding: 6px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    box-sizing: border-box; /* Include padding in width */
+	text-align: left;
+}
+
+.general-information-table tr:nth-child(even) {
+    background-color: #f2f2f2; /* Zebra striping for rows */
+}
+
+.general-information-table td:nth-child(1) {
+    text-align: left;
+    width: 25%;
+}
+
+.general-information-table td:nth-child(2) {
+    width: 25%;
+}
+
+.general-information-table td:nth-child(3), 
+.general-information-table td:nth-child(4) {
+    text-align: right;
+    width: 25%;
+}
+	.line-items-container {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.line-items-container, .line-items-container th, .line-items-container td {
+  border: 1px solid #ddd;
+  text-align: center;
+  padding: 8px;
+}
+
+.line-items-container th {
+  background-color: #999;
+  color: white;
+  text-align: center;
+}
+
+.line-items-container select,
+.line-items-container input {
+    width: 100%; /* Will fill the cell */
+    box-sizing: border-box; /* Include padding and border in the width */
+}
+@media screen and (max-width: 600px) {
+  .line-items-container, .line-items-container thead, .line-items-container tbody, .line-items-container th, .line-items-container td, .line-items-container tr {
+    text-align: center;
+	display: block;
+  }
+
+  .line-items-container thead tr {
+    text-align: j;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .line-items-container tr {
+    margin: 0 0 1rem 0;
+  }
+
+  .line-items-container td {
+    border: none;
+    position: relative;
+    padding-left: 50%;
+  }
+
+  .line-items-container td:before {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    content: attr(name);
+  }
+}
+
+	.payment-info {
+		width: 38%;
+		font-size: 0.75em;
+		line-height: 1.5;
+	}
+
+	.footer {
+		margin-top: 100px;
+	}
+
+
+	.footer-info {
+		float: right;
+		margin-top: 5px;
+		font-size: 0.75em;
+		color: #ccc;
+	}
+
+	.footer-info span {
+		padding: 0 5px;
+		color: black;
+	}
+
+	.add-new-button {
+		background-color: white;
+		border: 2px solid #008CBA;
+	}
+
+	.add-new-button:hover {
+		background-color: #008CBA;
+		color: white;
+	}
+
+	.payment-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.payment-table, .payment-table th, .payment-table td {
+  border: 1px solid #ddd;
+  text-align: left;
+  padding: 8px;
+}
+
+.payment-table th {
+  background-color: #999;
+  color: white;
+}
+
+.payment-table td input[type="text"], .payment-table td select {
+  width: 100%;
+  padding: 5px;
+  margin: 4px 0;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+
+@media screen and (max-width: 600px) {
+  .payment-table, .payment-table thead, .payment-table tbody, .payment-table th, .payment-table td, .payment-table tr {
+    display: block;
+  }
+
+  .payment-table thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .payment-table tr {
+    margin: 0 0 1rem 0;
+  }
+
+  .payment-table td {
+    border: none;
+    position: relative;
+    padding-left: 50%;
+  }
+
+  .payment-table td:before {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+  }
+
+  .payment-table td:nth-of-type(1):before { content: "PAYMENT"; }
+  .payment-table td:nth-of-type(2):before { content: "PERCENTAGE"; }
+  .payment-table td:nth-of-type(3):before { content: "AMOUNT"; }
+  .payment-table td:nth-of-type(4):before { content: "REMARKS"; }
+}
+
+
+
+</style>
+
+<form id="workOrder" , method="post" enctype="multipart/form-data">
+	{%csrf_token%}
+	{% if error %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+{% endif %}
+<div style="text-align: center; background-color: white">
+	{% if company_type == 'aci' %}
+    <img src="{{ MEDIA_URL }}aci_cmp_logo2.jpg" style="width: 400px;">
+    <input type="hidden" value="aci" name="company" id="company">
+{% elif company_type == 'bks' %}
+    <img src="{{ MEDIA_URL }}bks4.png" style="width: 400px;"> <!-- Assuming you want to keep the same width -->
+    <input type="hidden" value="bks" name="company" id="company">
+{% else %}
+    <img src="{{ MEDIA_URL }}lki_cmp_logo2.jpg" style="width: 400px;"> <!-- Same width for consistency -->
+    <input type="hidden" value="lki" name="company" id="company"> <!-- Changed value to 'lki' or whatever your default company code should be -->
+{% endif %}
+	  </div>
+	  
+	<!-- Title Text -->
+
+	<div style="text-align: center; font-size: 2.0em;">
+		<b>
+			{% if company_type == 'aci' %}
+			PT. ANSINDA COMMUNICATION INDONESIA
+			{% elif company_type == 'bks' %}
+			PT. BAHTERA KONSTRUKSI SEJAHTERA
+			{% else %}
+			PT. LEONY KONSTRUKSKI INDONESIA
+			{% endif %}
+		</b>	
+	</div>
+	<div style="text-align: center; font-size: 2.5em;">
+		<b>WORK ORDER</b>
+	</div>
+	<table class = "general-information-table"  >
+		<tr>
+			<td style="width: 18%;">DATE</td>
+			<td style="width: 2%; text-align: center;">:</td>
+			<td style="width: 20%; text-align: left;" ><input type ="date" name="wo_date" id ="wo_date" type="date" style="text-align: left; height: 30px"/></td>
+			
+			<td style ="width:10%"></td>
+
+			<td style ="width:18%">WO NUMBER</td>
+			<td style="width: 2%;">:</td>
+			{% if company_type == 'aci' %}
+			<td style ="width:30%">WO / ACI / EMR / <input name ="shortdate" id ="shortdate" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+			{% elif company_type == 'bks' %}
+			<td style ="width:30%">WO / BKS / EMR / <input name ="shortdate" id ="shortdate" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+			{% else %}
+			<td style ="width:30%">WO / LKI / EMR / <input name ="shortdate" id ="shortdate" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+			{% endif %}			
+		</tr>
+		<tr>
+			<td style="width: 18%;">REQUEST BY</td>
+			<td style="width: 2%; text-align: center;">:</td>
+			<td style="width: 20%; text-align: left;"><input text-transform: uppercase; name="request_by" type="text" style="text-align: left; height: 30px;"></td >
+			<td style ="width:20%">
+				
+			<td>CATEGORY</td>
+			<td style="width: 2%;">:</td>
+			<td style ="width:20%"><input name="category" type="text" style="text-align: left; height: 30px;" value="MATERIAL"></td>
+		</tr>
+		<tr>
+			<td style="text-align: left; width: 25px;">PROJECT</td>
+			<td>:</td>
+			<td style="text-align: left;"><input name="project" type="text" style=" height : 30px" value="EMR"> </strong></td>
+			<td></td>
+
+			<td>BANK</td>
+			<td>:</td>
+			<td style="text-align: left;"><select id ="bank" name="bank"style="text-align: left; height: 30px; width: 100%;">
+				<option value="BCA">BCA</option>
+				<option value="MANDIRI">MANDIRI</option>
+				<option value="OCBC NISP">OCBC</option>
+				<option value="BRI">BRI</option>
+				<option value="CREATE">CREATE</option>
+
+			</td>
+		</tr>
+		<tr>
+			<td style="text-align: left;">CUSTOMER</td>
+			<td>:</td>
+			<td style="text-align: left;">
+				<select id ="customer"name="customer" style="height : 30px ; width:100%;">
+					<option value = "ZTE">ZTE</option>
+					<option value = "YOFC">YOFC</option>
+					<option value = "FH">FH</option>
+					<option value="CREATE">CREATE</option>
+			</td>
+
+			<td></td>
+
+			<td style="text-align: left;height: 30px;">ACCOUNT NAME</td>
+			<td>:</td>
+			<td style="text-align: left;"><input name="account_name" type="text" style="height : 30px ;"></td>
+		</tr>
+		<tr>
+			<td style="text-align: left; width: 25px;">DEPARTMENT</td>
+			<td>:</td>
+			<td style="text-align: left;"><input name="department" type="text" style=" height : 30px" value="PROJECT"></td>
+
+			<td></td>
+
+			<td style="text-align: left">ACCOUNT NUMBER</td>
+			<td>:</td>
+			<td style="text-align: left;"><input name="account_number" type="text" style="height : 30px"></td>
+		</tr>
+		<tr>
+			<td style="text-align: left; width: 25px;">REGION</td>
+			<td>:</td>
+			<td style="text-align: left;"><select id ="region" name="region" style=" height : 30px ;width: 100% ;">
+				<option value="JABO">JABO</option>
+				<option value="CJ">CJ</option>
+				<option value="EJ">EJ</option>
+				<option value="WJ">WJ</option>
+				<option value="CREATE">CREATE</option>
+
+			</td>
+
+			<td></td>
+
+			<td style="text-align: left">PHONE NUMBER</td>
+			<td>:</td>
+			<td style="text-align: left;"><input name="phone_number" type="text" style="height : 30px"></td>
+		</tr>
+		<tr>
+			<td style="text-align: left; width: 25px;">CITY</td>
+			<td>:</td>
+			<td style="text-align: left;"><input name="city" type="text" style=" height : 30px"></td>
+
+			<td></td>
+
+			<td style="text-align: left">NPWP</td>
+			<td>:</td>
+			<td style="text-align: left;"><input name="npwp" type="text" style="height : 30px"></td>
+		</tr>
+	</table>
+
+	<div class="table-container">
+		<table class="line-items-container">
+			<thead>
+				<tr>
+					<th class="heading-description" >CLUSTER NAME</th>
+					<th class="heading-description">SITE ID</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><input type="text" class="clusterName" name="clusterName"></td>
+					<td><input type="text" class="siteId" name="siteId"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<button class="button add-new-button" onclick=add() type="button">+</button>
+	<table class="line-items-container" id="scopeOfWork" >
+		<thead>
+			<tr>
+				<th style ="width : 4%">NO</th>
+				<th style ="width: 21%;">ITEM</th>
+				<th style ="width : 12,5%">UNIT</th>
+				<th style ="width : 12,5%">QTY</th>
+				<th style ="width : 12,5%">UNIT PRICE</th>
+				<th style ="width : 12,5%">AMOUNT</th>
+				<th style ="width : 25%">REMARKS</th>
+				<th style ="width : 0%;"></th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+		<tfoot>
+			<tr>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td id="grand-total-actual"><input type = "text" name ="grand-total-actual" value = "0"></td>
+				<td></td>
+				<td></td> 
+			</tr>
+		</tfoot>
+	</table>
+
+
+  <!-- PAYMENT -->
+  <div style="margin-top: 50px;">
+    <button class="button add-new-button" onclick=addDeduction() type="button">+</button>
+    <table class="line-items-container" id ="payment-table" border="1">
+      <thead>
+        <th style ="width : 25%">PAYMENT</th>
+        <th style ="width : 25%">PERCENTAGE</th>
+        <th style ="width : 25%">AMOUNT</th>
+        <th style ="width : 25%">REMARKS</th>
+      </thead>
+      <tbody>
+        <tr>
+          <td>TOTAL</td>
+          <td></td>
+          <td id ="grand-total-payment"> <input type = "text" name ="grand-total-payment" value = "0"></td>
+          <td><input type ="text" name ="remarks1"></td>
+        </tr>
+        <tr>
+          <td>
+            <select name = "terms-selection" id ="terms-selection">
+				<option value = "DP" data-percentage-amount =30% data-remarks = ''> DP </option>
+				<option  value ="TERM 2" data-percentage-amount =40% data-remarks = 'Implementation Done'>TERM 2</option>
+				<option  value ="TERM 3" data-percentage-amount =20% data-remarks = 'ATP Done'>TERM 3</option>
+				<option  value ="TERM 4" data-percentage-amount =10% data-remarks = 'FAC Done'>TERM 4</option>
+				<option  value ="CASHBON" data-percentage-amount =0% data-remarks = '' >CASHBON</option>
+				<option  value ="FULL" data-percentage-amount = 100% data-remarks = ''>FULL</option>
+				<option  value ="REMAINING" data-percentage-amount =0% data-remarks = ''>REMAINING</option>
+				<option  value ="CREATE" data-percentage-amount = 0% data-remarks = ''>CREATE</option>  
+            </select>
+            </td>
+			<td><input type="text" id="terms-percentage-cell" name="terms-percentage-cell" value="0%"></td>          
+			<td id = "terms-amount-cell"><input type="text" id="terms-amount-cell" name="terms-amount-cell" value="0"></td>
+          <td style = "text-align: left;">
+			<input type ="text" name ="payment-remarks-cell">
+		  </td>
+        </tr>
+        <tr>
+          <td>
+			<select name ="tax-cell" id ="tax-cell">
+				<option value ="WHT-21" data-tax-percentage-amount = 2.5%>TAX - WHT21</option>
+				<option value ="WHT-23" data-tax-percentage-amount = 3%>TAX - WHT23</option>
+				<option value ="VAT" data-tax-percentage-amount = 11%>TAX - VAT</option>
+			</select>
+		</td>
+          <td>
+			<input type="text" id="tax-percentage-cell" name="tax-percentage-cell" value="0%">       
+		  </td>
+          <td id = "tax-amount-cell"> <input type="text" id="tax-amount-cell" name="tax-amount-cell" value="0"></td>
+          <td style = "text-align: left;"	>
+			<input type ="text" name ="tax-remarks-cell">
+		  </td>
+        </tr>
+        <tr id ="deduction-row" class ="deduction-row">
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td> GRAND TOTAL </td>
+          <td></td>
+          <td id = "grand-total-payment2"><input type = "text" name ="grand-total-payment2" value = "0"></td>
+          <td> <input type ="text" name ="remarks2"></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+        <!-- TERM PAYMENT -->
+		<button class="button add-new-button" onclick=addPayment() type="button">+</button>
+		<table class="line-items-container"border="1" id = "paymentTable" name ="paymentTable">	
+			<thead>
+				<th>PAYMENT TYPE</th>
+				<th>PERCENTAGE</th>
+				<th>AMOUNT</th>
+				<th>STATUS</th>
+				<th>DATE</th>
+				<th style ="width : 0%;"></th>
+			</thead>
+		<tbody>
+		</tbody>
+	</table>
+
+  <!-- DOCUMENT -->
+  <table class="line-items-container"border="1">
+    <thead>
+      <th>DOCUMENT</th>
+	  <th>STATUS</th>
+    </thead>
+	<tbody>
+		<tr>
+			<td>INVOICE					
+			</td>
+			<td>		
+				<input type="file" name="invoice">
+			</td>
+		</tr>		
+	</tbody>
+  </table>
+
+  <!-- SIGN FIELD -->
+  {% if company_type == 'aci'%}
+  <table class="line-items-container">
+    <thead>
+      <th>CREATED BY</th>
+      <th colspan="2" style="text-align: center;">APPROVED BY</th>
+    </thead>
+    <tbody>
+      <tr><td style="height: 200px;"><td></td></td></tr>
+      <tr><td><u>AGUNG SONATA</u></td><td><u>TONY</u></td><td><u>STEVEN</u></td></tr>
+      <tr><td>PROCUREMENT</td><td></td><td>CEO</td></tr>
+
+    </tbody>
+  </table>
+
+  {% elif company_type == 'bks' %}
+
+  <table class="line-items-container">
+    <thead>
+      <th>CREATED BY</th>
+      <th>APPROVED BY</th>
+    </thead>
+    <tbody>
+      <tr><td style="height: 200px;"><td></td></td></tr>
+      <tr><td><u>ELSA MONICA</u></td><td><u>JENNY</u></td></tr>
+      <tr><td>PROCUREMENT</td><td>CEO</td></tr>
+
+    </tbody>
+  </table>
+  {%else%} 
+  <table class="line-items-container">
+    <thead>
+      <th>CREATED BY</th>
+      <th>APPROVED BY</th>
+    </thead>
+    <tbody>
+      <tr><td style="height: 200px;"><td></td></td></tr>
+      <tr><td><u>AGUNG</u></td><td><u>FERONIA</u></td></tr>
+      <tr><td>PROCUREMENT</td><td>CEO</td></tr>
+
+    </tbody>
+  </table>
+  {%endif%}
+
+
+	<div class="footer">
+		<div class="footer-info">
+		</div>
+	</div>
+
+	<div>
+		<button type="submit" id ="submitBtn"> Submit </button>
+	</div>
+
+	
+	<input type="number" id="number_of_scopes" name="number_of_scopes" value="0" style="display: none;" >
+	<input type="number" id="number_of_deduction" name="number_of_deduction" value="0" style="display: none;">
+	<input type="number" id="number_of_payment" name="number_of_payment" value="0" style="display: none;">
+
+	<input type = "text" id = "pricing_type" name ="pricing_type" style="display: none;">
+</form>
+
+
+
+<script type="text/javascript">
+	document.addEventListener('DOMContentLoaded', function() {
+		document.getElementById('number_of_scopes').value = 0;
+		document.getElementById('number_of_deduction').value =0;
+		document.getElementById('number_of_payment').value =0;
+
+	});
+	document.addEventListener("DOMContentLoaded", function(){
+            document.getElementById("submitBtn").addEventListener("click", function(e){
+                var woNumber = document.getElementById("wo_number").value;
+                if (!woNumber) {
+                    alert("The work order number cannot be empty.");
+                    e.preventDefault(); // Prevent form submission
+                }
+            });
+        });
+</script>
+
+<script type="text/javascript">
+    var pricingType = "{{ pricing_type }}";
+</script>
+
+
+
+<script>
+function termsAmountCalculation() {
+  var selection = document.getElementById('terms-selection');
+  var selectedOption = selection.options[selection.selectedIndex];
+
+  // Get the percentage either from the dropdown or from the custom input
+  var percentageInput = document.getElementById('terms-percentage-cell').value;
+  var percentageString = percentageInput !== '' ? percentageInput : selectedOption.getAttribute('data-percentage-amount');
+  
+  // Remove any non-numeric characters (e.g., '%') and parse the percentage
+  var cleanedPercentageString = percentageString.replace('%', '');
+  var percentageNumber = parseFloat(cleanedPercentageString) / 100;
+
+  // Retrieve the grand total value
+  var grTotalCell = document.getElementById('grand-total-payment').querySelector('input').value;
+  var grValue = parseFloat(grTotalCell) || 0;
+
+  // Calculate and update the terms amount
+  var calculatedAmount = percentageNumber * grValue;
+  document.getElementById('terms-amount-cell').querySelector('input').value = calculatedAmount.toFixed(2);
+  document.getElementById('terms-percentage-cell').value= percentageString;
+
+
+}
+
+function taxAmountCalculation(){
+  var selection = document.getElementById('tax-cell');
+  var selectedOption = selection.options[selection.selectedIndex];
+
+  // Get the percentage either from the dropdown or from the custom input
+  var percentageInput = document.getElementById('tax-percentage-cell').value;
+  var percentageString = percentageInput !== '' ? percentageInput : selectedOption.getAttribute('data-percentage-amount');
+  
+  // Remove any non-numeric characters (e.g., '%') and parse the percentage
+  var cleanedPercentageString = percentageString.replace('%', '');
+  var percentageNumber = parseFloat(cleanedPercentageString) / 100;
+
+  // Retrieve the grand total value
+  var termAmoutCell = document.getElementById('terms-amount-cell').querySelector('input').value;
+  var termAmoutCellValue = parseFloat(termAmoutCell) || 0;
+
+  // Calculate and update the terms amount
+  var calculatedAmount = percentageNumber * termAmoutCellValue;
+  document.getElementById('tax-amount-cell').querySelector('input').value = calculatedAmount.toFixed(2);
+}
+
+function addDeduction(){
+  var paymentTable = document.getElementById('payment-table')
+  var deductionRow = document.getElementById('deduction-row')
+  var rowIdx = deductionRow.rowIndex
+  var newRow = paymentTable.insertRow(rowIdx)
+  var number_of_deduction = document.getElementById('number_of_deduction'); 
+  var currentCount = parseInt(number_of_deduction.value, 10) || 0; 
+  for (i = 0 ; i < 5 ; i++){
+	var cell = newRow.insertCell(i);
+	if (i == 0){
+		var selection = document.createElement('select')
+		selection.name = "deduction_" + currentCount.toString()
+		var option1 = document.createElement("option");
+		option1.value = "DEDUCTION";
+		option1.text = "DEDUCTION";
+		selection.appendChild(option1);
+
+		var option2 = document.createElement("option");
+		option2.value = "ADDITION";
+		option2.text = "ADDITION";
+		selection.appendChild(option2);
+		cell.appendChild(selection)
+	}
+	if (i == 1){
+		var percentage_cell = document.createElement('input')
+		percentage_cell.type = 'text'
+		percentage_cell.name = 'deduction-percentage_' +currentCount.toString()
+		percentage_cell.style.display = 'none'
+		cell.appendChild(percentage_cell)
+	}
+	if (i == 2){
+		var amount_cell = document.createElement('input')
+		amount_cell.type = 'text'
+		amount_cell.name = 'ded-addition-amount-cell_' + currentCount.toString()
+		amount_cell.id = 'ded-addition-amount-cell_' + currentCount.toString()
+		amount_cell.value = 0
+		cell.appendChild(amount_cell)
+		
+	}
+	if (i == 3){
+		var remarks_cell = document.createElement('input')
+		remarks_cell.type = 'text'
+		remarks_cell.name = 'deduction-remarks_' + currentCount.toString()
+		cell.style.textAlign = 'left'
+		cell.appendChild(remarks_cell)
+	}
+	if (i == 4) {
+		var removeButton = document.createElement("button");
+		removeButton.id = "removeRowDed"
+		removeButton.className = "button add-new-button removeRowDed"
+		removeButton.style.width = "25px"
+		removeButton.textContent = "-"
+		cell.appendChild(removeButton)
+	}
+	number_of_deduction.value = (currentCount + 1).toString(); // Increment after the loop 
+ }
+}
+
+
+function addUppercaseListener(element) {
+  element.addEventListener('input', function() {
+    this.value = this.value.toUpperCase();
+  });
+}
+
+
+function updateGrandTotal() {
+    var grandTotal = 0;
+
+    // Select all input elements with an ID containing 'amount-cell'
+    var amountInputs = document.querySelectorAll('input[id*="amount-cell"]');
+    amountInputs.forEach(function(input) {
+        // Parse the value of each input as a float and add it to the total
+        var value = parseFloat(input.value) || 0;
+		
+		        // Check if the ID is 'tax-amount-cell'
+		if (input.id === 'tax-amount-cell') {
+            // Subtract the tax amount from the total
+            grandTotal -= value;
+        } else {
+            // Add the value to the total for other IDs
+            grandTotal += value;
+        }
+    });
+
+    // Update the grand total in the appropriate input field
+	document.getElementById('grand-total-payment2').querySelector('input').value= grandTotal.toFixed(2);
+}
+function updateTotals() {
+	var totalActual = 0;
+	
+	var rows = document.querySelectorAll("#scopeOfWork tbody tr");
+	rows.forEach(function(row) {
+		var actual = row.querySelector('[name^="totalA"]'); // Use the correct selector for your inputs
+		
+		// Add the parsed values to the totals, ensuring they are numbers
+		totalActual += actual ? parseFloat(actual.value) || 0 : 0;
+    
+	});
+
+	// Update the totals in the tfoot
+	document.getElementById("grand-total-actual").querySelector('input').value = totalActual
+    document.getElementById("grand-total-payment").querySelector('input').value = totalActual
+}
+
+function reIndexRows(tableId) {
+  var table = document.getElementById(tableId);
+  var rows = table.querySelectorAll('tbody tr');
+
+  // Start from 0 since we're iterating over tbody rows directly
+  rows.forEach(function(row, index) {
+    var newIndex = index;
+    row.dataset.index = newIndex; // Update the dataset index
+    var numberCell = row.cells[0]; // Update the visible row number
+    numberCell.textContent = newIndex + 1;
+
+    // Update the names of all input/select elements
+    var inputs = row.querySelectorAll('input, select');
+    inputs.forEach(function(input) {
+      var name = input.name;
+      if (name) {
+        // Replace the old index with the new one
+        input.name = name.replace(/_\d+$/, '_' + newIndex);
+      } 
+    });
+  });
+}
+function reIndexRowsDed(tableId) {
+    var table = document.getElementById(tableId);
+    var rows = table.querySelectorAll('tr.deduction-row');
+    var rowCount = rows.length - 1; // Start indexing from the last row number
+
+    rows.forEach(function(row, index) {
+        // Set the index from the end of the list
+        var newIndex = rowCount - index;
+        row.dataset.index = newIndex;
+
+        // Update the names of all input/select elements
+        var inputs = row.querySelectorAll('input, select');
+        inputs.forEach(function(input) {
+            var name = input.name;
+            if (name) {
+                input.name = name.replace(/deduction(-|_)\d+/, 'deduction$1' + newIndex);
+            } 
+        });
+    });
+}
+function reIndexRowsPayment(tableId) {
+    var table = document.getElementById(tableId);
+    var rows = table.querySelectorAll('tbody tr');
+  rows.forEach(function(row, index) {
+    var newIndex = index; 
+    row.dataset.index = newIndex; // Update the dataset index
+
+    // Update the names of all input/select elements
+    var inputs = row.querySelectorAll('input, select');
+    inputs.forEach(function(input) {
+      var name = input.name;
+      if (name) {
+        // Replace the old index with the new one
+        input.name = name.replace(/_\d+$/, '_' + newIndex);
+      } 
+    });
+  });
+}
+function addPayment(){
+	var paymentTable =  document.getElementById("paymentTable");
+	var tbody = paymentTable.tBodies[0]
+	var rows = tbody.rows.length;
+	var r = tbody.insertRow(rows); // Insert the row at the end of this tbody
+	var number_of_payment = document.getElementById("number_of_payment");
+	var currentCount = parseInt(number_of_payment.value, 10)
+	number_of_payment.value = currentCount + 1
+	r.dataset.index = currentCount ;	
+
+	for(var i = 0 ; i < 6 ;i++){
+		var cell = r.insertCell(i);
+		if (i == 0){
+			var text = document.createElement("input");
+			text.name = "pType_" + currentCount.toString()
+			text.addEventListener('input', function() {
+				this.value = this.value.toUpperCase();
+        	});
+			text.class = "line-items-container"
+			cell.appendChild(text);			
+		}
+		if (i == 1){
+			var text2 = document.createElement("input");
+			text2.name = "pPercentage_" + currentCount.toString()
+			text2.class = "line-items-container"
+			cell.appendChild(text2);
+		}
+		if (i == 2){
+			var text3 = document.createElement("input");
+			text3.name = "pAmount_" + currentCount.toString()
+			text3.class = "line-items-container"
+			cell.appendChild(text3);			
+		}
+		if (i == 3){
+			var selection = document.createElement("select");
+			selection.name = "pStatus_" + currentCount.toString()
+			cell.style.textAlign = "center";
+			selection.class = "line-items-container"
+			// Add options to the sele5t element
+			var option1 = document.createElement("option");
+			option1.value = "DONE";
+			option1.text = "DONE";
+			selection.appendChild(option1);
+
+			var option2 = document.createElement("option");
+			option2.value = "REQUEST";
+			option2.text = "REQUEST";
+			selection.appendChild(option2);		
+			
+			cell.appendChild(selection)
+		}
+		if (i == 4){
+			var date = document.createElement("input")
+			date.type = 'date'
+			date.name = 'pDate_'+ currentCount.toString()
+			cell.appendChild(date)
+		}
+		if (i == 5){
+			var removeButton = document.createElement("button");
+			removeButton.id = "removeRowPayment"
+			removeButton.className = "button add-new-button removeRowPayment"
+			removeButton.class = "line-items-container"
+			removeButton.textContent = "-"
+			cell.appendChild(removeButton)
+		}
+	}
+}
+
+function add() {
+	var scopeOfWorkTable = document.getElementById("scopeOfWork");
+	var tbody = scopeOfWorkTable.tBodies[0]
+	var rows = tbody.rows.length;
+	var r = tbody.insertRow(rows); // Insert the row at the end of this tbody
+	var number_of_scopes = document.getElementById("number_of_scopes");
+	var currentCount = parseInt(number_of_scopes.value, 10)
+	number_of_scopes.value = currentCount + 1
+	r.dataset.index = currentCount ;
+	for (var i = 0; i < 8; i++) {
+		var cell
+		if (i == 0) {
+			cell = r.insertCell(i); // Insert the first cell
+			cell.textContent = rows + 1;
+			cell.style.textAlign = "center";
+			cell.class = "line-items-container";
+		}
+		else {
+			cell = r.insertCell(i); // Insert the other cells
+   		}
+		if (i == 1) {
+			var selection = document.createElement("select");
+			selection.name = "scopeOfWork_" + currentCount.toString()
+			cell.style.textAlign = "left";
+			selection.class = "line-items-container"
+			// Add options to the sele5t element
+			var option1 = document.createElement("option");
+			option1.value = "Clamp Pole Single 2,5 inch";
+			option1.setAttribute('data-price', 9000)
+			option1.text = "Clamp Pole Single 2,5 inch";
+			selection.appendChild(option1);
+
+			var option2 = document.createElement("option");
+			option2.value = "Dead End Fitting / Fixed / clamp Buaya 25/50"
+			option2.setAttribute('data-price', 13000)
+			option2.text = "Dead End Fitting / Fixed / clamp Buaya 25/50";
+			selection.appendChild(option2);
+
+			var option3 = document.createElement("option");
+			option3.value = "Stopping M6";
+			option3.setAttribute('data-price', 500)
+			option3.text = "Stopping M6";
+			selection.appendChild(option3);
+
+			var option4 = document.createElement("option");
+			option4.value = "Clamp 8 (Clamp Gantung)";
+			option4.setAttribute('data-price', 12500)
+			option4.text = "Clamp 8 (Clamp Gantung)";
+			selection.appendChild(option4);
+
+			var option5 = document.createElement("option");
+			option5.value = "Suspension Corong";
+			option5.setAttribute('data-price', 14000)
+			option5.text = "Suspension Corong";
+			selection.appendChild(option5);
+
+			var option6 = document.createElement("option");
+			option6.value = "Span Wartel M10";
+			option6.setAttribute('data-price', 8000)
+			option6.text = "Span Wartel M10";
+			selection.appendChild(option6);
+
+			var option7 = document.createElement("option");
+			option7.value = "Plat Belt 20mm / Stainless Belt";
+			option7.setAttribute('data-price', 135000)
+			option7.text = "Plat Belt 20mm / Stainless Belt";
+			selection.appendChild(option7);
+
+			var option8 = document.createElement("option");
+			option8.value = "Buldog Grip M8";
+			option8.setAttribute('data-price', 7500)
+			option8.text = "Buldog Grip M8";
+			selection.appendChild(option8);
+
+			var option9 = document.createElement("option");
+			option9.value = "Steel Clamp";
+			option9.setAttribute('data-price', 12000)
+			option9.text = "Steel Clamp";
+			selection.appendChild(option9);
+
+			var option10 = document.createElement("option");
+			option10.value = "Helical SET 24 Core";
+			option10.setAttribute('data-price', 7800)
+			option10.text = "Helical SET 24 Core";
+			selection.appendChild(option10);
+
+			var option11 = document.createElement("option");
+			option11.value = "Helical SET 144 Core";
+			option11.setAttribute('data-price', 18000)
+			option11.text = "Helical SET 144 Core";
+			selection.appendChild(option11);
+
+			var option12 = document.createElement("option");
+			option12.value = "Helical SET 288 Core";
+			option12.setAttribute('data-price', 20000)
+			option12.text = "Helical SET 288 Core";
+			selection.appendChild(option12);
+
+			var option13 = document.createElement("option");
+			option13.value = "Bracket A (for Helical Dead End)";
+			option13.setAttribute('data-price', 4500)
+			option13.text = "Bracket A (for Helical Dead End";
+			selection.appendChild(option13);
+
+			var option14 = document.createElement("option");
+			option14.value = "Add Custom Scope Of Work";
+			option14.text = "Add Custom Scope Of Work"
+			selection.appendChild(option14)
+			// Updating the unit price when selecting items
+			selection.onchange = function() {
+				var selectedOption = this.options[this.selectedIndex]
+				var selectedPrice = selectedOption.getAttribute('data-price')
+				var unitPriceInput = this.parentNode.parentNode.cells[4].querySelector('input');
+				unitPriceInput.value = selectedPrice
+				var totalActualInput = this.parentNode.parentNode.cells[5].querySelector('input')
+				var qtyActual = this.parentNode.parentNode.cells[3].querySelector('input')
+				var grandTotalUpdater = document.getElementById('grand-total-payment')
+				grandTotalUpdater.addEventListener('change', function(event){
+					this.value = unitPriceInput.value * qtyActual
+				});
+				if (qtyActual.value == 0){
+						totalActualInput.value = ''
+					}
+					else {
+						totalActualInput.value = qtyActual.value * unitPriceInput.value
+					}
+				if (this.value == "Add Custom Scope Of Work") {
+					var customInput = document.createElement("input");
+					this.style.display = "none"
+					customInput.type = "text"
+					customInput.name = "scopeOfWork_" + currentCount.toString()
+					applyStyles(customInput, "text")
+					this.parentNode.insertBefore(customInput, this.nextSibling);
+					
+				}
+				unitPriceInput.addEventListener('input', function(event) {
+					totalActualInput.value = this.value * qtyActual.value
+				});
+				qtyActual.addEventListener('input', function(event) {
+					totalActualInput.value = this.value * unitPriceInput.value
+				});
+				totalActualInput.value = unitPriceInput.value * qty.value;
+
+				// Total Actual
+				qtyActual.addEventListener('input', function(event) {
+					if (this.value == 0){
+						totalActualInput.value = ''
+					}
+					else {
+						totalActualInput.value = this.value * unitPriceInput.value
+					}
+				});
+				unitPriceInput.addEventListener('input', function(event) {
+					if (qtyActual.value == 0){
+						totalActualInput.value = ''
+					}
+					else {
+						totalActualInput.value = this.value * qtyActual.value
+					}
+				});
+			};
+			cell.appendChild(selection);
+		}
+		if (i == 2) {
+			var select2 = document.createElement("select");
+            select2.name = "unit_" + currentCount.toString()
+			select2.class = "line-items-container"
+
+
+            var option1 = document.createElement("option");
+			option1.value = "Pcs";
+			option1.text = "Pcs";
+			select2.appendChild(option1);
+
+            var option2 = document.createElement("option");
+			option2.value = "Roll";
+			option2.text = "Roll";
+			select2.appendChild(option2);
+
+            var option3 = document.createElement("option");
+			option3.value = "Meter";
+			option3.text = "Meter";
+			select2.appendChild(option3);
+            
+			cell.appendChild(select2);
+		}
+		if (i == 3) {
+			var num1 = document.createElement("input");
+			num1.name = "qtyA_" + currentCount.toString()
+			num1.type = "number";
+			num1.class = "line-items-container"
+
+
+			cell.appendChild(num1)
+		}
+		if (i == 4) { 
+			var text = document.createElement("input");
+			text.name = "unitPrice_" + currentCount.toString()
+			text.class = "line-items-container"
+
+			cell.appendChild(text);
+		}
+		if (i == 5) { 
+			var text3 = document.createElement("input");
+			text3.name = "totalA_" + currentCount.toString()
+			text3.class = "line-items-container"
+
+			cell.appendChild(text3);
+		}
+		if (i == 6) { 
+			var text4 = document.createElement("input");
+			text4.name = "remarks_" + currentCount.toString()
+			text4.class = "line-items-container"
+			cell.style.textAlign = "left";
+			cell.appendChild(text4);
+		}
+		if (i == 7){
+			var removeButton = document.createElement("button");
+			removeButton.id = "removeRow"
+			removeButton.className = "button add-new-button removeRowButton"
+			removeButton.class = "line-items-container"
+			removeButton.textContent = "-"
+			cell.appendChild(removeButton)
+		}
+	}
+}
+function applyStyles(element, type) {
+	element.style.width = "100%"; // Make element take the full width of the cell
+	element.style.height = "30px"; // Set a fixed height for a tighter look
+	element.style.boxSizing = "border-box"; // Include padding and border in the width and height
+	element.style.border = "1px solid #ddd"; // Uniform border style
+	element.style.padding = "4px"; // Consistent padding
+	element.style.margin = "0"; // Remove margins to avoid unnecessary spacing
+}
+// CHANGING THE TERMS SELECTION CELL
+document.getElementById('terms-selection').onchange = function(){
+  if (this.value == "CREATE") {
+    var customInput = document.createElement("input");
+    customInput.type = "text";
+    customInput.name = "terms-percentage-cell"; // Using the same name for consistency
+    customInput.id = "custom-terms-percentage-cell"; // Giving an ID for easier access
+	customInput.textContent = ''
+
+    // Hide the dropdown
+    this.style.display = "none";
+
+    // Insert the new input field after the dropdown
+    this.parentNode.insertBefore(customInput, this.nextSibling);
+	}
+  var percentageAmount = this.options[this.selectedIndex].getAttribute('data-percentage-amount');
+  var thisRemarks = this.options[this.selectedIndex].getAttribute('data-remarks');
+
+  document.getElementsByName('terms-percentage-cell')[0].value = percentageAmount;
+  document.getElementsByName('payment-remarks-cell')[0].value = thisRemarks;  
+}
+
+document.getElementById('bank').onchange = function() {
+  if (this.value == "CREATE") {
+    var customInput = document.createElement("input");
+    customInput.type = "text";
+    customInput.name = "bank";
+    customInput.id = "bank_custom"; // Use a different ID to avoid conflicts
+
+    // Add the uppercase listener to the new input
+    addUppercaseListener(customInput);
+
+    this.style.display = "none";
+    this.parentNode.insertBefore(customInput, this.nextSibling);
+  }
+};
+
+document.getElementById('customer').onchange = function() {
+  if (this.value == "CREATE") {
+    var customInput = document.createElement("input");
+    customInput.type = "text";
+    customInput.name = "customer";
+    customInput.id = "customer_custom"; // Use a different ID to avoid conflicts
+
+    // Add the uppercase listener to the new input
+    addUppercaseListener(customInput);
+
+    this.style.display = "none";
+    this.parentNode.insertBefore(customInput, this.nextSibling);
+  }
+};
+
+document.getElementById('region').onchange = function() {
+  if (this.value == "CREATE") {
+    var customInput = document.createElement("input");
+    customInput.type = "text";
+    customInput.name = "region";
+    customInput.id = "region_custom"; // Use a different ID to avoid conflicts
+
+    // Add the uppercase listener to the new input
+    addUppercaseListener(customInput);
+
+    this.style.display = "none";
+    this.parentNode.insertBefore(customInput, this.nextSibling);
+  }
+};
+
+// CHANGING THE TAX SELECTION CELL
+document.getElementById('tax-cell').onchange = function(){
+  var percentageAmount = this.options[this.selectedIndex].getAttribute('data-tax-percentage-amount');
+  document.getElementsByName('tax-percentage-cell')[0].value = percentageAmount;
+}
+
+document.addEventListener('input', function(event) {
+	updateTotals()
+	termsAmountCalculation()
+	taxAmountCalculation()
+	updateGrandTotal()
+
+});
+document.addEventListener('change', function(event) {
+	updateTotals()
+	termsAmountCalculation()
+	taxAmountCalculation()
+	updateGrandTotal()
+});
+
+
+// REMOVE BUTTON ON SCOPE OF WORK
+document.addEventListener('DOMContentLoaded', (event) => {
+	// Event delegation
+    document.getElementById('scopeOfWork').addEventListener('click', function(event) {
+        if (event.target && event.target.className.includes('removeRowButton')) {
+        var row = event.target.closest('tr');
+            if (row) {
+                row.remove(); // Remove the row
+                reIndexRows('scopeOfWork'); // Re-index rows after removal
+                number_of_scopes = document.getElementById('number_of_scopes')
+                number_of_scopes.value -= 1
+                updateTotals()
+                termsAmountCalculation()
+                taxAmountCalculation()
+                updateGrandTotal()
+            }
+        }
+    });
+});
+
+// REMOVE BUTTON ON DEDUCTION
+document.addEventListener('DOMContentLoaded', (event) => {
+	// Event delegation
+    document.getElementById('payment-table').addEventListener('click', function(event) {
+        if (event.target && event.target.className.includes('removeRowDed')) {
+        var row = event.target.closest('tr');
+            if (row) {
+                row.remove(); // Remove the row
+                reIndexRows('deduction-row'); // Re-index rows after removal
+                number_of_deduction = document.getElementById('number_of_deduction')
+                number_of_deduction.value -= 1
+                updateTotals()
+                termsAmountCalculation()
+                taxAmountCalculation()
+                updateGrandTotal()
+            }
+        }
+    });
+});
+// REMOVE BUTTON ON PAYMENT TABLE
+document.addEventListener('DOMContentLoaded', (event) => {
+	// Event delegation
+    document.getElementById('paymentTable').addEventListener('click', function(event) {
+        if (event.target && event.target.className.includes('removeRowPayment')) {
+        var row = event.target.closest('tr');
+            if (row) {
+                row.remove(); // Remove the row
+                reIndexRowsPayment('paymentTable'); // Re-index rows after removal
+                number_of_payment = document.getElementById('number_of_payment')
+                number_of_payment.value -= 1
+            }
+        }
+    });
+});
+
+
+
+
+document.getElementById('wo_date').addEventListener('input', function () {
+// Extract the year and month from the date
+var date = this.value;
+var yearMonth = date ? date.substr(2, 2) + date.substr(5, 2) : '';
+
+// Set the YYMM format to the 'shortdate' input field
+document.getElementById('shortdate').value = yearMonth;
+});
+document.getElementById('wo_number').addEventListener('input', function () {
+// Check if the input is not more than 4 digits and if it is within the 0-9999 range
+if (this.value.length > 4 || parseInt(this.value, 10) > 9999) {
+this.value = this.value.slice(0, 4); // Limit to the first 4 digits
+}
+});
+document.getElementsByName('request_by')[0].addEventListener('input', function () {
+this.value = this.value.toUpperCase();
+});
+document.getElementsByName('city')[0].addEventListener('input', function () {
+this.value = this.value.toUpperCase();
+});document.getElementsByName('account_name')[0].addEventListener('input', function () {
+this.value = this.value.toUpperCase();
+});document.getElementsByName('category')[0].addEventListener('input', function () {
+this.value = this.value.toUpperCase();
+});document.getElementsByName('project')[0].addEventListener('input', function () {
+this.value = this.value.toUpperCase();
+});document.getElementsByName('account_number')[0].addEventListener('input', function () {
+this.value = this.value.toUpperCase();
+});document.getElementsByName('phone_number')[0].addEventListener('input', function () {
+this.value = this.value.toUpperCase();
+});document.getElementsByName('npwp')[0].addEventListener('input', function () {
+this.value = this.value.toUpperCase();
+});document.getElementsByName('clusterName')[0].addEventListener('input', function () {
+this.value = this.value.toUpperCase();
+});document.getElementsByName('siteId')[0].addEventListener('input', function () {
+this.value = this.value.toUpperCase();
+});
+
+</script>
+
+{% endblock %}
