@@ -39,7 +39,7 @@ class Deduction(models.Model):
 class Payment(models.Model):
     pType = models.CharField(max_length=100, default="", blank=True)
     pPercentage = models.CharField(max_length=100, default="", blank=True)
-    pAmount = models.IntegerField(default = 0, blank = True)
+    pAmount = models.CharField(max_length=100, default="", blank=True)
     pStatus = models.CharField(max_length=100, default="", blank=True)
     pDate = models.DateField(blank = True,  default=timezone.now)
 

@@ -257,12 +257,26 @@ td {
 			<td style ="width:18%">WO NUMBER</td>
 			<td style="width: 2%;">:</td>
 			{% if order.company == 'aci' %}
-			<td style ="width:30%">WO / ACI / EMR / <input name ="shortdate"  value="{{order.shortdate}}" id ="shortdate" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}" type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
-      		{% elif order.company == 'bks' %}
-			<td style ="width:30%">WO / BKS / EMR / <input name ="shortdate" id ="shortdate"  value="{{order.shortdate}}" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}"	 type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
-      		{% else %}
-			<td style ="width:30%">WO / LKI / EMR / <input name ="shortdate" id ="shortdate"  value="{{order.shortdate}}" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}"	 type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
-      		{% endif %}			
+				{%if order.project == 'EMR' %}
+					<td style ="width:30%">WO / ACI / EMR / <input name ="shortdate"  value="{{order.shortdate}}" id ="shortdate" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}" type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+				{%else%}
+				<td style ="width:30%">WO / ACI / LN / <input name ="shortdate"  value="{{order.shortdate}}" id ="shortdate" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}" type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+				{%endif%}
+
+			{% elif order.company == 'bks' %}
+				{%if order.project == 'EMR' %}
+				<td style ="width:30%">WO / BKS / EMR / <input name ="shortdate" id ="shortdate"  value="{{order.shortdate}}" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}"	 type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+				{%else%}
+				<td style ="width:30%">WO / BKS / LN / <input name ="shortdate" id ="shortdate"  value="{{order.shortdate}}" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}"	 type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+				{%endif%}
+			
+			{% else %}
+				{%if order.project == 'EMR' %}
+					<td style ="width:30%">WO / LKI / EMR / <input name ="shortdate" id ="shortdate"  value="{{order.shortdate}}" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}"	 type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+				{%else%}
+					<td style ="width:30%">WO / LKI / LN / <input name ="shortdate" id ="shortdate"  value="{{order.shortdate}}" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}"	 type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+				{%endif%}
+			{% endif %}		
 		</tr>
 		<tr>
 			<td style="width: 18%;">REQUEST BY</td>

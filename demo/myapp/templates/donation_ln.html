@@ -255,12 +255,26 @@ Create New List
 			<td style ="width:18%">WO NUMBER</td>
 			<td style="width: 2%;">:</td>
 			{% if company_type == 'aci' %}
-			<td style ="width:30%">WO / ACI / EMR / <input name ="shortdate" id ="shortdate" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+				{% if project_type == 'EMR' %}		
+				<td style ="width:30%">WO / ACI / EMR / <input name ="shortdate" id ="shortdate" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+				{%else%}
+				<td style ="width:30%">WO / ACI / LN / <input name ="shortdate" id ="shortdate" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+				{%endif%}
+
 			{% elif company_type == 'bks' %}
-			<td style ="width:30%">WO / BKS / EMR / <input name ="shortdate" id ="shortdate" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+				{% if project_type == 'EMR' %}		
+				<td style ="width:30%">WO / BKS / EMR / <input name ="shortdate" id ="shortdate" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+				{%else%}
+				<td style ="width:30%">WO / BKS / LN / <input name ="shortdate" id ="shortdate" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+				{%endif%}
+			
 			{% else %}
-			<td style ="width:30%">WO / LKI / EMR / <input name ="shortdate" id ="shortdate" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
-			{% endif %}		
+				{% if project_type == 'EMR'%}		
+				<td style ="width:30%">WO / LKI / EMR / <input name ="shortdate" id ="shortdate" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+				{% else %}
+				<td style ="width:30%">WO / LKI / LN / <input name ="shortdate" id ="shortdate" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+				{%endif%}
+			{%endif%}
     		</tr>
 		<tr>
 			<td style="width: 18%;">REQUEST BY</td>

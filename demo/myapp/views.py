@@ -26,8 +26,8 @@ def create_wo(request):
     context = {'MEDIA_URL': settings.MEDIA_URL}
     return render(request, "create_wo.html", context)
 
-def mp_ln_traditional_internal_odn(request, pricing_type, company_type) :
-    context = {'MEDIA_URL': settings.MEDIA_URL,'pricing_type': pricing_type, 'company_type' : company_type}
+def mp_ln_traditional_internal_odn(request, pricing_type, company_type, project_type) :
+    context = {'MEDIA_URL': settings.MEDIA_URL,'pricing_type': pricing_type, 'company_type' : company_type, 'project_type' : project_type}
     if request.method == "POST" :
         wo_number = request.POST.get('wo_number')
         if not wo_number:
@@ -127,8 +127,8 @@ def mp_ln_traditional_internal_odn(request, pricing_type, company_type) :
     # Initial form display (GET request)
         return render(request, 'mp_ln_traditional_internal_odn.html', context)
 
-def mp_emr_traditional_internal(request, pricing_type, company_type) :
-    context = {'MEDIA_URL': settings.MEDIA_URL,'pricing_type': pricing_type, 'company_type' : company_type}
+def mp_emr_traditional_internal(request, pricing_type, company_type, project_type) :
+    context = {'MEDIA_URL': settings.MEDIA_URL,'pricing_type': pricing_type, 'company_type' : company_type , 'project_type' : project_type}
     if request.method == "POST" :
         wo_number = request.POST.get('wo_number')
         if not wo_number:
@@ -228,8 +228,8 @@ def mp_emr_traditional_internal(request, pricing_type, company_type) :
     else:
     # Initial form display (GET request)
         return render(request, 'mp_emr_traditional_internal.html', context)
-def material_ln(request, company_type) :
-    context = {'MEDIA_URL': settings.MEDIA_URL, 'company_type' : company_type}
+def material_ln(request, company_type, project_type) :
+    context = {'MEDIA_URL': settings.MEDIA_URL, 'company_type' : company_type , 'project_type' : project_type}
     if request.method == "POST" :
         wo_number = request.POST.get('wo_number')
         if not wo_number:
@@ -320,8 +320,8 @@ def material_ln(request, company_type) :
     # Initial form display (GET request)
         return render(request, 'material_ln.html', context)
 
-def material_emr(request, company_type) :
-    context = {'MEDIA_URL': settings.MEDIA_URL, 'company_type' : company_type}
+def material_emr(request, company_type, project_type) :
+    context = {'MEDIA_URL': settings.MEDIA_URL, 'company_type' : company_type, 'project_type' : project_type}
     if request.method == "POST" :
         wo_number = request.POST.get('wo_number')
         if not wo_number:
@@ -410,8 +410,8 @@ def material_emr(request, company_type) :
     # Initial form display (GET request)
         return render(request, 'material_emr.html', context)
 
-def oc_ln(request, company_type) :
-    context = {'MEDIA_URL': settings.MEDIA_URL, 'company_type' : company_type}
+def oc_ln(request, company_type, project_type) :
+    context = {'MEDIA_URL': settings.MEDIA_URL, 'company_type' : company_type, 'project_type' : project_type}
     if request.method == "POST" :
         wo_number = request.POST.get('wo_number')
         if not wo_number:
@@ -499,8 +499,8 @@ def oc_ln(request, company_type) :
     # Initial form display (GET request)
         return render(request, 'oc_ln.html', context)
 
-def oc_emr(request, company_type) :
-    context = {'MEDIA_URL': settings.MEDIA_URL, 'company_type' : company_type}
+def oc_emr(request, company_type , project_type) :
+    context = {'MEDIA_URL': settings.MEDIA_URL, 'company_type' : company_type, 'project_type' : project_type}
     if request.method == "POST" :
         wo_number = request.POST.get('wo_number')
         if not wo_number:
@@ -589,8 +589,8 @@ def oc_emr(request, company_type) :
     # Initial form display (GET request)
         return render(request, 'oc_emr.html', context)
 
-def donation_ln(request, company_type) :
-    context = {'MEDIA_URL': settings.MEDIA_URL, 'company_type' : company_type}
+def donation_ln(request, company_type , project_type) :
+    context = {'MEDIA_URL': settings.MEDIA_URL, 'company_type' : company_type , 'project_type' : project_type}
     if request.method == "POST" :
         wo_number = request.POST.get('wo_number')
         if not wo_number:
@@ -639,8 +639,8 @@ def donation_ln(request, company_type) :
     # Initial form display (GET request)
         return render(request, 'donation_ln.html', context)
 
-def donation_emr(request, company_type) :
-    context = {'MEDIA_URL': settings.MEDIA_URL, 'company_type' : company_type}
+def donation_emr(request, company_type, project_type) :
+    context = {'MEDIA_URL': settings.MEDIA_URL, 'company_type' : company_type, 'project_type' : project_type}
     if request.method == "POST" :
         wo_number = request.POST.get('wo_number')
         if not wo_number:

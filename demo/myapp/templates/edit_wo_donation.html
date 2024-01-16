@@ -220,7 +220,7 @@ Create New List
     {% if order.company == 'aci' %}
         <img src="{{ MEDIA_URL }}aci_cmp_logo2.jpg" style="width: 400px;">
 		<input type="hidden" value="aci"  name ="company" id ="company">
-    {% if order.company == 'bks' %}
+    {% elif order.company == 'bks' %}
 
         <img src="{{ MEDIA_URL }}bks4.png">
 		<input type="hidden" value="bks"  name ="company" id ="company">
@@ -237,7 +237,7 @@ Create New List
 		<b>
 			{% if order.company == 'aci' %}
 				PT. ANSINDA COMMUNICATION INDONESIA
-        {% if order.company == 'bks' %}
+        {% elif order.company == 'bks' %}
 				PT. BAHTERA KONSTRUKSI SEJAHTERA
         {% else %}
 				PT. LEONY KONSTRUKSKI INDONESIA
@@ -258,11 +258,25 @@ Create New List
 			<td style ="width:18%">WO NUMBER</td>
 			<td style="width: 2%;">:</td>
 			{% if order.company == 'aci' %}
-			<td style ="width:30%">WO / ACI / EMR / <input name ="shortdate"  value="{{order.shortdate}}" id ="shortdate" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}" type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
-      {% if order.company == 'bks' %}
-			<td style ="width:30%">WO / BKS / EMR / <input name ="shortdate" id ="shortdate"  value="{{order.shortdate}}" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}"	 type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+        {%if order.project == 'EMR' %}
+			  <td style ="width:30%">WO / ACI / EMR / <input name ="shortdate"  value="{{order.shortdate}}" id ="shortdate" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}" type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+        {%else%}
+        <td style ="width:30%">WO / ACI / LN / <input name ="shortdate"  value="{{order.shortdate}}" id ="shortdate" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}" type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+        {%endif%}
+
+      {% elif order.company == 'bks' %}
+        {%if order.project == 'EMR' %}
+        <td style ="width:30%">WO / BKS / EMR / <input name ="shortdate" id ="shortdate"  value="{{order.shortdate}}" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}"	 type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+        {%else%}
+        <td style ="width:30%">WO / BKS / LN / <input name ="shortdate" id ="shortdate"  value="{{order.shortdate}}" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}"	 type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+        {%endif%}
+      
       {% else %}
-			<td style ="width:30%">WO / LKI / EMR / <input name ="shortdate" id ="shortdate"  value="{{order.shortdate}}" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}"	 type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+        {%if order.project == 'EMR' %}
+		    <td style ="width:30%">WO / LKI / EMR / <input name ="shortdate" id ="shortdate"  value="{{order.shortdate}}" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}"	 type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+        {%else%}
+		    <td style ="width:30%">WO / LKI / LN / <input name ="shortdate" id ="shortdate"  value="{{order.shortdate}}" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}"	 type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+        {%endif%}
       {% endif %}		
     </tr>
 		<tr>
@@ -497,47 +511,84 @@ Create New List
 
 
   <!-- SIGN FIELD -->
-  {% if order.company == 'aci'%}
-  <table class="line-items-container">
-    <thead>
-      <th >CREATED BY</th>
-      <th colspan="2" style="text-align: center;">APPROVED BY</th>
-    </thead>
-    <tbody>
-      <tr><td style="height: 200px;"><td></td></td></tr>
-      <tr><td><u>AGUNG SONATA</u></td><td><u>SUNNY</u></td><td><u>STEVEN</u></td></tr>
-      <tr><td>PROCUREMENT</td><td></td><td>CEO</td></tr>
+  {% if order.company == 'aci' %}
+  {% if order.project == 'EMR' %}
+    <table class="line-items-container">
+      <thead>
+        <th>CREATED BY</th>
+        <th colspan="2" style="text-align: center;">APPROVED BY</th>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="height: 200px;">
+          <td></td>
+		  <td></td>
+        </tr>
+        <tr>
+          <td><u>AGUNG SONATA</u></td>
+          <td><u>TONY</u></td>
+          <td><u>STEVEN</u></td>
+        </tr>
+        <tr>
+          <td>PROCUREMENT</td>
+          <td></td>
+          <td>CEO</td>
+        </tr>
+      </tbody>
+    </table>
+  {% if order.project == 'LN' %}
+    <table class="line-items-container">
+      <thead>
+        <th>CREATED BY</th>
+        <th colspan="2" style="text-align: center;">APPROVED BY</th>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="height: 200px;"></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><u>AGUNG SONATA</u></td>
+          <td><u>SUNNY</u></td>
+          <td><u>STEVEN</u></td>
+        </tr>
+        <tr>
+          <td>PROCUREMENT</td>
+          <td></td>
+          <td>CEO</td>
+        </tr>
+      </tbody>
+    </table>
+  {% endif %}
+{% endif %}
+{% elif order.company == 'bks' %}
 
-    </tbody>
-  </table>
-  {% elif order.company == 'bks' %}
+<table class="line-items-container">
+<thead>
+	<th>CREATED BY</th>
+	<th>APPROVED BY</th>
+</thead>
+<tbody>
+	<tr><td style="height: 200px;"><td></td></td></tr>
+	<tr><td><u>ELSA MONICA</u></td><td><u>JENNY</u></td></tr>
+	<tr><td>PROCUREMENT</td><td>CEO</td></tr>
 
-  <table class="line-items-container">
-    <thead>
-      <th>CREATED BY</th>
-      <th>APPROVED BY</th>
-    </thead>
-    <tbody>
-      <tr><td style="height: 200px;"><td></td></td></tr>
-      <tr><td><u>ELSA MONICA</u></td><td><u>JENNY</u></td></tr>
-      <tr><td>PROCUREMENT</td><td>CEO</td></tr>
+</tbody>
+</table>
+{%else%} 
+<table class="line-items-container">
+<thead>
+	<th>CREATED BY</th>
+	<th>APPROVED BY</th>
+</thead>
+<tbody>
+	<tr><td style="height: 200px;"><td></td></td></tr>
+	<tr><td><u>AGUNG</u></td><td><u>FERONIA</u></td></tr>
+	<tr><td>PROCUREMENT</td><td>CEO</td></tr>
 
-    </tbody>
-  </table>
-  {%else%} 
-  <table class="line-items-container">
-    <thead>
-      <th>CREATED BY</th>
-      <th>APPROVED BY</th>
-    </thead>
-    <tbody>
-      <tr><td style="height: 200px;"><td></td></td></tr>
-      <tr><td><u>AGUNG</u></td><td><u>FERONIA</u></td></tr>
-      <tr><td>PROCUREMENT</td><td>CEO</td></tr>
-
-    </tbody>
-  </table>
-  {%endif%}
+</tbody>
+</table>
+{%endif%}
 
 	<div class="footer">
 		<div class="footer-info">

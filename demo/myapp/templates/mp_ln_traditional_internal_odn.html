@@ -258,12 +258,26 @@ td {
 			<td style ="width:18%">WO NUMBER</td>
 			<td style="width: 2%;">:</td>
 			{% if company_type == 'aci' %}
-			<td style ="width:30%">WO / ACI / EMR / <input name ="shortdate" id ="shortdate" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+				{% if project_type == 'EMR' %}		
+				<td style ="width:30%">WO / ACI / EMR / <input name ="shortdate" id ="shortdate" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+				{%else%}
+				<td style ="width:30%">WO / ACI / LN / <input name ="shortdate" id ="shortdate" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+				{%endif%}
+
 			{% elif company_type == 'bks' %}
-			<td style ="width:30%">WO / BKS / EMR / <input name ="shortdate" id ="shortdate" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+				{% if project_type == 'EMR' %}		
+				<td style ="width:30%">WO / BKS / EMR / <input name ="shortdate" id ="shortdate" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+				{%else%}
+				<td style ="width:30%">WO / BKS / LN / <input name ="shortdate" id ="shortdate" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+				{%endif%}
+			
 			{% else %}
-			<td style ="width:30%">WO / LKI / EMR / <input name ="shortdate" id ="shortdate" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
-			{% endif %}		
+				{% if project_type == 'EMR'%}		
+				<td style ="width:30%">WO / LKI / EMR / <input name ="shortdate" id ="shortdate" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+				{% else %}
+				<td style ="width:30%">WO / LKI / LN / <input name ="shortdate" id ="shortdate" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+				{%endif%}
+			{%endif%}
 		</tr>
 		<tr>
 			<td style="width: 18%;">REQUEST BY</td>
@@ -1307,7 +1321,7 @@ function add() {
 			var option1 = document.createElement("option");
 			option1.value = "MPO HUB FebS-D06";
 			option1.setAttribute('data-price', 10000)
-			option1.text = "ODB HUB FebS-H05";
+			option1.text = "MPO HUB FebS-D06";
 			selection.appendChild(option1);
 
 			var option2 = document.createElement("option");
@@ -1319,7 +1333,7 @@ function add() {
 			var option3 = document.createElement("option");
 			option3.value = "Cascaded Box FebS-S11 (70/30)";
 			option3.setAttribute('data-price', 10000)
-			option3.text = "Cascaded Box FebS-S11 (70/30)y";
+			option3.text = "Cascaded Box FebS-S11 (70/30)";
 			selection.appendChild(option3);
 
 			var option4 = document.createElement("option");
@@ -1343,13 +1357,13 @@ function add() {
 			var option7 = document.createElement("option");
 			option7.value = "48C Inline Joint Closure";
 			option7.setAttribute('data-price', 50000)
-			option7.text = "48C inline joint Closure";
+			option7.text = "48C inline Joint Closure";
 			selection.appendChild(option7);
 
 			var option8 = document.createElement("option");
 			option8.value = "24C Inline Joint Closure";
 			option8.setAttribute('data-price', 25000)
-			option8.text = "24C inline joint Closure";
+			option8.text = "24C inline Joint Closure";
 			selection.appendChild(option8);
 
 			var option9 = document.createElement("option");
