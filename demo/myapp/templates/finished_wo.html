@@ -96,12 +96,12 @@
   }
   #example td:nth-child(15){
     text-align: center;
-    width: 4%;
+    width: 10%;
 
   }
   #example td:nth-child(16){
     text-align: center;
-    width: 10%;
+    width: 4%;
 
   }
   #example td:nth-child(17){
@@ -164,7 +164,7 @@
                     </th>
                     <th>
                       CLUSTER
-                      <input type="text" name="cluster"style="width: 100%;">
+                      <input type="text" name="clusterName"style="width: 100%;">
                     </th>
                     <th>
                       SITE ID
@@ -278,7 +278,7 @@
                   </td>     
                 </tr>
                 {% empty %}
-                <tr><td colspan="19">No work orders available.</td></tr>
+                <tr><td colspan="20">No work orders available.</td></tr>
                   {% endfor %}
               </tbody>
           </table>
@@ -577,7 +577,6 @@ function updateTable(data) {
 
   // Loop through the data and create table rows
   data.forEach(function(order, index) {
-    console.log(order.data)
     var row = tbody.insertRow();
     // Set the cell contents
     row.insertCell().textContent = index + 1; // No
@@ -690,7 +689,7 @@ function updateTable(data) {
     var row = tbody.insertRow();
     var cell = row.insertCell(0);
     cell.textContent = 'No work orders available.';
-    cell.colSpan = 19; // Span across all columns
+    cell.colSpan = 20; // Span across all columns
   
   }
 }

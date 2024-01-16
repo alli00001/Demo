@@ -165,7 +165,7 @@ class WorkOrder(models.Model):
         payment_term_str = self.paymentTerm if self.paymentTerm else ''
         term_percentage_str = str(self.termPercentage) if self.termPercentage else ''
 
-        parts = [convertDate(wo_date_str),project_str,category_str ,customer_str, type_str,cluster_name_str,siteid_str,odbid_str,worktype_str , cluster_name_str, payment_term_str, term_percentage_str]
+        parts = [convertDate(wo_date_str),project_str,category_str ,customer_str, type_str,cluster_name_str,siteid_str,odbid_str,worktype_str , payment_term_str, term_percentage_str]
         returnString = '-'.join(part for part in parts if part)        
         return returnString   
      

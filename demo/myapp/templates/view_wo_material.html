@@ -56,7 +56,9 @@ td {
 .general-information-table td:nth-child(2) {
     width: 25%;
 }
-
+.scopeOfWork td:nth-child(2) {
+    text-align: left;
+}
 .general-information-table td:nth-child(3), 
 .general-information-table td:nth-child(4) {
     text-align: right;
@@ -387,7 +389,7 @@ td {
       {%for scope in order.workOrder.all%}
       <tr>
         <td style = "text-align: center; padding: 8px 0;">{{ forloop.counter }}</td> <!-- This will auto-increment the row number -->
-        <td>{{ scope.scopeOfWork }}</td>
+        <td style="text-align: left;">{{ scope.scopeOfWork }}</td>
         <td>{{ scope.unit }}</td>
         <td>{{ scope.qtyActual }}</td>
         <td>{{ scope.unitPrice }}</td>

@@ -12,7 +12,9 @@ Create New List
 	Common invoice styles. These styles will work in a browser or using the HTML
 	to PDF anvil endpoint.
 */
-
+.scopeOfWork td:nth-child(2) {
+    text-align: left;
+}
 td {
   word-wrap: break-word; /* Allows long words to be able to break and wrap onto the next line */
   white-space: normal; /* Allows whitespace to behave normally, i.e., wrapping the text */
@@ -89,7 +91,6 @@ td {
 
 @media screen and (max-width: 600px) {
   .line-items-container, .line-items-container thead, .line-items-container tbody, .line-items-container th, .line-items-container td, .line-items-container tr {
-    text-align: center;
 	display: block;
   }
 
@@ -348,7 +349,7 @@ td {
 				<td>{{order.siteId}}</td>
 				<td>{{order.type}}</td>
 				<td>{{order.workType}}</td>
-				<td>{{order.type}}</td>
+				<td>{{order.hp}}</td>
 			</tr>
 		</tbody>
 	</table>
@@ -387,7 +388,7 @@ td {
 		<thead>
 			<tr>
 				<th style ="width : 4%">NO</th>
-				<th style ="width: 26%;">SCOPE OF WORK</th>
+				<th style ="width: 26%; ">SCOPE OF WORK</th>
 				<th style ="width : 10%">QTY (BOQ)</th>
 				<th style ="width : 10%">QTY (ACTUAL)</th>
 				<th style ="width : 10%">UNIT PRICE</th>
@@ -401,7 +402,7 @@ td {
       {%for scope in order.workOrder.all%}
       <tr>
         <td style = "text-align: center; padding: 8px 0;">{{ forloop.counter }}</td> <!-- This will auto-increment the row number -->
-        <td>{{ scope.scopeOfWork }}</td>
+        <td style="text-align: left;">{{ scope.scopeOfWork }}</td>
         <td>{{ scope.qtyBoq }}</td>
         <td>{{ scope.qtyActual }}</td>
         <td>{{ scope.unitPrice }}</td>
