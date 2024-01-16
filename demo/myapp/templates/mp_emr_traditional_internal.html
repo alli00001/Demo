@@ -459,7 +459,7 @@ td {
           <td>
 			<select name ="tax-cell" id ="tax-cell">
 				<option value ="WHT-21" data-tax-percentage-amount = 2.5%>TAX - WHT21</option>
-				<option value ="WHT-23" data-tax-percentage-amount = 3%>TAX - WHT23</option>
+				<option value ="WHT-23" data-tax-percentage-amount = 2%>TAX - WHT23</option>
 				<option value ="VAT" data-tax-percentage-amount = 11%>TAX - VAT</option>
 			</select>
 		</td>
@@ -673,6 +673,13 @@ td {
 </script>
 
 <script>
+
+document.addEventListener('keypress', function(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            return false;
+        }
+    });
 	    var pricingType = "{{ pricing_type }}";
     document.addEventListener('DOMContentLoaded', function () {
         var inputElement = document.getElementById('pricing_type');
@@ -1058,9 +1065,9 @@ function add() {
 			selection.appendChild(option11);
 
 			var option12 = document.createElement("option");
-			option12.value = "Instal sling Wire";
+			option12.value = "Instal Sling Wire";
 			option12.setAttribute('data-price', 1600)
-			option12.text = "Instal sling Wire";
+			option12.text = "Instal Sling Wire";
 			selection.appendChild(option12);
 
 			var option13 = document.createElement("option");
@@ -1070,9 +1077,9 @@ function add() {
 			selection.appendChild(option13);
 
 			var option14 = document.createElement("option");
-			option14.value = "Instal FAT inclde the Splicing & Splitter";
+			option14.value = "Instal FAT include the Splicing & Splitter";
 			option14.setAttribute('data-price', 130000)
-			option14.text = "Instal FAT inclde the Splicing & Splitter";
+			option14.text = "Instal FAT include the Splicing & Splitter";
 			selection.appendChild(option14);
 
 			var option15 = document.createElement("option");
@@ -1216,9 +1223,9 @@ function add() {
 			selection.appendChild(option11);
 
 			var option12 = document.createElement("option");
-			option12.value = "Instal sling Wire";
+			option12.value = "Instal Sling Wire";
 			option12.setAttribute('data-price', 2500)
-			option12.text = "Instal sling Wire";
+			option12.text = "Instal Sling Wire";
 			selection.appendChild(option12);
 
 			var option13 = document.createElement("option");
@@ -1228,9 +1235,9 @@ function add() {
 			selection.appendChild(option13);
 
 			var option14 = document.createElement("option");
-			option14.value = "Instal FAT inclde the Splicing & Splitter";
+			option14.value = "Instal FAT includee the Splicing & Splitter";
 			option14.setAttribute('data-price', 150000)
-			option14.text = "Instal FAT inclde the Splicing & Splitter";
+			option14.text = "Instal FAT includee the Splicing & Splitter";
 			selection.appendChild(option14);
 
 			var option15 = document.createElement("option");

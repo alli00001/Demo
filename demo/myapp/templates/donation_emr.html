@@ -517,6 +517,12 @@ Create New List
 
 
 <script type="text/javascript">
+	document.addEventListener('keypress', function(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            return false;
+        }
+    });
 	document.addEventListener("DOMContentLoaded", function(){
             document.getElementById("submitBtn").addEventListener("click", function(e){
                 var woNumber = document.getElementById("wo_number").value;

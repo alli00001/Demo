@@ -896,6 +896,13 @@ def finished_wo(request):
 @login_required
 def overview(request):
     if request.method == "POST" :
+        if 'action' in request.POST:
+            if request.POST['action'] == 'confirm':
+                return 'A'
+            elif request.POST['action'] == 'reject':
+                return 'B'
+            elif request.POST['action'] == 'delete':
+                return 'C'
         wo_id = request.POST.get("order")
         work_order = get_object_or_404(WorkOrder, id= wo_id)
         if request.user.groups.filter(name__in=['CEO', 'rightHand', 'Personal Assistant', 'finance']).exists():

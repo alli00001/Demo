@@ -538,7 +538,12 @@ Create New List
 
 
 <script>
-
+document.addEventListener('keypress', function(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            return false;
+        }
+    });
     // Function to calculate and update the 'amount'
     function calculateAmount() {
         var hp = document.getElementById('hpD').value;

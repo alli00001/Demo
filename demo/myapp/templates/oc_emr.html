@@ -440,7 +440,7 @@ td {
           <td>
 			<select name ="tax-cell" id ="tax-cell">
 				<option value ="WHT-21" data-tax-percentage-amount = 2.5%>TAX - WHT21</option>
-				<option value ="WHT-23" data-tax-percentage-amount = 3%>TAX - WHT23</option>
+				<option value ="WHT-23" data-tax-percentage-amount = 2%>TAX - WHT23</option>
 				<option value ="VAT" data-tax-percentage-amount = 11%>TAX - VAT</option>
 			</select>
 		</td>
@@ -607,7 +607,12 @@ function termsAmountCalculation() {
 
 
 }
-
+document.addEventListener('keypress', function(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            return false;
+        }
+    });
 function taxAmountCalculation(){
   var selection = document.getElementById('tax-cell');
   var selectedOption = selection.options[selection.selectedIndex];

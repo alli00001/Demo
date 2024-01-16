@@ -506,7 +506,7 @@ td {
           <td>
 			<select name ="tax-cell" id ="tax-cell">
 				<option value ="WHT-21" data-tax-percentage-amount = 2.5% {% if order.paymentTax == 'WHT-21' %}selected{% endif %}>TAX - WHT21</option>
-				<option value ="WHT-23" data-tax-percentage-amount = 3% {% if order.paymentTax == 'WHT-23' %}selected{% endif %}>TAX - WHT23</option>
+				<option value ="WHT-23" data-tax-percentage-amount = 2% {% if order.paymentTax == 'WHT-23' %}selected{% endif %}>TAX - WHT23</option>
 				<option value ="VAT" data-tax-percentage-amount = 11% {% if order.paymentTax == 'VAT' %}selected{% endif %}>TAX - VAT</option>
 			</select>
 		</td>
@@ -895,7 +895,12 @@ function addDeduction(){
     reIndexRowsDed('payment-table'); 
     }
 }
-
+document.addEventListener('keypress', function(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            return false;
+        }
+    });
 
 function addUppercaseListener(element) {
   element.addEventListener('input', function() {

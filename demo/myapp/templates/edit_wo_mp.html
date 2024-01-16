@@ -459,9 +459,9 @@ td {
                     <option value ="Instal pole 7 & 9 meter 4 inch include the foundation" data-price = 135000 {% if scope.scopeOfWork == 'Instal pole 7 & 9 meter 4 inch include the foundation' %}selected{% endif %}>Instal pole 7 & 9 meter 4 inch include the foundation</option>
                     <option value ="Instal pole 7 meter 3 inch include the foundation" data-price = 130000 {% if scope.scopeOfWork == 'Instal pole 7 meter 3 inch include the foundation' %}selected{% endif %}>Instal pole 7 meter 3 inch include the foundation</option>
                     <option value ="Instal Cable Hanger" data-price = 20000 {% if scope.scopeOfWork == 'Instal Cable Hanger' %}selected{% endif %}>Instal Cable Hanger</option>
-                    <option value ="Instal sling Wire" data-price = 2500 {% if scope.scopeOfWork == 'Instal sling Wire' %}selected{% endif %}>Instal sling Wire</option>
+                    <option value ="Instal Sling Wire" data-price = 2500 {% if scope.scopeOfWork == 'Instal Sling Wire' %}selected{% endif %}>Instal Sling Wire</option>
                     <option value ="Instal FDT" data-price = 130000 {% if scope.scopeOfWork == 'Instal FDT' %}selected{% endif %}>Instal FDT</option>
-                    <option value ="Instal FAT inclde the Splicing & Splitter" data-price = 150000 {% if scope.scopeOfWork == 'Instal FAT inclde the Splicing & Splitter' %}selected{% endif %}>Instal FAT inclde the Splicing & Splitter</option>
+                    <option value ="Instal FAT includee the Splicing & Splitter" data-price = 150000 {% if scope.scopeOfWork == 'Instal FAT includee the Splicing & Splitter' %}selected{% endif %}>Instal FAT includee the Splicing & Splitter</option>
                     <option value ="Splicing" data-price = 20000 {% if scope.scopeOfWork == 'Splicing' %}selected{% endif %}>Splicing</option>
                 </select></td>
                 <td><input class="line-items-container" type="number" name ="qtyB_{{ forloop.counter|add:"-1" }}" value="{{ scope.qtyBoq }}"></td>
@@ -487,9 +487,9 @@ td {
                 <option value ="Instal pole 7 & 9 meter 4 inch include the foundation" data-price = 110000 {% if scope.scopeOfWork == 'Instal pole 7 & 9 meter 4 inch include the foundation' %}selected{% endif %}>Instal pole 7 & 9 meter 4 inch include the foundation</option>
                 <option value ="Instal pole 7 meter 3 inch include the foundation" data-price = 110000 {% if scope.scopeOfWork == 'Instal pole 7 meter 3 inch include the foundation' %}selected{% endif %}>Instal pole 7 meter 3 inch include the foundation</option>
                 <option value ="Instal Cable Hanger" data-price = 20000 {% if scope.scopeOfWork == 'Instal Cable Hanger' %}selected{% endif %}>Instal Cable Hanger</option>
-                <option value ="Instal sling Wire" data-price = 1600 {% if scope.scopeOfWork == 'Instal sling Wire' %}selected{% endif %}>Instal sling Wire</option>
+                <option value ="Instal Sling Wire" data-price = 1600 {% if scope.scopeOfWork == 'Instal Sling Wire' %}selected{% endif %}>Instal Sling Wire</option>
                 <option value ="Instal FDT" data-price = 120000 {% if scope.scopeOfWork == 'Instal FDT' %}selected{% endif %}>Instal FDT</option>
-                <option value ="Instal FAT inclde the Splicing & Splitter" data-price = 130000 {% if scope.scopeOfWork == 'Instal FAT inclde the Splicing & Splitter' %}selected{% endif %}>Instal FAT inclde the Splicing & Splitter</option>
+                <option value ="Instal FAT includee the Splicing & Splitter" data-price = 130000 {% if scope.scopeOfWork == 'Instal FAT includee the Splicing & Splitter' %}selected{% endif %}>Instal FAT includee the Splicing & Splitter</option>
                 <option value ="Splicing" data-price = 20000 {% if scope.scopeOfWork == 'Splicing' %}selected{% endif %}>Splicing</option>
             </select></td>
             <td><input class="line-items-container" type="number" name ="qtyB_{{ forloop.counter|add:"-1" }}" value="{{ scope.qtyBoq }}"></td>
@@ -624,7 +624,7 @@ td {
           <td>
 			<select name ="tax-cell" id ="tax-cell">
 				<option value ="WHT-21" data-tax-percentage-amount = 2.5% {% if order.paymentTax == 'WHT-21' %}selected{% endif %}>TAX - WHT21</option>
-				<option value ="WHT-23" data-tax-percentage-amount = 3% {% if order.paymentTax == 'WHT-23' %}selected{% endif %}>TAX - WHT23</option>
+				<option value ="WHT-23" data-tax-percentage-amount = 2% {% if order.paymentTax == 'WHT-23' %}selected{% endif %}>TAX - WHT23</option>
 				<option value ="VAT" data-tax-percentage-amount = 11% {% if order.paymentTax == 'VAT' %}selected{% endif %}>TAX - VAT</option>
 			</select>
 		</td>
@@ -1309,7 +1309,12 @@ function addPayment(){
 		}
 	}
 }
-
+document.addEventListener('keypress', function(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            return false;
+        }
+    });
 function add() {
 	var scopeOfWorkTable = document.getElementById("scopeOfWork");
 	var tbody = scopeOfWorkTable.tBodies[0]
@@ -1401,9 +1406,9 @@ function add() {
 			selection.appendChild(option11);
 
 			var option12 = document.createElement("option");
-			option12.value = "Instal sling Wire";
+			option12.value = "Instal Sling Wire";
 			option12.setAttribute('data-price', 1600)
-			option12.text = "Instal sling Wire";
+			option12.text = "Instal Sling Wire";
 			selection.appendChild(option12);
 
 			var option13 = document.createElement("option");
@@ -1413,9 +1418,9 @@ function add() {
 			selection.appendChild(option13);
 
 			var option14 = document.createElement("option");
-			option14.value = "Instal FAT inclde the Splicing & Splitter";
+			option14.value = "Instal FAT includee the Splicing & Splitter";
 			option14.setAttribute('data-price', 130000)
-			option14.text = "Instal FAT inclde the Splicing & Splitter";
+			option14.text = "Instal FAT includee the Splicing & Splitter";
 			selection.appendChild(option14);
 
 			var option15 = document.createElement("option");
@@ -1579,9 +1584,9 @@ function add() {
 			selection.appendChild(option11);
 
 			var option12 = document.createElement("option");
-			option12.value = "Instal sling Wire";
+			option12.value = "Instal Sling Wire";
 			option12.setAttribute('data-price', 2500)
-			option12.text = "Instal sling Wire";
+			option12.text = "Instal Sling Wire";
 			selection.appendChild(option12);
 
 			var option13 = document.createElement("option");
@@ -1591,9 +1596,9 @@ function add() {
 			selection.appendChild(option13);
 
 			var option14 = document.createElement("option");
-			option14.value = "Instal FAT inclde the Splicing & Splitter";
+			option14.value = "Instal FAT includee the Splicing & Splitter";
 			option14.setAttribute('data-price', 150000)
-			option14.text = "Instal FAT inclde the Splicing & Splitter";
+			option14.text = "Instal FAT includee the Splicing & Splitter";
 			selection.appendChild(option14);
 
 			var option15 = document.createElement("option");
@@ -2146,9 +2151,9 @@ function add() {
 			selection.appendChild(option11);
 
 			var option12 = document.createElement("option");
-			option12.value = "Instal sling Wire";
+			option12.value = "Instal Sling Wire";
 			option12.setAttribute('data-price', 1600)
-			option12.text = "Instal sling Wire";
+			option12.text = "Instal Sling Wire";
 			selection.appendChild(option12);
 
 			var option13 = document.createElement("option");
@@ -2158,9 +2163,9 @@ function add() {
 			selection.appendChild(option13);
 
 			var option14 = document.createElement("option");
-			option14.value = "Instal FAT inclde the Splicing & Splitter";
+			option14.value = "Instal FAT includee the Splicing & Splitter";
 			option14.setAttribute('data-price', 130000)
-			option14.text = "Instal FAT inclde the Splicing & Splitter";
+			option14.text = "Instal FAT includee the Splicing & Splitter";
 			selection.appendChild(option14);
 
 			var option15 = document.createElement("option");
@@ -2304,9 +2309,9 @@ function add() {
 			selection.appendChild(option11);
 
 			var option12 = document.createElement("option");
-			option12.value = "Instal sling Wire";
+			option12.value = "Instal Sling Wire";
 			option12.setAttribute('data-price', 2500)
-			option12.text = "Instal sling Wire";
+			option12.text = "Instal Sling Wire";
 			selection.appendChild(option12);
 
 			var option13 = document.createElement("option");
@@ -2316,9 +2321,9 @@ function add() {
 			selection.appendChild(option13);
 
 			var option14 = document.createElement("option");
-			option14.value = "Instal FAT inclde the Splicing & Splitter";
+			option14.value = "Instal FAT includee the Splicing & Splitter";
 			option14.setAttribute('data-price', 150000)
-			option14.text = "Instal FAT inclde the Splicing & Splitter";
+			option14.text = "Instal FAT includee the Splicing & Splitter";
 			selection.appendChild(option14);
 
 			var option15 = document.createElement("option");
