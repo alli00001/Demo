@@ -364,9 +364,9 @@ Create New List
     </thead>
     <tbody>
         <td>1</td>
-        <td><input type="text" class="clusterName" name="clusterName"></td>
-        <td><input type="text" class="odbId" name="odbId"></td>
-        <td><input type="text" class="suffixId" name="suffixId"></td>
+        <td><textarea style="width: 100%;" class="clusterName" name="clusterName"> </textarea></td>
+        <td><textarea style="width: 100%;" class="odbId" name="odbId" id ="odbId"></textarea></td>
+        <td><textarea style="width: 100%;" class="suffixId" name="suffixId" id ="suffixId"></textarea></td>
         <td><input type ="text" id ="hpD" name ="hpD"></td>
         <td><input type ="text" id ="unitPriceD" name ="unitPriceD"></td>
         <td><input type ="text" id ="amountD" name ="amountD"></td>
@@ -539,11 +539,16 @@ Create New List
 
 <script>
 document.addEventListener('keypress', function(event) {
-        if (event.keyCode === 13) {
+    // Check if the Enter key is pressed without the Shift key
+    if (event.keyCode === 13 && !event.shiftKey) {
+        // Check if the target of the keypress event is not a textarea
+        if (event.target.tagName.toLowerCase() !== 'textarea') {
             event.preventDefault();
             return false;
         }
-    });
+    }
+});
+
     // Function to calculate and update the 'amount'
     function calculateAmount() {
         var hp = document.getElementById('hpD').value;

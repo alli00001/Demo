@@ -364,8 +364,8 @@ td {
 			</thead>
 			<tbody>
 				<tr>
-					<td><input type="text" class="clusterName" name="clusterName"></td>
-					<td><input type="text" class="siteId" name="siteId"></td>
+					<td><textarea style="width: 100%;" class="clusterName" name="clusterName"> </textarea></td>
+					<td><textarea style="width: 100%;" class="siteId" name="siteId"></textarea></td>
 					<td>
 						<select class = "type" name="type" id ="type">
 						<option value="CLUSTER">CLUSTER</option>
@@ -675,11 +675,15 @@ td {
 <script>
 
 document.addEventListener('keypress', function(event) {
-        if (event.keyCode === 13) {
+    // Check if the Enter key is pressed without the Shift key
+    if (event.keyCode === 13 && !event.shiftKey) {
+        // Check if the target of the keypress event is not a textarea
+        if (event.target.tagName.toLowerCase() !== 'textarea') {
             event.preventDefault();
             return false;
         }
-    });
+    }
+});
 	    var pricingType = "{{ pricing_type }}";
     document.addEventListener('DOMContentLoaded', function () {
         var inputElement = document.getElementById('pricing_type');

@@ -367,8 +367,8 @@ Create New List
     </thead>
     <tbody>
         <td>1</td>
-        <td><input type="text" class="clusterName" name="clusterName" value ="{{order.clusterName}}"></td>
-        <td><input type="text" class="siteId" name="siteId" value ="{{order.siteId}}"></td>
+        <td><textarea style="width: 100%;" class="clusterName" name="clusterName">{{order.clusterName}}</textarea></td>
+        <td><textarea style="width: 100%;" class="siteId" name="siteId">{{order.siteId}}</textarea></td>
         <td><input type ="text" id ="hpD" name ="hpD" value ="{{order.hpD}}"></td>
         <td><input type ="text" id ="unitPriceD" name ="unitPriceD" value ="{{order.unitPriceD}}"></td>
         <td><input type ="text" id ="amountD" name ="amountD"value ="{{order.amountD}}"></td>
@@ -393,9 +393,9 @@ Create New List
     </thead>
     <tbody>
         <td>1</td>
-        <td><input type="text" class="clusterName" name="clusterName" value ="{{order.clusterName}}"></td>
-        <td><input type="text" class="odbId" name="odbId" value ="{{order.odbId}}"></td>
-        <td><input type="text" class="suffixId" name="suffixId" value ="{{order.suffixId}}"></td>
+        <td><textarea style="width: 100%;" class="clusterName" name="clusterName">{{order.clusterName}}</textarea></td>
+        <td><textarea style="width: 100%;" class="odbId" name="odbId"></textarea>{{order.odbId}}</td>
+        <td><textarea style="width: 100%;" class="suffixId" name="suffixId">{{order.suffixId}}</textarea></td>
         <td><input type ="text" id ="hpD" name ="hpD" value ="{{order.hpD}}"></td>
         <td><input type ="text" id ="unitPriceD" name ="unitPriceD" value ="{{order.unitPriceD}}"></td>
         <td><input type ="text" id ="amountD" name ="amountD"value ="{{order.amountD}}"></td>
@@ -576,12 +576,17 @@ Create New List
 
 
 <script>
-  document.addEventListener('keypress', function(event) {
-        if (event.keyCode === 13) {
+document.addEventListener('keypress', function(event) {
+    // Check if the Enter key is pressed without the Shift key
+    if (event.keyCode === 13 && !event.shiftKey) {
+        // Check if the target of the keypress event is not a textarea
+        if (event.target.tagName.toLowerCase() !== 'textarea') {
             event.preventDefault();
             return false;
         }
-    });
+    }
+});
+
 
     // Function to calculate and update the 'amount'
     function calculateAmount() {

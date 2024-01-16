@@ -364,9 +364,9 @@ td {
 			</thead>
 			<tbody>
 				<tr>
-					<td><input type="text" class="clusterName" name="clusterName"></td>
-					<td><input type="text" class="odbId" name="odbId"></td>
-                    <td><input type="text" class="suffixId" name="suffixId"></td>
+					<td><textarea style="width: 100%;" class="clusterName" name="clusterName"> </textarea></td>
+					<td><textarea style="width: 100%;" class="odbId" name="odbId" id ="odbId"></textarea></td>
+                    <td><textarea style="width: 100%;" class="suffixId" name="suffixId" id ="suffixId"></textarea></td>
 
 				</tr>
 			</tbody>
@@ -588,12 +588,17 @@ td {
 
 
 <script>
-	document.addEventListener('keypress', function(event) {
-        if (event.keyCode === 13) {
+document.addEventListener('keypress', function(event) {
+    // Check if the Enter key is pressed without the Shift key
+    if (event.keyCode === 13 && !event.shiftKey) {
+        // Check if the target of the keypress event is not a textarea
+        if (event.target.tagName.toLowerCase() !== 'textarea') {
             event.preventDefault();
             return false;
         }
-    });
+    }
+});
+
 function termsAmountCalculation() {
   var selection = document.getElementById('terms-selection');
   var selectedOption = selection.options[selection.selectedIndex];

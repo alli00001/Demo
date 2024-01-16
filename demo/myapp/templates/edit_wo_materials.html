@@ -361,8 +361,8 @@ td {
 			</thead>
 			<tbody>
 				<tr>
-					<td><input value="{{order.clusterName}}" type="text" class="clusterName" name="clusterName"></td>
-					<td><input value="{{order.siteId}}" type="text" class="siteId" name="siteId"></td>
+					<td><textarea style="width: 100%;" class="clusterName" name="clusterName">{{order.clusterName}}</textarea></td>
+					<td><textarea style="width: 100%;" class="siteId" name="siteId">{{order.siteId}}</textarea></td>
 
 				</tr>
 			</tbody>
@@ -381,9 +381,9 @@ td {
 			</thead>
 			<tbody>
 				<tr>
-					<td><input value="{{order.clusterName}}" type="text" class="clusterName" name="clusterName"></td>
-					<td><input value="{{order.odbId}}" type="text" class="odbId" name="odbId"></td>
-                    <td><input value="{{order.suffixId}}" type="text" class="suffixId" name="suffixId"></td>
+					<td><textarea style="width: 100%;" class="clusterName" name="clusterName">{{order.clusterName}}</textarea></td>
+					<td><textarea style="width: 100%;" class="odbId" name="odbId"></textarea>{{order.odbId}}</td>
+					<td><textarea style="width: 100%;" class="suffixId" name="suffixId">{{order.suffixId}}</textarea></td>
 				</tr>
 			</tbody>
 		</table>
@@ -896,11 +896,16 @@ function addDeduction(){
     }
 }
 document.addEventListener('keypress', function(event) {
-        if (event.keyCode === 13) {
+    // Check if the Enter key is pressed without the Shift key
+    if (event.keyCode === 13 && !event.shiftKey) {
+        // Check if the target of the keypress event is not a textarea
+        if (event.target.tagName.toLowerCase() !== 'textarea') {
             event.preventDefault();
             return false;
         }
-    });
+    }
+});
+
 
 function addUppercaseListener(element) {
   element.addEventListener('input', function() {
