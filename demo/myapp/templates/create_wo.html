@@ -6,55 +6,55 @@ Create New List
 
 {% block content %}
 <div class = "company-selection" id ="company-selection">
-<img src="{{MEDIA_URL}}acix.png" alt="Ansinda Company Logo" id="ansinda-company-logo" width="100px" height="100px">
-<img src = "{{MEDIA_URL}}bksx.png" alt = "BKS Company Logo" id = "bks-company-logo" width="100px" height="100px">
-<img src = "{{MEDIA_URL}}acix.png" alt = "LKI Company Logo" id = "lki-company-logo" width="100px" height="100px">
+<img src="{{MEDIA_URL}}aci_black.jpg" alt="Ansinda Company Logo" id="ansinda-company-logo" width="100px" height="100px">
+<img src = "{{MEDIA_URL}}bks_black.jpg" alt = "BKS Company Logo" id = "bks-company-logo" width="100px" height="100px">
+<img src = "{{MEDIA_URL}}lki_black.jpg" alt = "LKI Company Logo" id = "lki-company-logo" width="100px" height="100px">
 
 </div>
 
   <div id="wo-category-aci" style="display: none;">
-    <img src="{{MEDIA_URL}}mp.png"  id="wo-category-aci-mp" width="100px" height="100px">
-    <img src="{{MEDIA_URL}}donation2.png"  id="wo-category-aci-donation"  width="100px" height="100px">
-    <img src="{{MEDIA_URL}}material.png"  id="wo-category-aci-material"  width="100px" height="100px">
-    <img src="{{MEDIA_URL}}oc2.png"  id="wo-category-aci-oc"  width="100px" height="100px">
+    <img src="{{MEDIA_URL}}mp_black.jpg"  id="wo-category-aci-mp" width="100px" height="100px">
+    <img src="{{MEDIA_URL}}donation_black.jpg"  id="wo-category-aci-donation"  width="100px" height="100px">
+    <img src="{{MEDIA_URL}}material_black.jpg"  id="wo-category-aci-material"  width="100px" height="100px">
+    <img src="{{MEDIA_URL}}other_cost_black.jpg"  id="wo-category-aci-oc"  width="100px" height="100px">
   </div>
 
 
   <div id="wo-category-aci-mp-subcompany" style="display: none;">
 
-    <img src="{{MEDIA_URL}}emrx.png"  id="wo-category-aci-mp-emr"  width="100px" height="100px">
-    <img src="{{MEDIA_URL}}linknet.png" id="wo-category-aci-mp-ln"  width="100px" height="100px">
+    <img src="{{MEDIA_URL}}emr_black.jpg"  id="wo-category-aci-mp-emr"  width="100px" height="100px">
+    <img src="{{MEDIA_URL}}linknet_black.jpg" id="wo-category-aci-mp-ln"  width="100px" height="100px">
   
   </div>
 
   <div id="wo-category-aci-donation-subcompany" style="display: none;">
-    <img src="{{MEDIA_URL}}emrx.png"  id="wo-category-aci-donation-emr"  width="100px" height="100px" onclick="setTypesDonationEmr( 'aci' , 'EMR')">
-    <img src="{{MEDIA_URL}}linknet.png" id="wo-category-aci-donation-ln"  width="100px" height="100px" onclick="setTypesDonationLn( 'aci', 'LN')">
+    <img src="{{MEDIA_URL}}emr_black.jpg"  id="wo-category-aci-donation-emr"  width="100px" height="100px" onclick="setTypesDonationEmr( 'aci' , 'EMR')">
+    <img src="{{MEDIA_URL}}linknet_black.jpg" id="wo-category-aci-donation-ln"  width="100px" height="100px" onclick="setTypesDonationLn( 'aci', 'LN')">
   </div>  
   <div id="wo-category-aci-material-subcompany" style="display: none;">
-    <img src="{{MEDIA_URL}}emrx.png"  id="wo-category-aci-material-emr"  width="100px" height="100px" onclick="setTypesMaterialEmr('aci', 'EMR')">
-    <img src="{{MEDIA_URL}}linknet.png" id="wo-category-aci-material-ln"  width="100px" height="100px" onclick="setTypesMaterialLn('aci', 'LN')">
+    <img src="{{MEDIA_URL}}emr_black.jpg"  id="wo-category-aci-material-emr"  width="100px" height="100px" onclick="setTypesMaterialEmr('aci', 'EMR')">
+    <img src="{{MEDIA_URL}}linknet_black.jpg" id="wo-category-aci-material-ln"  width="100px" height="100px" onclick="setTypesMaterialLn('aci', 'LN')">
   </div>  
   
   <div id="wo-category-aci-oc-subcompany" style="display: none;">
-    <img src="{{MEDIA_URL}}emrx.png"  id="wo-category-aci-oc-emr"  width="100px" height="100px"  onclick="setTypesOcEmr( 'aci', 'EMR')">
-    <img src="{{MEDIA_URL}}linknet.png" id="wo-category-aci-oc-ln"  width="100px" height="100px"  onclick="setTypesOcLn( 'aci', 'LN')">
+    <img src="{{MEDIA_URL}}emr_black.jpg"  id="wo-category-aci-oc-emr"  width="100px" height="100px"  onclick="setTypesOcEmr( 'aci', 'EMR')">
+    <img src="{{MEDIA_URL}}linknet_black.jpg" id="wo-category-aci-oc-ln"  width="100px" height="100px"  onclick="setTypesOcLn( 'aci', 'LN')">
   </div>
 
 
   <!--END POINT -->
 
   <div id="wo-category-aci-mp-emr-type" style="display: none;">
-    <img src="{{MEDIA_URL}}EMR-traditional-mandor.png"  width="100px" height="100px"  onclick="setTypesMpEmr('traditional', 'aci', 'EMR')">
-    <img src="{{MEDIA_URL}}EMR-traditional-internal.png"  width="100px" height="100px"  onclick="setTypesMpEmr('internal', 'aci', 'EMR')">
+    <img src="{{MEDIA_URL}}emr_trad_mdr_black.jpg"  width="100px" height="100px"  onclick="setTypesMpEmr('traditional', 'aci', 'EMR')">
+    <img src="{{MEDIA_URL}}emr_trad_int_black.jpg"  width="100px" height="100px"  onclick="setTypesMpEmr('internal', 'aci', 'EMR')">
   </div>
 
 
 
   <div id="wo-category-aci-mp-ln-type" style="display: none;">
-    <img src="{{MEDIA_URL}}ln-traditional-mandor.png"  id="ln-tr"  width="100px" height="100px"  onclick="setTypesMpLn('traditional', 'aci', 'LN')">
-    <img src="{{MEDIA_URL}}ln-traditional-internal.png" id="ln-int"  width="100px" height="100px"  onclick="setTypesMpLn('internal', 'aci', 'LN')">
-    <img src="{{MEDIA_URL}}ln-quick-odn.png" id="ln-odn"  width="100px" height="100px" onclick="setTypesMpLn('odn', 'aci', 'LN')">
+    <img src="{{MEDIA_URL}}ln_trad_mdr_black.jpg"  id="ln-tr"  width="100px" height="100px"  onclick="setTypesMpLn('traditional', 'aci', 'LN')">
+    <img src="{{MEDIA_URL}}ln_trad_int_black.jpg" id="ln-int"  width="100px" height="100px"  onclick="setTypesMpLn('internal', 'aci', 'LN')">
+    <img src="{{MEDIA_URL}}ln_quick_odn_black.jpg" id="ln-odn"  width="100px" height="100px" onclick="setTypesMpLn('odn', 'aci', 'LN')">
   </div>
 
 
@@ -63,94 +63,94 @@ Create New List
   <!-- BKS HERE -->
 
   <div id="wo-category-bks" style="display: none;">
-    <img src="{{MEDIA_URL}}mp.png"  id="wo-category-bks-mp" width="100px" height="100px">
-    <img src="{{MEDIA_URL}}donation2.png"  id="wo-category-bks-donation"  width="100px" height="100px">
-    <img src="{{MEDIA_URL}}material.png"  id="wo-category-bks-material"  width="100px" height="100px">
-    <img src="{{MEDIA_URL}}oc2.png"  id="wo-category-bks-oc"  width="100px" height="100px">
+    <img src="{{MEDIA_URL}}mp_black.jpg"  id="wo-category-bks-mp" width="100px" height="100px">
+    <img src="{{MEDIA_URL}}donation_black.jpg"  id="wo-category-bks-donation"  width="100px" height="100px">
+    <img src="{{MEDIA_URL}}material_black.jpg"  id="wo-category-bks-material"  width="100px" height="100px">
+    <img src="{{MEDIA_URL}}other_cost_black.jpg"  id="wo-category-bks-oc"  width="100px" height="100px">
   </div>
 
 
   <div id="wo-category-bks-mp-subcompany" style="display: none;">
 
-    <img src="{{MEDIA_URL}}emrx.png"  id="wo-category-bks-mp-emr"  width="100px" height="100px">
-    <img src="{{MEDIA_URL}}linknet.png" id="wo-category-bks-mp-ln"  width="100px" height="100px">
+    <img src="{{MEDIA_URL}}emr_black.jpg"  id="wo-category-bks-mp-emr"  width="100px" height="100px">
+    <img src="{{MEDIA_URL}}linknet_black.jpg" id="wo-category-bks-mp-ln"  width="100px" height="100px">
   
   </div>
 
   <div id="wo-category-bks-donation-subcompany" style="display: none;">
-    <img src="{{MEDIA_URL}}emrx.png"  id="wo-category-bks-donation-emr"  width="100px" height="100px"  onclick="setTypesDonationEmr( 'bks', 'EMR')">
-    <img src="{{MEDIA_URL}}linknet.png" id="wo-category-bks-donation-ln"  width="100px" height="100px"  onclick="setTypesDonationLn( 'bks', 'LN')">
+    <img src="{{MEDIA_URL}}emr_black.jpg"  id="wo-category-bks-donation-emr"  width="100px" height="100px"  onclick="setTypesDonationEmr( 'bks', 'EMR')">
+    <img src="{{MEDIA_URL}}linknet_black.jpg" id="wo-category-bks-donation-ln"  width="100px" height="100px"  onclick="setTypesDonationLn( 'bks', 'LN')">
   </div>  
   <div id="wo-category-bks-material-subcompany" style="display: none;">
-    <img src="{{MEDIA_URL}}emrx.png"  id="wo-category-bks-material-emr"  width="100px" height="100px" onclick="setTypesMaterialEmr( 'bks', 'EMR')">
-    <img src="{{MEDIA_URL}}linknet.png" id="wo-category-bks-material-ln"  width="100px" height="100px" onclick="setTypesMaterialLn('bks', 'LN')">
+    <img src="{{MEDIA_URL}}emr_black.jpg"  id="wo-category-bks-material-emr"  width="100px" height="100px" onclick="setTypesMaterialEmr( 'bks', 'EMR')">
+    <img src="{{MEDIA_URL}}linknet_black.jpg" id="wo-category-bks-material-ln"  width="100px" height="100px" onclick="setTypesMaterialLn('bks', 'LN')">
   </div>  
   
   <div id="wo-category-bks-oc-subcompany" style="display: none;">
-    <img src="{{MEDIA_URL}}emrx.png"  id="wo-category-bks-oc-emr"  width="100px" height="100px"  onclick="setTypesOcEmr( 'bks', 'EMR')">
-    <img src="{{MEDIA_URL}}linknet.png" id="wo-category-bks-oc-ln"  width="100px" height="100px"  onclick="setTypesOcLn( 'bks', 'LN')">
+    <img src="{{MEDIA_URL}}emr_black.jpg"  id="wo-category-bks-oc-emr"  width="100px" height="100px"  onclick="setTypesOcEmr( 'bks', 'EMR')">
+    <img src="{{MEDIA_URL}}linknet_black.jpg" id="wo-category-bks-oc-ln"  width="100px" height="100px"  onclick="setTypesOcLn( 'bks', 'LN')">
   </div>
 
 
   <!--END POINT -->
 
   <div id="wo-category-bks-mp-emr-type" style="display: none;">
-    <img src="{{MEDIA_URL}}EMR-traditional-mandor.png"  width="100px" height="100px"  onclick="setTypesMpEmr('traditional', 'bks', 'EMR')">
-    <img src="{{MEDIA_URL}}EMR-traditional-internal.png"  width="100px" height="100px"  onclick="setTypesMpEmr('internal', 'bks', 'EMR')">
+    <img src="{{MEDIA_URL}}emr_trad_mdr_black.jpg"  width="100px" height="100px"  onclick="setTypesMpEmr('traditional', 'bks', 'EMR')">
+    <img src="{{MEDIA_URL}}emr_trad_int_black.jpg"  width="100px" height="100px"  onclick="setTypesMpEmr('internal', 'bks', 'EMR')">
   </div>
 
 
   <div id="wo-category-bks-mp-ln-type" style="display: none;">
-    <img src="{{MEDIA_URL}}ln-traditional-mandor.png"  id="ln-tr"  width="100px" height="100px"  onclick="setTypesMpLn('traditional' , 'bks', 'LN')">
-    <img src="{{MEDIA_URL}}ln-traditional-internal.png" id="ln-int"  width="100px" height="100px" onclick="setTypesMpLn('internal' , 'bks', 'LN')">
-    <img src="{{MEDIA_URL}}ln-quick-odn.png" id="ln-odn"  width="100px" height="100px"  onclick="setTypesMpLn('odn' , 'bks', 'LN')">
+    <img src="{{MEDIA_URL}}ln_trad_mdr_black.jpg"  id="ln-tr"  width="100px" height="100px"  onclick="setTypesMpLn('traditional' , 'bks', 'LN')">
+    <img src="{{MEDIA_URL}}ln_trad_int_black.jpg" id="ln-int"  width="100px" height="100px" onclick="setTypesMpLn('internal' , 'bks', 'LN')">
+    <img src="{{MEDIA_URL}}ln_quick_odn_black.jpg" id="ln-odn"  width="100px" height="100px"  onclick="setTypesMpLn('odn' , 'bks', 'LN')">
   </div>
 
 
     <!-- lki HERE -->
 
     <div id="wo-category-lki" style="display: none;">
-      <img src="{{MEDIA_URL}}mp.png"  id="wo-category-lki-mp" width="100px" height="100px">
-      <img src="{{MEDIA_URL}}donation2.png"  id="wo-category-lki-donation"  width="100px" height="100px">
-      <img src="{{MEDIA_URL}}material.png"  id="wo-category-lki-material"  width="100px" height="100px">
-      <img src="{{MEDIA_URL}}oc2.png"  id="wo-category-lki-oc"  width="100px" height="100px">
+      <img src="{{MEDIA_URL}}mp_black.jpg"  id="wo-category-lki-mp" width="100px" height="100px">
+      <img src="{{MEDIA_URL}}donation_black.jpg"  id="wo-category-lki-donation"  width="100px" height="100px">
+      <img src="{{MEDIA_URL}}material_black.jpg"  id="wo-category-lki-material"  width="100px" height="100px">
+      <img src="{{MEDIA_URL}}other_cost_black.jpg"  id="wo-category-lki-oc"  width="100px" height="100px">
     </div>
   
   
     <div id="wo-category-lki-mp-subcompany" style="display: none;">
   
-      <img src="{{MEDIA_URL}}emrx.png"  id="wo-category-lki-mp-emr"  width="100px" height="100px">
-      <img src="{{MEDIA_URL}}linknet.png" id="wo-category-lki-mp-ln"  width="100px" height="100px">
+      <img src="{{MEDIA_URL}}emr_black.jpg"  id="wo-category-lki-mp-emr"  width="100px" height="100px">
+      <img src="{{MEDIA_URL}}linknet_black.jpg" id="wo-category-lki-mp-ln"  width="100px" height="100px">
     
     </div>
   
     <div id="wo-category-lki-donation-subcompany" style="display: none;">
-      <img src="{{MEDIA_URL}}emrx.png"  id="wo-category-lki-donation-emr"  width="100px" height="100px"  onclick="setTypesDonationEmr( 'lki', 'EMR')">
-      <img src="{{MEDIA_URL}}linknet.png" id="wo-category-lki-donation-ln"  width="100px" height="100px"  onclick="setTypesDonationLn( 'lki', 'LN')">
+      <img src="{{MEDIA_URL}}emr_black.jpg"  id="wo-category-lki-donation-emr"  width="100px" height="100px"  onclick="setTypesDonationEmr( 'lki', 'EMR')">
+      <img src="{{MEDIA_URL}}linknet_black.jpg" id="wo-category-lki-donation-ln"  width="100px" height="100px"  onclick="setTypesDonationLn( 'lki', 'LN')">
     </div>  
     <div id="wo-category-lki-material-subcompany" style="display: none;">
-      <img src="{{MEDIA_URL}}emrx.png"  id="wo-category-lki-material-emr"  width="100px" height="100px" onclick="setTypesMaterialEmr( 'lki', 'EMR')">
-      <img src="{{MEDIA_URL}}linknet.png" id="wo-category-lki-material-ln"  width="100px" height="100px" onclick="setTypesMaterialLn('lki', 'LN')">
+      <img src="{{MEDIA_URL}}emr_black.jpg"  id="wo-category-lki-material-emr"  width="100px" height="100px" onclick="setTypesMaterialEmr( 'lki', 'EMR')">
+      <img src="{{MEDIA_URL}}linknet_black.jpg" id="wo-category-lki-material-ln"  width="100px" height="100px" onclick="setTypesMaterialLn('lki', 'LN')">
     </div>  
     
     <div id="wo-category-lki-oc-subcompany" style="display: none;">
-      <img src="{{MEDIA_URL}}emrx.png"  id="wo-category-lki-oc-emr"  width="100px" height="100px"  onclick="setTypesOcEmr( 'lki', 'EMR')">
-      <img src="{{MEDIA_URL}}linknet.png" id="wo-category-lki-oc-ln"  width="100px" height="100px"  onclick="setTypesOcLn( 'lki', 'LN')">
+      <img src="{{MEDIA_URL}}emr_black.jpg"  id="wo-category-lki-oc-emr"  width="100px" height="100px"  onclick="setTypesOcEmr( 'lki', 'EMR')">
+      <img src="{{MEDIA_URL}}linknet_black.jpg" id="wo-category-lki-oc-ln"  width="100px" height="100px"  onclick="setTypesOcLn( 'lki', 'LN')">
     </div>
   
   
     <!--END POINT -->
   
     <div id="wo-category-lki-mp-emr-type" style="display: none;">
-      <img src="{{MEDIA_URL}}EMR-traditional-mandor.png"  width="100px" height="100px"  onclick="setTypesMpEmr('traditional', 'lki', 'EMR')">
-      <img src="{{MEDIA_URL}}EMR-traditional-internal.png"  width="100px" height="100px"  onclick="setTypesMpEmr('internal', 'lki', 'EMR')">
+      <img src="{{MEDIA_URL}}emr_trad_mdr_black.jpg"  width="100px" height="100px"  onclick="setTypesMpEmr('traditional', 'lki', 'EMR')">
+      <img src="{{MEDIA_URL}}emr_trad_int_black.jpg"  width="100px" height="100px"  onclick="setTypesMpEmr('internal', 'lki', 'EMR')">
     </div>
   
   
     <div id="wo-category-lki-mp-ln-type" style="display: none;">
-      <img src="{{MEDIA_URL}}ln-traditional-mandor.png"  id="ln-tr"  width="100px" height="100px"  onclick="setTypesMpLn('traditional' , 'lki', 'LN')">
-      <img src="{{MEDIA_URL}}ln-traditional-internal.png" id="ln-int"  width="100px" height="100px" onclick="setTypesMpLn('internal' , 'lki', 'LN')">
-      <img src="{{MEDIA_URL}}ln-quick-odn.png" id="ln-odn"  width="100px" height="100px"  onclick="setTypesMpLn('odn' , 'lki', 'LN')">
+      <img src="{{MEDIA_URL}}ln_trad_mdr_black.jpg"  id="ln-tr"  width="100px" height="100px"  onclick="setTypesMpLn('traditional' , 'lki', 'LN')">
+      <img src="{{MEDIA_URL}}ln_trad_int_black.jpg" id="ln-int"  width="100px" height="100px" onclick="setTypesMpLn('internal' , 'lki', 'LN')">
+      <img src="{{MEDIA_URL}}ln_quick_odn_black.jpg" id="ln-odn"  width="100px" height="100px"  onclick="setTypesMpLn('odn' , 'lki', 'LN')">
     </div>
 
 <script>
