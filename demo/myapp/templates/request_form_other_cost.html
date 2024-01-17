@@ -223,7 +223,7 @@ td {
 	<!-- Company Logo -->
 	<div style="text-align: center; background-color: white">
 		{% if order.company == 'aci' %}
-			<img src="{{ MEDIA_URL }}aci_cmp_logo2.jpg" style="width: 400px;">
+			<img src="{{ MEDIA_URL }}aci_cmp_logo3.jpg" style="width: 400px;">
 		
 		{%elif order.company == 'bks'%}
 		<img src="{{ MEDIA_URL }}bks4.png">
@@ -364,7 +364,7 @@ td {
         <td style = "text-align: center; padding: 8px 0;">{{ forloop.counter }}</td> <!-- This will auto-increment the row number -->
         <td style="text-align: left;">{{ scope.scopeOfWork }}</td>
         <td>{{ scope.totalActual }}</td>
-        <td>{{ scope.remarks }}</td>
+        <td style="text-align: left;">{{ scope.remarks }}</td>
       </tr>
       {% endfor %}
 
@@ -567,114 +567,136 @@ td {
 
 </form>
 <script>
+  var wo = {
+      type: "{{ order.type }}",
+      cluster: "{{ order.cluster }}",
+      odbId: "{{ order.odbId }}",
+      siteId: "{{ order.siteId }}",
+  suffixId: "{{order.suffixId}}",
+  workType: "{{order.workType}}",
+  paymentTerm : "{{order.paymentTerm}}",
+		termPercentage : "{{order.termPercentage}}"
+  };
+async function generatePDF(event) {
+event.preventDefault(); // Prevent the default form action
+const {
+jsPDF
+} = window.jspdf;
 
-	
-  async function generatePDF(event) {
-    event.preventDefault(); // Prevent the default form action
-    const {
-    jsPDF
-    } = window.jspdf;
-  
-    // Get the form element
-    const form = document.getElementById('workOrder'); // Replace with your actual form ID
-    form.style.width = '100%';
-    form.style.maxWidth = '100%';
-    form.style.padding = "30";
-    const tables = form.querySelectorAll('table');
-    tables.forEach(table => {
-      table.style.width = '100%'; // Ensure tables use the full width of the form
-    table.style.maxWidth = '100%';
-    });
-  
-    // Apply borders to the cells of the specific class table
-    const tableCells = form.querySelectorAll('.line-items-container th, .line-items-container td');
-    tableCells.forEach(cell => {
-      cell.style.border = '1px solid black';
-    });
-    const workOrderTable = form.querySelectorAll('.scopeOfWork');
-    workOrderTable.forEach(table => {
-      table.style.borderCollapse = 'collapse';
-    });
-  
-    // Apply borders to the cells of the specific class table
-    const workOrderTableCells = form.querySelectorAll('.scopeOfWork th, .scopeOfWork td');
-    workOrderTableCells.forEach(cell => {
-      cell.style.border = '1px solid black';
-    });
-    const inputs = form.querySelectorAll('input');
-  inputs.forEach(input => {
-      // Skip hidden inputs or specific inputs by ID
-      if (input.type !== 'hidden' && input.id !== 'number_of_scopes' && input.id !== 'number_of_deduction') {
-          const textSpan = document.createElement('span');
-          textSpan.textContent = input.value;
-          textSpan.style.display = 'inline-block';
-          textSpan.style.minWidth = input.offsetWidth + 'px';
-          input.parentNode.replaceChild(textSpan, input);
-      } else {
-          // Ensure inputs to be hidden are not displayed
-          input.style.display = 'none';
-      }
-  });
-  
-  
-    var buttons = document.querySelectorAll('button');
-  
-    // Hide buttons
-    buttons.forEach(function(button) {
-    button.style.visibility = 'hidden';
-    });
-  
-    // Replace selects with the selected text
-    const selects = form.querySelectorAll('select');
-    selects.forEach(select => {
-      const selectedText = select.options[select.selectedIndex].text;
-      const textNode = document.createTextNode(selectedText);
-      select.parentNode.replaceChild(textNode, select);
-    });
-    // Capture the form as a canvas
-    const canvas = await html2canvas(form, {
-    scale: 1 // Start with a normal scale
-    });
-  
-    const imgData = canvas.toDataURL('image/png');
-    const imgWidth = canvas.width;
-    const imgHeight = canvas.height;
-  
-    // Initialize jsPDF
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
-  
-    // Set desired margins (in mm)
-    const marginLeft = 0;
-    const marginRight = 0;
-    const marginTop = 0;
-    const marginBottom = 0;
-  
-    // Calculate the available space considering the margins
-    const availableWidth = pageWidth - marginLeft - marginRight ;
-    const availableHeight = pageHeight - marginTop - marginBottom;
-    const horizontalScale = availableWidth / imgWidth;
-    const verticalScale = availableHeight / imgHeight;
-    const scale = Math.min(horizontalScale, verticalScale);
-  
-    // If the content height is less than page height, we can allow for a larger width.
-    const finalScale = imgHeight * horizontalScale > availableHeight ? verticalScale : horizontalScale;
-  
-    // Calculate the scaled dimensions
-    const scaledWidth = imgWidth * finalScale;
-    const scaledHeight = imgHeight * finalScale;
-  
-    // Calculate centered positions
-    const xCentered = (pageWidth - scaledWidth) / 2;
-    const yCentered = (pageHeight - scaledHeight) / 2;
-  
-    // Add the image to the PDF, scaled and centered
-    pdf.addImage(imgData, 'PNG', xCentered, yCentered, scaledWidth, scaledHeight);
-  
-    // Save the PDF
-    pdf.save('form.pdf');
+// Get the form element
+const form = document.getElementById('workOrder'); // Replace with your actual form ID
+form.style.width = '100%';
+form.style.maxWidth = '100%';
+form.style.padding = "30";
+const tables = form.querySelectorAll('table');
+tables.forEach(table => {
+  table.style.width = '100%'; // Ensure tables use the full width of the form
+table.style.maxWidth = '100%';
+});
+
+// Apply borders to the cells of the specific class table
+const tableCells = form.querySelectorAll('.line-items-container th, .line-items-container td');
+tableCells.forEach(cell => {
+  cell.style.border = '1px solid black';
+});
+const workOrderTable = form.querySelectorAll('.scopeOfWork');
+workOrderTable.forEach(table => {
+  table.style.borderCollapse = 'collapse';
+});
+
+// Apply borders to the cells of the specific class table
+const workOrderTableCells = form.querySelectorAll('.scopeOfWork th, .scopeOfWork td');
+workOrderTableCells.forEach(cell => {
+  cell.style.border = '1px solid black';
+});
+const inputs = form.querySelectorAll('input');
+inputs.forEach(input => {
+  // Skip hidden inputs or specific inputs by ID
+  if (input.type !== 'hidden' && input.id !== 'number_of_scopes' && input.id !== 'number_of_deduction') {
+      const textSpan = document.createElement('span');
+      textSpan.textContent = input.value;
+      textSpan.style.display = 'inline-block';
+      textSpan.style.minWidth = input.offsetWidth + 'px';
+      input.parentNode.replaceChild(textSpan, input);
+  } else {
+      // Ensure inputs to be hidden are not displayed
+      input.style.display = 'none';
   }
-  
-  </script>
+});
+
+
+var buttons = document.querySelectorAll('button');
+
+// Hide buttons
+buttons.forEach(function(button) {
+button.style.visibility = 'hidden';
+});
+
+// Replace selects with the selected text
+const selects = form.querySelectorAll('select');
+selects.forEach(select => {
+  const selectedText = select.options[select.selectedIndex].text;
+  const textNode = document.createTextNode(selectedText);
+  select.parentNode.replaceChild(textNode, select);
+});
+// Capture the form as a canvas
+const canvas = await html2canvas(form, {
+scale: 1 // Start with a normal scale
+});
+
+const imgData = canvas.toDataURL('image/png');
+const imgWidth = canvas.width;
+const imgHeight = canvas.height;
+
+// Initialize jsPDF
+const pdf = new jsPDF('p', 'mm', 'a4');
+const pageWidth = pdf.internal.pageSize.getWidth();
+const pageHeight = pdf.internal.pageSize.getHeight();
+
+// Set desired margins (in mm)
+const marginLeft = 0;
+const marginRight = 0;
+const marginTop = 0;
+const marginBottom = 0;
+
+// Calculate the available space considering the margins
+const availableWidth = pageWidth - marginLeft - marginRight ;
+const availableHeight = pageHeight - marginTop - marginBottom;
+const horizontalScale = availableWidth / imgWidth;
+const verticalScale = availableHeight / imgHeight;
+const scale = Math.min(horizontalScale, verticalScale);
+
+// If the content height is less than page height, we can allow for a larger width.
+const finalScale = imgHeight * horizontalScale > availableHeight ? verticalScale : horizontalScale;
+
+// Calculate the scaled dimensions
+const scaledWidth = imgWidth * finalScale;
+const scaledHeight = imgHeight * finalScale;
+
+// Calculate centered positions
+const xCentered = (pageWidth - scaledWidth) / 2;
+const yCentered = (pageHeight - scaledHeight) / 2;
+
+// Add the image to the PDF, scaled and centered
+pdf.addImage(imgData, 'PNG', xCentered, yCentered, scaledWidth, scaledHeight);
+
+// Save the PDF
+var filenameParts = ['REQUEST-FORM'];
+if (isNotEmpty(wo.type)) filenameParts.push(wo.type);
+if (isNotEmpty(wo.cluster)) filenameParts.push(wo.cluster);
+if (isNotEmpty(wo.odbId)) filenameParts.push(wo.odbId);
+if (isNotEmpty(wo.siteId)) filenameParts.push(wo.siteId);
+if (isNotEmpty(wo.suffixId)) filenameParts.push(wo.suffixId);
+if (isNotEmpty(wo.workType)) filenameParts.push(wo.workType);
+if (isNotEmpty(wo.paymentTerm)) filenameParts.push(wo.paymentTerm);
+if (isNotEmpty(wo.termPercentage)) filenameParts.push(wo.termPercentage);
+var filename = filenameParts.join('-') + '.pdf';	
+pdf.save(filename);
+}
+function isNotEmpty(str) {
+  return str && str.trim() !== '';
+}
+
+
+</script>
 {%endblock%}

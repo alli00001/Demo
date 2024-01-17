@@ -216,7 +216,7 @@ td {
 	<!-- Company Logo -->
 	<div style="text-align: center; background-color: white">
 		{% if order.company == 'aci' %}
-			<img src="{{ MEDIA_URL }}aci_cmp_logo2.jpg" style="width: 400px;">
+			<img src="{{ MEDIA_URL }}aci_cmp_logo3.jpg" style="width: 400px;">
 		
 		{%elif order.company == 'bks'%}
 		<img src="{{ MEDIA_URL }}bks4.png">
@@ -352,8 +352,8 @@ td {
 		</thead>
 		<tbody>
 			<tr>
-				<td>{{order.clusterName}}</td>
-				<td>{{order.siteId}}</td>
+				<td>{{order.clusterName |linebreaksbr}}</td>
+				<td>{{order.siteId |linebreaksbr}}</td>
 			</tr>
 		</tbody>
 	</table>
@@ -371,9 +371,9 @@ td {
 		</thead>
 		<tbody>
 			<tr>
-				<td>{{order.clusterName}}</td>
-				<td>{{order.odbId}}</td>
-				<td>{{order.suffixId}}</td>
+				<td>{{order.clusterName |linebreaksbr}}</td>
+				<td>{{order.odbId |linebreaksbr}}</td>
+				<td>{{order.suffixId |linebreaksbr}}</td>
 			</tr>
 		</tbody>
 	</table>
@@ -386,7 +386,7 @@ td {
 		<thead>
 			<tr>
 				<th style ="width : 4%">NO</th>
-				<th style ="width: 21%;">ITEM</th>
+				<th style ="width: 21%;">DESCRIPTION</th>
 				<th style ="width : 12,5%">UNIT</th>
 				<th style ="width : 12,5%">QTY</th>
 				<th style ="width : 12,5%">UNIT PRICE</th>
@@ -403,7 +403,7 @@ td {
         <td>{{ scope.qtyActual }}</td>
         <td>{{ scope.unitPrice }}</td>
         <td>{{ scope.totalActual }}</td>
-        <td>{{ scope.remarks }}</td>
+        <td style="text-align: left;">{{ scope.remarks }}</td>
       </tr>
       {% endfor %}
 
@@ -653,7 +653,16 @@ td {
 </form>
 
 <script>
-	
+    var wo = {
+        type: "{{ order.type }}",
+        cluster: "{{ order.cluster }}",
+        odbId: "{{ order.odbId }}",
+        siteId: "{{ order.siteId }}",
+		suffixId: "{{order.suffixId}}",
+		workType: "{{order.workType}}",
+		paymentTerm : "{{order.paymentTerm}}",
+		termPercentage : "{{order.termPercentage}}"
+    };
 async function generatePDF(event) {
 	event.preventDefault(); // Prevent the default form action
 	const {
@@ -758,8 +767,22 @@ inputs.forEach(input => {
 	pdf.addImage(imgData, 'PNG', xCentered, yCentered, scaledWidth, scaledHeight);
 
 	// Save the PDF
-	pdf.save('form.pdf');
+	var filenameParts = ['WO'];
+	if (isNotEmpty(wo.type)) filenameParts.push(wo.type);
+	if (isNotEmpty(wo.cluster)) filenameParts.push(wo.cluster);
+	if (isNotEmpty(wo.odbId)) filenameParts.push(wo.odbId);
+	if (isNotEmpty(wo.siteId)) filenameParts.push(wo.siteId);
+	if (isNotEmpty(wo.suffixId)) filenameParts.push(wo.suffixId);
+	if (isNotEmpty(wo.workType)) filenameParts.push(wo.workType);
+	if (isNotEmpty(wo.paymentTerm)) filenameParts.push(wo.paymentTerm);
+	if (isNotEmpty(wo.termPercentage)) filenameParts.push(wo.termPercentage);
+	var filename = filenameParts.join('-') + '.pdf';	
+	pdf.save(filename);
 }
+function isNotEmpty(str) {
+    return str && str.trim() !== '';
+}
+
 
 </script>
 {%endblock%}

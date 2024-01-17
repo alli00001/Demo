@@ -92,9 +92,9 @@ class WorkOrder(models.Model):
     grandTotalBoq = models.FloatField(default = 0, blank = True)
 
     # Donation Scope
-    hpD = models.FloatField(default = 0, blank = True, )
-    amountD = models.FloatField(default = 0, blank = True)
-    unitPriceD =  models.FloatField(default = 0, blank = True)
+    hpD = models.CharField(max_length = 100, default = "", blank = True, )
+    amountD = models.CharField(max_length = 100, default = "", blank = True)
+    unitPriceD =  models.CharField(max_length = 100, default = "", blank = True)
     remarkD =  models.CharField(max_length = 100,default ="", blank = True)
 
 
@@ -161,13 +161,28 @@ class WorkOrder(models.Model):
         siteid_str = self.siteId if self.siteId else ''
         odbid_str = self.odbId if self.odbId else ''
         worktype_str = self.workType if self.workType else ''
+        suffixid_str = self.suffixId if self.suffixId else ''
 
         payment_term_str = self.paymentTerm if self.paymentTerm else ''
         term_percentage_str = str(self.termPercentage) if self.termPercentage else ''
 
-        parts = [convertDate(wo_date_str),project_str,category_str ,customer_str, type_str,cluster_name_str,siteid_str,odbid_str,worktype_str , payment_term_str, term_percentage_str]
+        parts = [convertDate(wo_date_str),category_str ,customer_str,project_str ,type_str,cluster_name_str,siteid_str,odbid_str,suffixid_str,worktype_str , payment_term_str, term_percentage_str]
         returnString = '-'.join(part for part in parts if part)        
         return returnString   
-     
+    def delete(self, *args, **kwargs):
+        # Manually delete related ScopeOfWork instances
+        for scope in self.workOrder.all():
+            scope.delete()
+
+        # Manually delete related Deduction instances
+        for deduction in self.deductions.all():
+            deduction.delete()
+
+        # Manually delete related Payment instances
+        for payment in self.paymentInformation.all():
+            payment.delete()
+
+        # Finally, delete the WorkOrder instance
+        super(WorkOrder, self).delete(*args, **kwargs)    
     
 #date category customer type cluster siteid odbid worktype paymentterm percentage

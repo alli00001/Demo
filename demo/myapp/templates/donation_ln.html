@@ -11,6 +11,16 @@ Create New List
 	Common invoice styles. These styles will work in a browser or using the HTML
 	to PDF anvil endpoint.
 */
+#removeButton {
+    margin-top: 10px; /* Adjust as necessary for your layout */
+    padding: .25rem .80rem; /* Similar padding to bootstrap's btn class */
+    border-radius: .25rem; /* Rounded borders */
+    border: 1px solid #ced4da; /* Similar to default file input button */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 0.9rem; /* Adjust font size as needed */
+    line-height: 0.9; /* For proper text alignment */
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out; /* Smooth transition for hover effects */
+}
 .general-information-table {
   table-layout: fixed;
   width: 100%;
@@ -218,7 +228,7 @@ Create New List
 {% endif %}
 	<div style="text-align: center; background-color: white"  >
     {% if company_type == 'aci' %}
-    <img src="{{ MEDIA_URL }}aci_cmp_logo2.jpg" style="width: 400px;">
+    <img src="{{ MEDIA_URL }}aci_cmp_logo3.jpg" style="width: 400px;">
     <input type="hidden" value="aci" name="company" id="company">
 {% elif company_type == 'bks' %}
     <img src="{{ MEDIA_URL }}bks4.png" style="width: 400px;"> <!-- Assuming you want to keep the same width -->
@@ -284,7 +294,7 @@ Create New List
 				
 			<td>CATEGORY</td>
 			<td style="width: 2%;">:</td>
-			<td style ="width:20%"><input name="category" type="text" style="text-align: left; height: 30px;" value="DONATION"></td>
+			<td style ="width:20%"><input name="category" type="text" style="text-align: left; height: 30px; display: none;" value="DONATION">DONATION</td>
 		</tr>
 		<tr>
 			<td style="text-align: left; width: 25px;">PROJECT</td>
@@ -400,15 +410,19 @@ Create New List
 	<tbody>
 		<tr>
 			<td>Capture Approval by ZTE   </td>
-			<td>
-				<input type="file" name="capture_approval">
+			<td style="text-align: left;">
+				<input type="file" name="capture_approval" id ="capture_approval">
+				<button type="button" onclick="clearFileInput('capture_approval')" id="removeButton">Remove</button>				
+
 			</td>
 		</tr>
 		<tr>
 			<td>Capture DRM Approve									
 			</td>
-			<td>
-				<input type="file" name="capture_drm">
+			<td  style="text-align: left;">
+				<input type="file" name="capture_drm" id ="capture_drm">
+				<button type="button" onclick="clearFileInput('capture_drm')" id="removeButton">Remove</button>				
+
 			</td>
 		</tr>		
         <tr>
@@ -454,8 +468,10 @@ Create New List
         <tr>
 			<td>Berita Acara Kesepakatan (BAK)									
 			</td>
-			<td>
-				<input type="file" name="bak">
+			<td style="text-align: left;">
+				<input type="file" name="bak" id ="bak">
+				<button type="button" onclick="clearFileInput('bak')" id="removeButton">Remove</button>				
+
 			</td>
 		</tr>
         <tr>
@@ -529,10 +545,6 @@ Create New List
 
 
 <script type="text/javascript">
-	document.addEventListener('DOMContentLoaded', function() {
-		document.getElementById('number_of_scopes').value = 0;
-		document.getElementById('number_of_deduction').value =0;
-	});
 	document.addEventListener("DOMContentLoaded", function(){
             document.getElementById("submitBtn").addEventListener("click", function(e){
                 var woNumber = document.getElementById("wo_number").value;
@@ -552,6 +564,9 @@ Create New List
 
 
 <script>
+  function clearFileInput(id) {
+    document.getElementById(id).value = "";
+}
 document.addEventListener('keypress', function(event) {
     // Check if the Enter key is pressed without the Shift key
     if (event.keyCode === 13 && !event.shiftKey) {
@@ -615,8 +630,6 @@ document.addEventListener('keypress', function(event) {
     });document.getElementsByName('npwp')[0].addEventListener('input', function () {
     this.value = this.value.toUpperCase();
     });document.getElementsByName('clusterName')[0].addEventListener('input', function () {
-    this.value = this.value.toUpperCase();
-    });document.getElementsByName('siteId')[0].addEventListener('input', function () {
     this.value = this.value.toUpperCase();
     });
     

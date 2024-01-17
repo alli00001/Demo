@@ -8,6 +8,16 @@
 	Common invoice styles. These styles will work in a browser or using the HTML
 	to PDF anvil endpoint.
 */
+#removeButton {
+    margin-top: 10px; /* Adjust as necessary for your layout */
+    padding: .25rem .80rem; /* Similar padding to bootstrap's btn class */
+    border-radius: .25rem; /* Rounded borders */
+    border: 1px solid #ced4da; /* Similar to default file input button */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 0.9rem; /* Adjust font size as needed */
+    line-height: 0.9; /* For proper text alignment */
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out; /* Smooth transition for hover effects */
+}
 .general-information-table {
   table-layout: fixed;
   width: 100%;
@@ -218,7 +228,7 @@ td {
 {% endif %}
 <div style="text-align: center; background-color: white">
     {% if order.company == 'aci' %}
-        <img src="{{ MEDIA_URL }}aci_cmp_logo2.jpg" style="width: 400px;">
+        <img src="{{ MEDIA_URL }}aci_cmp_logo3.jpg" style="width: 400px;">
 		<input type="hidden" value="aci"  name ="company" id ="company">
     {% elif order.company == 'bks' %}
 
@@ -276,7 +286,7 @@ td {
 				{%else%}
 					<td style ="width:30%">WO / LKI / LN / <input name ="shortdate" id ="shortdate"  value="{{order.shortdate}}" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}"	 type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
 				{%endif%}
-			{% endif %}	
+			{% endif %}				
 		</tr>
 		<tr>
 			<td style="width: 18%;">REQUEST BY</td>
@@ -286,7 +296,7 @@ td {
 				
 			<td>CATEGORY</td>
 			<td style="width: 2%;">:</td>
-			<td style ="width:20%"><input value="{{order.category}}" name="category" type="text" style="text-align: left; height: 30px;" value="MP"></td>
+			<td style ="width:20%"><input value="{{order.category}}" name="category" type="text" style="text-align: left; height: 30px; display: none;" >{{order.category}}</td>
 		</tr>
 		<tr>
 			<td style="text-align: left; width: 25px;">PROJECT</td>
@@ -296,18 +306,30 @@ td {
 
 			<td>BANK</td>
 			<td>:</td>
-			<td style="text-align: left;"><select id ="bank" name="bank"style="text-align: left; height: 30px; width: 100%;">
-                <option value="BCA" {% if order.bank == 'BCA' %}selected{% endif %}>BCA</option>
-                <option value="MANDIRI" {% if order.bank == 'MANDIRI' %}selected{% endif %}>MANDIRI</option>
-                <option value="OCBC NISP" {% if order.bank == 'OCBC NISP' %}selected{% endif %}>OCBC</option>
-                <option value="BRI" {% if order.bank == 'BRI' %}selected{% endif %}>BRI</option>
-				<option value="CREATE">CREATE</option>
-
+		{% if order.bank != 'BCA' and order.bank != 'MANDIRI' and order.bank != 'OCBC NISP' and order.bank != 'BRI' %}
+			<td style="text-align: left;">
+				<input value="{{order.bank}}" type="text" id ="bank" name ="bank">
 			</td>
+		{% else %}
+			<td style="text-align: left;">
+				<select id="bank" name="bank" style="text-align: left; height: 30px; width: 100%;">
+					<option value="BCA" {% if order.bank == 'BCA' %}selected{% endif %}>BCA</option>
+					<option value="MANDIRI" {% if order.bank == 'MANDIRI' %}selected{% endif %}>MANDIRI</option>
+					<option value="OCBC NISP" {% if order.bank == 'OCBC NISP' %}selected{% endif %}>OCBC</option>
+					<option value="BRI" {% if order.bank == 'BRI' %}selected{% endif %}>BRI</option>
+					<option value="CREATE">CREATE</option>
+				</select>
+			</td>
+		{% endif %}
 		</tr>
 		<tr>
 			<td style="text-align: left;">CUSTOMER</td>
 			<td>:</td>
+			{% if order.customer != 'ZTE' and order.customer != 'YOFC' and order.customer != 'OCBC FH'%}
+			<td style="text-align: left;">
+				<input value="{{order.customer}}" type="text" id ="customer" name ="customer">
+			</td>
+			{% else %}
 			<td style="text-align: left;">
 				<select id ="customer"name="customer" style="height : 30px ; width:100%;">
 					<option value = "ZTE"  {% if order.customer == 'ZTE' %}selected{% endif %}>ZTE</option>
@@ -315,7 +337,7 @@ td {
 					<option value = "FH"  {% if order.customer == 'FH' %}selected{% endif %}>FH</option>
 					<option value="CREATE">CREATE</option>
 			</td>
-
+			{%endif%}
 			<td></td>
 
 			<td style="text-align: left;height: 30px;">ACCOUNT NAME</td>
@@ -336,15 +358,20 @@ td {
 		<tr>
 			<td style="text-align: left; width: 25px;">REGION</td>
 			<td>:</td>
+			{% if order.region != 'JABO' and order.region != 'CJ' and order.region != 'EJ' and order.region != 'WJ'%}
+			<td style="text-align: left;">
+				<input value="{{order.region}}" type="text" id ="region" name ="region">
+			</td>
+			{%else%}
 			<td style="text-align: left;"><select id ="region" name="region" style=" height : 30px ;width: 100% ;">
 				<option value="JABO"  {% if order.region == 'JABO' %}selected{% endif %}>JABO</option>
-				<option value="CJ"  {% if order.bank == 'CJ' %}selected{% endif %}>CJ</option>
-				<option value="EJ"  {% if order.bank == 'EJ' %}selected{% endif %}>EJ</option>
-				<option value="WJ"  {% if order.bank == 'WJ' %}selected{% endif %}>WJ</option>
+				<option value="CJ"  {% if order.region == 'CJ' %}selected{% endif %}>CJ</option>
+				<option value="EJ"  {% if order.region == 'EJ' %}selected{% endif %}>EJ</option>
+				<option value="WJ"  {% if order.region == 'WJ' %}selected{% endif %}>WJ</option>
 				<option value="CREATE">CREATE</option>
 
 			</td>
-
+			{%endif%}
 			<td></td>
 
 			<td style="text-align: left">PHONE NUMBER</td>
@@ -521,7 +548,10 @@ td {
 			<select name ="tax-cell" id ="tax-cell">
 				<option value ="WHT-21" data-tax-percentage-amount = 2.5% {% if order.paymentTax == 'WHT-21' %}selected{% endif %}>TAX - WHT21</option>
 				<option value ="WHT-23" data-tax-percentage-amount = 2% {% if order.paymentTax == 'WHT-23' %}selected{% endif %}>TAX - WHT23</option>
-				<option value ="VAT" data-tax-percentage-amount = 11% {% if order.paymentTax == 'VAT' %}selected{% endif %}>TAX - VAT</option>
+				<option value ="VAT" data-tax-percentage-amount = 1.1% {% if order.paymentTax == 'VAT' %}selected{% endif %}>TAX - VAT</option>
+				<option value ="NO TAX" data-tax-percentage-amount = 0% {% if order.paymentTax == 'NO TAX' %}selected{% endif %}>NO TAX</option>
+				<option value ="TAX" data-tax-percentage-amount = {{order.taxPercentage}} {% if order.paymentTax == 'TAX' %}selected{% endif %}>TAX</option>
+
 			</select>
 		</td>
           <td>
@@ -616,14 +646,16 @@ td {
 	<tbody>
 		<tr>
 			<td>INVOICE</td>
-			<td>
+			<td style = "text-align : left">
 				{% if order.invoice %}
 					<a href="{{ order.invoice.url }}">Download Attachment</a>
-					<input type="file" name="invoice">
+					<input type="file" name="invoice" id="invoice">
+					<button type="button" onclick="deleteAttachment({{ order.id }}, 'delete_invoice')" id="removeButton">Remove</button>
 				{% else %}
 					No attachment
-					<input type="file" name="invoice">
-				{% endif %}
+					<input type="file" name="invoice" id ="invoice">
+					<button type="button" onclick="clearFileInput('invoice')" id="removeButton">Remove</button>				
+					{% endif %}
 			</td>
 		</tr>
 	</tbody>
@@ -747,7 +779,23 @@ td {
 </script>
 
 <script>
+function deleteAttachment(orderId, action) {
+    if (!confirm('Are you sure you want to delete the attachment?')) {
+        return; // Do nothing if the user cancels the confirmation dialog
+    }
 
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "{% url 'delete_attachment' order.id %}", true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+    xhr.onreadystatechange = function() {
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            // Handle success, such as updating the UI to reflect the deleted attachment
+            alert('Attachment deleted successfully.');
+        }
+    }
+    xhr.send('action=' + action);
+}
 function updateTotalActual(number){
     const qtyAElement = document.querySelector(`input[name='qtyA_${number}']`);
     const unitPriceElement = document.querySelector(`input[name='unitPrice_${number}']`);
@@ -920,7 +968,9 @@ document.addEventListener('keypress', function(event) {
     }
 });
 
-
+function clearFileInput(id) {
+    document.getElementById(id).value = "";
+}
 function addUppercaseListener(element) {
   element.addEventListener('input', function() {
     this.value = this.value.toUpperCase();

@@ -14,6 +14,48 @@ from datetime import datetime
 from django.core.exceptions import ValidationError
 # Create your views here.
 
+def delete_attachment(request, id):
+    if request.method == "POST":
+        obj = get_object_or_404(WorkOrder, id=id)
+        action = request.POST.get("action")
+
+        # Determine which attachment to delete
+        attachment_field = None
+        if action == "delete_team_list":
+            attachment_field = 'team_list'
+        elif action == "delete_picture_of_team":
+            attachment_field = 'picture_of_team'
+        elif action == "delete_checklist_boq_actual_attachment":
+            attachment_field = 'checklist_boq_actual_attachment'
+        elif action == "delete_cover_acceptance_attachment":
+            attachment_field = 'cover_acceptance_attachment'
+        elif action == "delete_cover_opm":
+            attachment_field = 'cover_opm_attachment'
+        elif action == "delete_fac_certificate":
+            attachment_field = 'fac_certificate'
+        elif action == "delete_no_issue_agreement":
+            attachment_field = 'no_issue_agreement'
+        elif action == "delete_invoice":
+            attachment_field = 'invoice'   
+        elif action == "delete_capture_approval":
+            attachment_field = 'capture_approval'   
+        elif action == "delete_capture_drm":
+            attachment_field = 'capture_drm'   
+        elif action == "delete_bak":
+            attachment_field = 'bak'        
+        # Add additional conditions for other attachment types
+
+        # Delete the specified attachment
+        if attachment_field and hasattr(obj, attachment_field):
+            attachment = getattr(obj, attachment_field)
+            if attachment:
+                attachment.delete()  # This deletes the file from the filesystem
+                setattr(obj, attachment_field, None)  # Remove the association
+                obj.save()
+                return JsonResponse({'status': 'success'})
+
+        return JsonResponse({'status': 'attachment_not_found'}, status=404)
+    return JsonResponse({'status': 'error'}, status=400)
 @login_required
 def wo_submitted(request):
     return render(request, "wo_submitted.html")
@@ -790,7 +832,7 @@ def finished_wo(request):
         ceoCheck=True,
         rightHandCheck=True,
         financeCheck=True
-    ).order_by('id')
+    ).order_by('-wo_date')
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         project = request.GET.get('project', None)
         dates = request.GET.getlist('dates[]')
@@ -895,10 +937,13 @@ def finished_wo(request):
     return render(request, 'finished_wo.html', context)
 @login_required
 def overview(request):
-    if request.method == "POST" :
-
+    if request.method == "POST" :     
         wo_id = request.POST.get("order")
         work_order = get_object_or_404(WorkOrder, id= wo_id)
+        action = request.POST.get("action")
+        if (action == "delete") :
+            work_order.delete()
+            return redirect('overview')
         if request.user.groups.filter(name__in=['CEO', 'rightHand', 'Personal Assistant', 'finance']).exists():
             work_order.remarksOverview = request.POST.get('remarksOverview', work_order.remarksOverview)
         if request.user.groups.filter(name='CEO').exists():
@@ -918,7 +963,7 @@ def overview(request):
         rightHandCheck=True,
         personalAssistantCheck=True,
         financeCheck=True
-    )
+    ).order_by('-wo_date')
     
     paginator = Paginator(work_order_list, 20)  
     page_number = request.GET.get('page')
@@ -1004,7 +1049,6 @@ def edit_wo(request, id, category, project):
                 return render(request, "edit_wo_mp.html", context)
 
             obj = WorkOrder.objects.get(id = id)
-
             # EXTEND WO CHECK
             if (obj.extendable and obj.project == 'EMR') :
                 workOrder = WorkOrder(
@@ -1703,6 +1747,8 @@ def edit_wo(request, id, category, project):
 
                 for deduction in obj.deductions.all():
                     deduction.delete()
+                for payment in obj.paymentInformation.all():
+                    payment.delete()
                 count = request.POST.get("number_of_scopes")
                 count = int(count)
                 scopeOfWorks = getScopeOfWorksInformation(request.POST, count)
@@ -1894,7 +1940,7 @@ def edit_wo(request, id, category, project):
                     paymentObject.save()
                     workOrder.paymentInformation.add(paymentObject)     
                 return render(request, "wo_submitted.html", context)
-            if(obj) :
+            elif(obj) :
                 obj.company = request.POST.get('company')
                 wo_date_str = request.POST.get('wo_date')
                 obj.wo_date = parse_date(wo_date_str)
@@ -1957,6 +2003,10 @@ def edit_wo(request, id, category, project):
 
                 for deduction in obj.deductions.all():
                     deduction.delete()
+
+                for payment in obj.paymentInformation.all():
+                    payment.delete()
+
                 count = request.POST.get("number_of_scopes")
                 count = int(count)
                 scopeOfWorks = getScopeOfWorksInformation(request.POST, count)
@@ -1982,4 +2032,10 @@ def edit_wo(request, id, category, project):
                 return render(request, "wo_submitted.html", context)
             else :
                 return render(request, "edit_wo_oc.html", context)
+            
         return render(request, "edit_wo_oc.html", context)
+
+def delete_wo(request, id):
+    targetWO = WorkOrder(get_object_or_404, id = id)
+    targetWO.delete()
+    return redirect('wo_submitted')

@@ -160,7 +160,8 @@
                             {% endif %}
                           </td>
                           <td>
-                            <button type="submit" name="action" value="delete"> DELETE </button>
+                            <input type="hidden" name="order" value="{{ order.id }}">
+                            <button type="submit" name="action" value="delete" onclick="return confirm('Delete Work Order?')"> DELETE </button>
                           </td>
                           
                           

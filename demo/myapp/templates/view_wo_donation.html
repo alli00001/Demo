@@ -210,7 +210,7 @@ Create New List
 	<!-- Company Logo -->
 	<div style="text-align: center; background-color: white">
 		{% if order.company == 'aci' %}
-			<img src="{{ MEDIA_URL }}aci_cmp_logo2.jpg" style="width: 400px;">
+			<img src="{{ MEDIA_URL }}aci_cmp_logo3.jpg" style="width: 400px;">
 		{% elif order.company == 'bks' %}
 			<img src="{{ MEDIA_URL }}bks4.png">
 		{% else %}
@@ -350,12 +350,12 @@ Create New List
     </thead>
     <tbody>
         <td>1</td>
-		<td>{{order.clusterName}}</td>
-        <td>{{order.siteId}}</td>
+		<td>{{order.clusterName |linebreaksbr}}</td>
+        <td>{{order.siteId |linebreaksbr}}</td>
         <td>{{order.hpD}}</td>
         <td>{{order.unitPriceD}}</td>
         <td>{{order.amountD}}</td>
-        <td>{{order.remarkD}}</td>
+        <td style="text-align: left;">{{order.remarkD}}</td>
     </tbody>
 
 </table>
@@ -377,9 +377,9 @@ Create New List
     </thead>
     <tbody>
         <td>1</td>
-		<td>{{order.clusterName}}</td>
-        <td>{{order.odbId}}</td>
-        <td>{{order.suffixId}}</td>
+		<td>{{order.clusterName |linebreaksbr}}</td>
+        <td>{{order.odbId |linebreaksbr}}</td>
+        <td>{{order.suffixId |linebreaksbr}}</td>
 		<td>{{order.hpD}}</td>
         <td>{{order.unitPriceD}}</td>
         <td>{{order.amountD}}</td>
@@ -605,7 +605,14 @@ Create New List
 </form>
 
 <script>
-	
+    var wo = {
+        type: "{{ order.type }}",
+        cluster: "{{ order.cluster }}",
+        odbId: "{{ order.odbId }}",
+        siteId: "{{ order.siteId }}",
+		suffixId: "{{order.suffixId}}",
+		workType: "{{order.workType}}",
+    };
 async function generatePDF(event) {
 	event.preventDefault(); // Prevent the default form action
 	const {
@@ -710,8 +717,20 @@ inputs.forEach(input => {
 	pdf.addImage(imgData, 'PNG', xCentered, yCentered, scaledWidth, scaledHeight);
 
 	// Save the PDF
-	pdf.save('form.pdf');
+	var filenameParts = ['WO'];
+	if (isNotEmpty(wo.type)) filenameParts.push(wo.type);
+	if (isNotEmpty(wo.cluster)) filenameParts.push(wo.cluster);
+	if (isNotEmpty(wo.odbId)) filenameParts.push(wo.odbId);
+	if (isNotEmpty(wo.siteId)) filenameParts.push(wo.siteId);
+	if (isNotEmpty(wo.suffixId)) filenameParts.push(wo.suffixId);
+	if (isNotEmpty(wo.workType)) filenameParts.push(wo.workType);
+	var filename = filenameParts.join('-') + '.pdf';	
+	pdf.save(filename);
 }
+function isNotEmpty(str) {
+    return str && str.trim() !== '';
+}
+
 
 </script>
 {%endblock%}

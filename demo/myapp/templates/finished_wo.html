@@ -133,6 +133,7 @@
                   <tr>
                     <th >NO</th>
                     <th>WORK ORDERS </th> 
+                    <th>REQUEST FORM</th>
                     <th >
                       <button type="button" class="btn btn-info" data-toggle="modal" data-target="#dateFilterModal">
                         DATE
@@ -207,6 +208,13 @@
                       <a href="{% url 'view_wo' order.id order.category order.company order.project%}">{{ order.wo_string }}</a>
                     </td>
                     <td>
+                      <input type="hidden" name="order" value="{{ order.id }}">
+                      <input type="hidden" name="order_category" value="{{ order.category }}">
+                      <input type="hidden" name="order_project" value="{{ order.project }}">
+                      <input type="hidden" name="order_company" value="{{ order.company }}">
+                      <a href="{% url 'request_form' order.id order.category order.company order.project %}">REQUEST FORM</a>
+                    </td>
+                    <td>
                       {{ order.wo_date|date:"Y-m-d" }}                         
                       </td>
                     <td>
@@ -278,7 +286,7 @@
                   </td>     
                 </tr>
                 {% empty %}
-                <tr><td colspan="20">No work orders available.</td></tr>
+                <tr><td colspan="21">No work orders available.</td></tr>
                   {% endfor %}
               </tbody>
           </table>
@@ -581,6 +589,37 @@ function updateTable(data) {
     // Set the cell contents
     row.insertCell().textContent = index + 1; // No
     row.insertCell().innerHTML = '<a href="/view_wo/' + order.id + '/' + order.category + '/' + order.company + '/' + order.project + '">' + order.wo_string + '</a>'; 
+    // REQ FORM
+    var reqFormCell = row.insertCell();
+
+    var hiddenCategory2 = document.createElement('input');
+    hiddenCategory2.type = 'hidden';
+    hiddenCategory2.name = 'order_category';
+    hiddenCategory2.value = order.category;
+    reqFormCell.appendChild(hiddenCategory2);
+
+    var hiddenIdReqForm = document.createElement('input');
+    hiddenIdReqForm.type = 'hidden';
+    hiddenIdReqForm.name = 'id';
+    hiddenIdReqForm.value = order.id;
+    reqFormCell.appendChild(hiddenIdReqForm);
+
+    var hiddenCompany = document.createElement('input');
+    hiddenCompany.type = 'hidden'
+    hiddenCompany.name = 'order_company'
+    hiddenCompany.value = order.company
+    reqFormCell.appendChild(hiddenCompany)
+
+    var hiddenProject2 = document.createElement('input');
+    hiddenProject2.type = 'hidden';
+    hiddenProject2.name = 'order_project';
+    hiddenProject2.value = order.project;
+    reqFormCell.appendChild(hiddenProject2);
+
+    var reqFormLink = document.createElement('a');
+    reqFormLink.href = '/request_form/' + order.id + '/' + order.category + '/' +order.company + '/'+ order.project; // Update URL as needed
+    reqFormLink.textContent = 'REQUEST FORM';
+    reqFormCell.appendChild(reqFormLink);
     row.insertCell().textContent = order.wo_date;
     row.insertCell().textContent = order.category; // WO
 
@@ -658,14 +697,15 @@ function updateTable(data) {
     hiddenCategory.type = 'hidden';
     hiddenCategory.name = 'order_category';
     hiddenCategory.value = order.category;
-    console.log(hiddenCategory)
     extendCell.appendChild(hiddenCategory);
 
+
+
+//
     var hiddenProject = document.createElement('input');
     hiddenProject.type = 'hidden';
     hiddenProject.name = 'order_project';
     hiddenProject.value = order.project;
-    console.log(hiddenProject)
     extendCell.appendChild(hiddenProject);
 
     if (order.extendable) {
@@ -689,7 +729,7 @@ function updateTable(data) {
     var row = tbody.insertRow();
     var cell = row.insertCell(0);
     cell.textContent = 'No work orders available.';
-    cell.colSpan = 20; // Span across all columns
+    cell.colSpan = 21; // Span across all columns
   
   }
 }

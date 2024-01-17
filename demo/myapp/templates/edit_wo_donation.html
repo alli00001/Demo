@@ -11,6 +11,16 @@ Create New List
 	Common invoice styles. These styles will work in a browser or using the HTML
 	to PDF anvil endpoint.
 */
+#removeButton {
+    margin-top: 10px; /* Adjust as necessary for your layout */
+    padding: .25rem .80rem; /* Similar padding to bootstrap's btn class */
+    border-radius: .25rem; /* Rounded borders */
+    border: 1px solid #ced4da; /* Similar to default file input button */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 0.9rem; /* Adjust font size as needed */
+    line-height: 0.9; /* For proper text alignment */
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out; /* Smooth transition for hover effects */
+}
 .general-information-table {
   table-layout: fixed;
   width: 100%;
@@ -218,7 +228,7 @@ Create New List
 {% endif %}
 <div style="text-align: center; background-color: white">
     {% if order.company == 'aci' %}
-        <img src="{{ MEDIA_URL }}aci_cmp_logo2.jpg" style="width: 400px;">
+        <img src="{{ MEDIA_URL }}aci_cmp_logo3.jpg" style="width: 400px;">
 		<input type="hidden" value="aci"  name ="company" id ="company">
     {% elif order.company == 'bks' %}
 
@@ -258,27 +268,27 @@ Create New List
 			<td style ="width:18%">WO NUMBER</td>
 			<td style="width: 2%;">:</td>
 			{% if order.company == 'aci' %}
-        {%if order.project == 'EMR' %}
-			  <td style ="width:30%">WO / ACI / EMR / <input name ="shortdate"  value="{{order.shortdate}}" id ="shortdate" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}" type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
-        {%else%}
-        <td style ="width:30%">WO / ACI / LN / <input name ="shortdate"  value="{{order.shortdate}}" id ="shortdate" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}" type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
-        {%endif%}
+				{%if order.project == 'EMR' %}
+					<td style ="width:30%">WO / ACI / EMR / <input name ="shortdate"  value="{{order.shortdate}}" id ="shortdate" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}" type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+				{%else%}
+				<td style ="width:30%">WO / ACI / LN / <input name ="shortdate"  value="{{order.shortdate}}" id ="shortdate" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}" type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+				{%endif%}
 
-      {% elif order.company == 'bks' %}
-        {%if order.project == 'EMR' %}
-        <td style ="width:30%">WO / BKS / EMR / <input name ="shortdate" id ="shortdate"  value="{{order.shortdate}}" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}"	 type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
-        {%else%}
-        <td style ="width:30%">WO / BKS / LN / <input name ="shortdate" id ="shortdate"  value="{{order.shortdate}}" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}"	 type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
-        {%endif%}
-      
-      {% else %}
-        {%if order.project == 'EMR' %}
-		    <td style ="width:30%">WO / LKI / EMR / <input name ="shortdate" id ="shortdate"  value="{{order.shortdate}}" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}"	 type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
-        {%else%}
-		    <td style ="width:30%">WO / LKI / LN / <input name ="shortdate" id ="shortdate"  value="{{order.shortdate}}" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}"	 type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
-        {%endif%}
-      {% endif %}		
-    </tr>
+			{% elif order.company == 'bks' %}
+				{%if order.project == 'EMR' %}
+				<td style ="width:30%">WO / BKS / EMR / <input name ="shortdate" id ="shortdate"  value="{{order.shortdate}}" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}"	 type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+				{%else%}
+				<td style ="width:30%">WO / BKS / LN / <input name ="shortdate" id ="shortdate"  value="{{order.shortdate}}" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}"	 type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+				{%endif%}
+			
+			{% else %}
+				{%if order.project == 'EMR' %}
+					<td style ="width:30%">WO / LKI / EMR / <input name ="shortdate" id ="shortdate"  value="{{order.shortdate}}" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}"	 type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+				{%else%}
+					<td style ="width:30%">WO / LKI / LN / <input name ="shortdate" id ="shortdate"  value="{{order.shortdate}}" type ="text" style="width: 10%; height: 30px; text-align: center;" readonly> / <input name="wo_number" id = "wo_number" value="{{order.wo_number}}"	 type="number" style="text-align: right; height: 30px; width: 20%;" min = "0" max = "9999" maxlength="4"></td>
+				{%endif%}
+			{% endif %}				
+		</tr>
 		<tr>
 			<td style="width: 18%;">REQUEST BY</td>
 			<td style="width: 2%; text-align: center;">:</td>
@@ -287,7 +297,7 @@ Create New List
 				
 			<td>CATEGORY</td>
 			<td style="width: 2%;">:</td>
-			<td style ="width:20%"><input value="{{order.category}}" name="category" type="text" style="text-align: left; height: 30px;" value="MP"></td>
+			<td style ="width:20%"><input value="{{order.category}}" name="category" type="text" style="text-align: left; height: 30px; display: none;" >{{order.category}}</td>
 		</tr>
 		<tr>
 			<td style="text-align: left; width: 25px;">PROJECT</td>
@@ -297,18 +307,30 @@ Create New List
 
 			<td>BANK</td>
 			<td>:</td>
-			<td style="text-align: left;"><select id ="bank" name="bank"style="text-align: left; height: 30px; width: 100%;">
-                <option value="BCA" {% if order.bank == 'BCA' %}selected{% endif %}>BCA</option>
-                <option value="MANDIRI" {% if order.bank == 'MANDIRI' %}selected{% endif %}>MANDIRI</option>
-                <option value="OCBC NISP" {% if order.bank == 'OCBC NISP' %}selected{% endif %}>OCBC</option>
-                <option value="BRI" {% if order.bank == 'BRI' %}selected{% endif %}>BRI</option>
-				<option value="CREATE">CREATE</option>
-
+		{% if order.bank != 'BCA' and order.bank != 'MANDIRI' and order.bank != 'OCBC NISP' and order.bank != 'BRI' %}
+			<td style="text-align: left;">
+				<input value="{{order.bank}}" type="text" id ="bank" name ="bank">
 			</td>
+		{% else %}
+			<td style="text-align: left;">
+				<select id="bank" name="bank" style="text-align: left; height: 30px; width: 100%;">
+					<option value="BCA" {% if order.bank == 'BCA' %}selected{% endif %}>BCA</option>
+					<option value="MANDIRI" {% if order.bank == 'MANDIRI' %}selected{% endif %}>MANDIRI</option>
+					<option value="OCBC NISP" {% if order.bank == 'OCBC NISP' %}selected{% endif %}>OCBC</option>
+					<option value="BRI" {% if order.bank == 'BRI' %}selected{% endif %}>BRI</option>
+					<option value="CREATE">CREATE</option>
+				</select>
+			</td>
+		{% endif %}
 		</tr>
 		<tr>
 			<td style="text-align: left;">CUSTOMER</td>
 			<td>:</td>
+			{% if order.customer != 'ZTE' and order.customer != 'YOFC' and order.customer != 'OCBC FH'%}
+			<td style="text-align: left;">
+				<input value="{{order.customer}}" type="text" id ="customer" name ="customer">
+			</td>
+			{% else %}
 			<td style="text-align: left;">
 				<select id ="customer"name="customer" style="height : 30px ; width:100%;">
 					<option value = "ZTE"  {% if order.customer == 'ZTE' %}selected{% endif %}>ZTE</option>
@@ -316,7 +338,7 @@ Create New List
 					<option value = "FH"  {% if order.customer == 'FH' %}selected{% endif %}>FH</option>
 					<option value="CREATE">CREATE</option>
 			</td>
-
+			{%endif%}
 			<td></td>
 
 			<td style="text-align: left;height: 30px;">ACCOUNT NAME</td>
@@ -337,15 +359,20 @@ Create New List
 		<tr>
 			<td style="text-align: left; width: 25px;">REGION</td>
 			<td>:</td>
+			{% if order.region != 'JABO' and order.region != 'CJ' and order.region != 'EJ' and order.region != 'WJ'%}
+			<td style="text-align: left;">
+				<input value="{{order.region}}" type="text" id ="region" name ="region">
+			</td>
+			{%else%}
 			<td style="text-align: left;"><select id ="region" name="region" style=" height : 30px ;width: 100% ;">
 				<option value="JABO"  {% if order.region == 'JABO' %}selected{% endif %}>JABO</option>
-				<option value="CJ"  {% if order.bank == 'CJ' %}selected{% endif %}>CJ</option>
-				<option value="EJ"  {% if order.bank == 'EJ' %}selected{% endif %}>EJ</option>
-				<option value="WJ"  {% if order.bank == 'WJ' %}selected{% endif %}>WJ</option>
+				<option value="CJ"  {% if order.region == 'CJ' %}selected{% endif %}>CJ</option>
+				<option value="EJ"  {% if order.region == 'EJ' %}selected{% endif %}>EJ</option>
+				<option value="WJ"  {% if order.region == 'WJ' %}selected{% endif %}>WJ</option>
 				<option value="CREATE">CREATE</option>
 
 			</td>
-
+			{%endif%}
 			<td></td>
 
 			<td style="text-align: left">PHONE NUMBER</td>
@@ -408,7 +435,7 @@ Create New List
     <tbody>
         <td>1</td>
         <td><textarea style="width: 100%;" class="clusterName" name="clusterName">{{order.clusterName}}</textarea></td>
-        <td><textarea style="width: 100%;" class="odbId" name="odbId"></textarea>{{order.odbId}}</td>
+        <td><textarea style="width: 100%;" class="odbId" name="odbId">{{order.odbId}}</textarea></td>
         <td><textarea style="width: 100%;" class="suffixId" name="suffixId">{{order.suffixId}}</textarea></td>
         <td><input type ="text" id ="hpD" name ="hpD" value ="{{order.hpD}}"></td>
         <td><input type ="text" id ="unitPriceD" name ="unitPriceD" value ="{{order.unitPriceD}}"></td>
@@ -427,84 +454,100 @@ Create New List
 	  <th>STATUS</th>
     </thead>
 	<tbody>
-		<tr>
-			<td>Capture Approval by ZTE   </td>
-			<td>
-				{% if order.capture_approval %}
-					<a href="{{ order.capture_approval.url }}">Attachment Ready</a>
-                    <input type="file" name="capture_approval">
+    <tr>
+      <td>Capture Approval by ZTE</td>
+      <td style="text-align: left">
+          {% if order.capture_approval %}
+              <a href="{{ order.capture_approval.url }}">Download Attachment</a>
+              <input type="file" name="capture_approval" id="capture_approval">
+              <button type="button" onclick="deleteAttachment({{ order.id }}, 'delete_capture_approval')" id="removeButton">Remove</button>
+          {% else %}
+              No attachment
+              <input type="file" name="capture_approval" id="capture_approval">
+              <button type="button" onclick="clearFileInput('capture_approval')" id="removeButton">Remove</button>
+          {% endif %}
+      </td>
+  </tr>
+  
+  <tr>
+    <td>Capture DRM Approve</td>
+    <td style="text-align: left">
+        {% if order.capture_drm %}
+            <a href="{{ order.capture_drm.url }}">Download Attachment</a>
+            <input type="file" name="capture_drm" id="capture_drm">
+            <button type="button" onclick="deleteAttachment({{ order.id }}, 'delete_capture_drm')" id="removeButton">Remove</button>
+        {% else %}
+            No attachment
+            <input type="file" name="capture_drm" id="capture_drm">
+            <button type="button" onclick="clearFileInput('capture_drm')" id="removeButton">Remove</button>
+        {% endif %}
+    </td>
+</tr>
 
-				{% else %}
-					No attachment
-                    <input type="file" name="capture_approval">
-
-				{% endif %}
-			</td>
-		</tr>
-		<tr>
-			<td>Capture DRM Approve									
-			</td>
-			<td>
-				{% if order.capture_drm %}
-					<a href="{{ order.capture_drm.url }}">Attachment Ready</a>
-                    <input type="file" name="capture_drm">
-
-				{% else %}
-					No attachment
-                    <input type="file" name="capture_drm">
-
-				{% endif %}
-			</td>
-		</tr>		
         <tr>
 			<td>Surat Permohonan Izin Pembangunan Infrastruktur Informasi & Telkekomunikasi									
-			</td>
+      </td>
 			<td>		
-                {{order.surat_izin}}
+          <select id ="surat-izin" name ="surat-izin">
+            <option value="RECEIVED"  {% if order.surat_izin == 'RECEIVED' %}selected{% endif %}>RECEIVED</option>
+            <option value="NY RECEIVED"  {% if order.surat_izin == 'NY RECEIVED' %}selected{% endif %}>NY RECEIVED</option>
+          </select>
 			</td>
 		</tr>		
 		<tr>
 			<td>Berita Acara Pertemuan (BAP - Open)									
 			</td>
 			<td>		
-				{{order.bap_open}}
+        <select id ="bap-open" name ="bap-open">
+          <option value="RECEIVED"  {% if order.bap_open == 'RECEIVED' %}selected{% endif %}>RECEIVED</option>
+          <option value="NY RECEIVED"  {% if order.bap_open == 'NY RECEIVED' %}selected{% endif %}>NY RECEIVED</option>
+        </select>
 			</td>
 		</tr>		
 		<tr>
 			<td>Form Survey Cluster										
 			</td>
 			<td>		
-				{{order.form_survey}}
-			</td>
+        <select id ="form-survey" name ="form-survey">
+          <option value="RECEIVED"  {% if order.form_survey == 'RECEIVED' %}selected{% endif %}>RECEIVED</option>
+          <option value="NY RECEIVED"  {% if order.form_survey == 'NY RECEIVED' %}selected{% endif %}>NY RECEIVED</option>
+        </select>			
+      </td>
 		</tr>		
 		<tr>
 			<td>Berita Acara Pertemuan (BAP - SND)								
 			</td>
 			<td>
-				{{order.bap_snd}}
-			</td>
+        <select id ="bap-snd" name ="bap-snd">
+          <option value="RECEIVED"  {% if order.bap_snd == 'RECEIVED' %}selected{% endif %}>RECEIVED</option>
+          <option value="NY RECEIVED"  {% if order.bap_snd == 'NY RECEIVED' %}selected{% endif %}>NY RECEIVED</option>
+        </select>						
+      </td>
 		</tr>		
-        <tr>
-			<td>Berita Acara Kesepakatan (BAK)									
-			</td>
-            <td>
-                {% if order.bak %}
-                    <a href="{{ order.bak.url }}">Attachment Ready</a>
-                    <input type="file" name="bak">
-
-                {% else %}
-                    No attachment
-                    <input type="file" name="bak">
-
-                {% endif %}
-            </td>
-		</tr>
+    <tr>
+      <td>Berita Acara Kesepakatan (BAK)</td>
+      <td style="text-align: left">
+          {% if order.bak %}
+              <a href="{{ order.bak.url }}">Download Attachment</a>
+              <input type="file" name="bak" id="bak">
+              <button type="button" onclick="deleteAttachment({{ order.id }}, 'delete_bak')" id="removeButton">Remove</button>
+          {% else %}
+              No attachment
+              <input type="file" name="bak" id="bak">
+              <button type="button" onclick="clearFileInput('bak')" id="removeButton">Remove</button>
+          {% endif %}
+      </td>
+  </tr>
+  
         <tr>
 			<td>Layout SND Kasar											
 			</td>
 			<td>
-				{{order.layout}}
-			</td>
+        <select id ="layout" name ="layout">
+          <option value="RECEIVED"  {% if order.layout == 'RECEIVED' %}selected{% endif %}>RECEIVED</option>
+          <option value="NY RECEIVED"  {% if order.layout == 'NY RECEIVED' %}selected{% endif %}>NY RECEIVED</option>
+        </select>						
+      </td>
 		</tr>
 	</tbody>
   </table>
@@ -604,10 +647,6 @@ Create New List
 
 
 <script type="text/javascript">
-	document.addEventListener('DOMContentLoaded', function() {
-		document.getElementById('number_of_scopes').value = 0;
-		document.getElementById('number_of_deduction').value =0;
-	});
 	document.addEventListener("DOMContentLoaded", function(){
             document.getElementById("submitBtn").addEventListener("click", function(e){
                 var woNumber = document.getElementById("wo_number").value;
@@ -627,6 +666,26 @@ Create New List
 
 
 <script>
+  function deleteAttachment(orderId, action) {
+    if (!confirm('Are you sure you want to delete the attachment?')) {
+        return; // Do nothing if the user cancels the confirmation dialog
+    }
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "{% url 'delete_attachment' order.id %}", true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+    xhr.onreadystatechange = function() {
+        if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            // Handle success, such as updating the UI to reflect the deleted attachment
+            alert('Attachment deleted successfully.');
+        }
+    }
+    xhr.send('action=' + action);
+}
+  function clearFileInput(id) {
+    document.getElementById(id).value = "";
+}
 document.addEventListener('keypress', function(event) {
     // Check if the Enter key is pressed without the Shift key
     if (event.keyCode === 13 && !event.shiftKey) {
@@ -692,7 +751,9 @@ document.addEventListener('keypress', function(event) {
     this.value = this.value.toUpperCase();
     });document.getElementsByName('clusterName')[0].addEventListener('input', function () {
     this.value = this.value.toUpperCase();
-    });document.getElementsByName('siteId')[0].addEventListener('input', function () {
+    });document.getElementsByName('odbId')[0].addEventListener('input', function () {
+    this.value = this.value.toUpperCase();
+    });document.getElementsByName('suffixId')[0].addEventListener('input', function () {
     this.value = this.value.toUpperCase();
     });
     

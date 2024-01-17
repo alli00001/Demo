@@ -31,6 +31,7 @@ urlpatterns = [
     path('edit_wo/<int:id>/<str:category>/<str:project>', views.edit_wo, name='edit_wo'),
 
     path('wo_submitted/', views.wo_submitted , name ="wo_submitted"),
+    path('delete_attachment/<int:id>/', views.delete_attachment, name='delete_attachment'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
