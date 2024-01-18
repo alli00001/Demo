@@ -440,8 +440,8 @@ td {
 				<td></td>
 				<td></td>
 				<td></td>
-				<td id="grand-total-boq"><input type = "text" name ="grand-total-boq" value = "0"></td>
-				<td id="grand-total-actual"> <input type = "text" name ="grand-total-actual" value = "0"></td>
+				<td id="grand-total-boq"><input type = "text" name ="grand-total-boq" value = "0"  style="text-align: center;"></td>
+				<td id="grand-total-actual"> <input type = "text" name ="grand-total-actual" value = "0"  style="text-align: center;"></td>
 				<td></td> 
 				<td></td>
 			</tr>
@@ -469,12 +469,12 @@ td {
         <tr>
           <td>
             <select name = "terms-selection" id ="terms-selection">
-            <option value = "DP" data-percentage-amount =30% data-remarks = ''> DP </option>
+			<option  value ="FULL" data-percentage-amount = 100% data-remarks = ''>FULL</option>
+			<option value = "DP" data-percentage-amount =30% data-remarks = ''> DP </option>
             <option  value ="TERM 2" data-percentage-amount =40% data-remarks = 'Implementation Done'>TERM 2</option>
             <option  value ="TERM 3" data-percentage-amount =20% data-remarks = 'ATP Done'>TERM 3</option>
             <option  value ="TERM 4" data-percentage-amount =10% data-remarks = 'FAC Done'>TERM 4</option>
             <option  value ="CASHBON" data-percentage-amount =0% data-remarks = '' >CASHBON</option>
-            <option  value ="FULL" data-percentage-amount = 100% data-remarks = ''>FULL</option>
             <option  value ="REMAINING" data-percentage-amount =0% data-remarks = ''>REMAINING</option>
             <option  value ="CREATE" data-percentage-amount = 0% data-remarks = ''>CREATE</option>  
             </select>
@@ -488,10 +488,10 @@ td {
         <tr>
           <td>
 			<select name ="tax-cell" id ="tax-cell">
+				<option value ="NO TAX" data-tax-percentage-amount= 0%>NO TAX</option>
 				<option value ="WHT-21" data-tax-percentage-amount = 2.5%>TAX - WHT21</option>
 				<option value ="WHT-23" data-tax-percentage-amount = 2%>TAX - WHT23</option>
 				<option value ="VAT" data-tax-percentage-amount = 1.1%>TAX - VAT</option>
-				<option value ="NO TAX" data-tax-percentage-amount= 0%>NO TAX</option>
 				<option value ="TAX" data-tax-percentage-amount=0%>TAX</option>
 
 			</select>
@@ -551,21 +551,15 @@ td {
 				<td>PICTURE OF TEAM READY ON SITE					
 				</td>
 				<td style="text-align:left">
-					<div>
 						<input type="file" name="picture_of_team" id ="picture_of_team">
-					</div>
-					<div>
 						<button type="button" onclick="clearFileInput('picture_of_team')" id="removeButton">Remove</button>				
-
-					</div>
-
 	
 				</td>
 			</tr>		<tr>
 				<td>CHECKLIST BOQ ACTUAL					
 				</td>
 				<td style="text-align:left">
-					<input type="file" name="checklist_boq_actual_attachment">
+					<input type="file" name="checklist_boq_actual_attachment" id ="checklist_boq_actual_attachment">
 					<button type="button" onclick="clearFileInput('checklist_boq_actual_attachment')" id="removeButton">Remove</button>				
 
 				</td>
@@ -574,7 +568,7 @@ td {
 				<td>COVER ACCEPTANCE SIGN BY CUSTOMER, PROJECT & COMPANY					
 				</td>
 				<td style="text-align:left">
-					<input type="file" name="cover_acceptance_attachment">
+					<input type="file" name="cover_acceptance_attachment" id ="cover_acceptance_attachment">
 					<button type="button" onclick="clearFileInput('cover_acceptance_attachment')" id="removeButton">Remove</button>				
 
 				</td>
@@ -583,7 +577,7 @@ td {
 				<td>COVER OPM & OTDR TEST					
 				</td>
 				<td style="text-align:left">
-					<input type="file" name="cover_opm_attachment">
+					<input type="file" name="cover_opm_attachment" id ="cover_opm_attachment">
 					<button type="button" onclick="clearFileInput('cover_opm_attachment')" id="removeButton">Remove</button>				
 
 				</td>
@@ -592,7 +586,7 @@ td {
 				<td>FAC CERTIFICATE					
 				</td>
 				<td style="text-align:left">
-					<input type="file" name="fac_certificate">
+					<input type="file" name="fac_certificate" id ="fac_certificate">
 					<button type="button" onclick="clearFileInput('fac_certificate')" id="removeButton">Remove</button>				
 
 				</td>
@@ -601,7 +595,7 @@ td {
 				<td>NO ISSUE AGREEMENT					
 				</td>
 				<td style="text-align:left">
-					<input type="file" name="no_issue_agreement">
+					<input type="file" name="no_issue_agreement" id ="no_issue_agreement"> 
 					<button type="button" onclick="clearFileInput('no_issue_agreement')" id="removeButton">Remove</button>				
 
 				</td>
@@ -610,7 +604,7 @@ td {
 				<td>INVOICE / RECEIPT				
 				</td>
 				<td style="text-align:left">
-					<input type="file" name="invoice">
+					<input type="file" name="invoice" id ="invoice">
 					<button type="button" onclick="clearFileInput('invoice')" id="removeButton">Remove</button>				
 
 				</td>
@@ -1140,10 +1134,16 @@ function add() {
 			selection.appendChild(option14);
 
 			var option15 = document.createElement("option");
-			option15.value = "Splicing";
+			option15.value = "Splicing FDT / JC";
 			option15.setAttribute('data-price', 20000)
-			option15.text = "Splicing";
+			option15.text = "Splicing FDT / JC";
 			selection.appendChild(option15);
+
+			var option17 = document.createElement("option");
+			option17.value = "INSTALL JC";
+			option17.setAttribute('data-price', 50000)
+			option17.text = "INSTALL JC";
+			selection.appendChild(option17);
 
 			// User create custom object 
 			var option16 = document.createElement("option");
@@ -1298,10 +1298,16 @@ function add() {
 			selection.appendChild(option14);
 
 			var option15 = document.createElement("option");
-			option15.value = "Splicing";
+			option15.value = "Splicing FDT / JC";
 			option15.setAttribute('data-price', 20000)
-			option15.text = "Splicing";
+			option15.text = "Splicing FDT / JC";
 			selection.appendChild(option15);
+			
+			var option17 = document.createElement("option");
+			option17.value = "INSTALL JC";
+			option17.setAttribute('data-price', 50000)
+			option17.text = "INSTALL JC";
+			selection.appendChild(option17);
 
 			// User create custom object 
 			var option16 = document.createElement("option");

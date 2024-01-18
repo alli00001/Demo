@@ -862,32 +862,32 @@ def finished_wo(request):
                     print(f"Invalid date string: {date_str}")
             query &= date_queries
         if category:
-            query &= Q(category=category)
+            query &= Q(category__icontains=category)
         if project:
-            query &= Q(project=project)
+            query &= Q(project__icontains=project)
         if customer:
-            query &= Q(customer=customer)
+            query &= Q(customer__icontains=customer)
         if region:
-            query &= Q(region=region)
+            query &= Q(region__icontains=region)
         if city:
-            query &= Q(city=city)
+            query &= Q(city__icontains=city)
         if type:
-            query &= Q(type=type)
+            query &= Q(type__icontains=type)
         if clusterName:
-            query &= Q(clusterName=clusterName)
+            query &= Q(clusterName__icontains=clusterName)
         if siteId:
-            query &= Q(siteId=siteId)
+            query &= Q(siteId__icontains=siteId)
         if odbId:
-            query &= Q(odbId=odbId)
+            query &= Q(odbId__icontains=odbId)
         if suffixId:
-            query &= Q(suffixId=suffixId)
+            query &= Q(suffixId__icontains=suffixId)
         if type:
-            query &= Q(type=type)
+            query &= Q(type__icontains=type)
         if workType:
-            query &= Q(workType=workType)
+            query &= Q(workType__icontains=workType)
         if paymentTerm:
-            query &= Q(paymentTerm=paymentTerm)
-        finished_filtered_orders = finished_work_orders.filter(query)
+            query &= Q(paymentTerm__icontains=paymentTerm)
+        finished_filtered_orders = finished_work_orders.filter(query).order_by('wo_date')
         data = [
             {
                 'project' : order.project,
@@ -944,20 +944,35 @@ def overview(request):
         if (action == "delete") :
             work_order.delete()
             return redirect('overview')
-        if request.user.groups.filter(name__in=['CEO', 'rightHand', 'Personal Assistant', 'finance']).exists():
-            work_order.remarksOverview = request.POST.get('remarksOverview', work_order.remarksOverview)
-        if request.user.groups.filter(name='CEO').exists():
-            work_order.ceoCheck = 'ceoCheck' in request.POST
-            work_order.save()
-        if request.user.groups.filter(name='rightHand').exists():
-            work_order.rightHandCheck = 'rightHandCheck' in request.POST
-            work_order.save()
-        if request.user.groups.filter(name='Personal Assistant').exists():
-            work_order.personalAssistantCheck = 'paCheck' in request.POST
-            work_order.save()
-        if request.user.groups.filter(name='Finance').exists():
-            work_order.financeCheck = 'financeCheck' in request.POST
-            work_order.save()
+        
+        if (action == "confirm") : 
+            if request.user.groups.filter(name__in=['CEO', 'rightHand', 'Personal Assistant', 'finance']).exists():
+                work_order.remarksOverview = request.POST.get('remarksOverview', work_order.remarksOverview)
+            if request.user.groups.filter(name='CEO').exists():
+                work_order.ceoCheck = 'ceoCheck' in request.POST
+                work_order.save()
+            if request.user.groups.filter(name='rightHand').exists():
+                work_order.rightHandCheck = 'rightHandCheck' in request.POST
+                work_order.save()
+            if request.user.groups.filter(name='Personal Assistant').exists():
+                work_order.personalAssistantCheck = 'paCheck' in request.POST
+                work_order.save()
+            if request.user.groups.filter(name='Finance').exists():
+                work_order.financeCheck = 'financeCheck' in request.POST
+                work_order.save()
+        if (action == "reject")    :
+            if request.user.groups.filter(name='CEO').exists():
+                work_order.ceoReject = 'ceoReject' in request.POST
+                work_order.save()
+            if request.user.groups.filter(name='rightHand').exists():
+                work_order.rightHandReject = 'rightHandReject' in request.POST
+                work_order.save()
+            if request.user.groups.filter(name='Personal Assistant').exists():
+                work_order.personalAssistantReject = 'paReject' in request.POST
+                work_order.save()
+            if request.user.groups.filter(name='Finance').exists():
+                work_order.financeReject = 'financeReject' in request.POST
+                work_order.save()
     work_order_list = WorkOrder.objects.exclude(
         ceoCheck=True,
         rightHandCheck=True,

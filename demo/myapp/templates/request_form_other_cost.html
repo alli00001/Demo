@@ -349,6 +349,59 @@ td {
 		</tr>
 	</table>
 
+  
+	{% if order.project == 'EMR'%}
+	<div class="table-container">
+		<table class="line-items-container">
+			<thead>
+				<tr>
+					<th class="heading-description" style ="width : 20%" >CLUSTER NAME</th>
+					<th class="heading-description" style ="width : 20%">SITE ID</th>
+					<th class="heading-description" style ="width : 20%">TYPE</th>
+					<th class="heading-description" style ="width : 20%">WORK TYPE</th>
+					<th class="heading-description" style ="width : 20%">HP</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>{{order.clusterName |linebreaksbr}}</td>
+					<td>{{order.siteId |linebreaksbr}}</td>
+					<td>{{order.type}}</td>
+					<td>{{order.workType}}</td>
+					<td>{{order.type}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	{% else %}
+	<div class="table-container">
+		<table class="line-items-container">
+			<thead>
+				<tr>
+					<th class="heading-description" style ="width : 20%" >CLUSTER NAME</th>
+					<th class="heading-description" style ="width : 20%">ODB ID</th>
+					<th class="heading-description" style ="width : 20%">SUFFIX ID</th>
+					<th class="heading-description" style ="width : 20%">TYPE</th>
+					<th class="heading-description" style ="width : 20%">WORK TYPE</th>
+					<th class="heading-description" style ="width : 20%">HP</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>{{order.clusterName |linebreaksbr}}</td>
+					<td>{{order.odbId |linebreaksbr}}</td>
+					<td>{{order.suffixId |linebreaksbr}}</td>
+					<td>{{order.type}}</td>
+					<td>{{order.workType}}</td>
+					<td>{{order.hp}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	{% endif%}
+  
 	<table class="line-items-container" id="scopeOfWork" >
 		<thead>
 			<tr>
