@@ -52,10 +52,17 @@ class WorkOrder(models.Model):
     #Privilage Check
     company = models.CharField(blank = True, max_length = 100, default ="")
     pricing_type = models.CharField(blank = True, max_length = 100, default ="")
+
     ceoCheck = models.BooleanField(default = False)
     rightHandCheck = models.BooleanField(default = False)
     personalAssistantCheck = models.BooleanField(default = False)
     financeCheck = models.BooleanField(default = False)
+
+    ceoReject = models.BooleanField(default = False)
+    rightHandReject = models.BooleanField(default = False)
+    personalAssistantReject = models.BooleanField(default = False)
+    financeReject = models.BooleanField(default = False)
+
     extendable = models.BooleanField(default = False)
     remarksOverview = models.CharField(blank = True, max_length = 100, default ="")
 

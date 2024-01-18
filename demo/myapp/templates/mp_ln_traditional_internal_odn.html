@@ -437,8 +437,8 @@ td {
 				<td></td>
 				<td></td>
 				<td></td>
-				<td id="grand-total-boq"><input type = "text" name ="grand-total-boq" value = "0"></td>
-				<td id="grand-total-actual"> <input type = "text" name ="grand-total-actual" value = "0"></td>
+				<td id="grand-total-boq"><input type = "text" name ="grand-total-boq" value = "0"  style="text-align: center;"></td>
+				<td id="grand-total-actual"> <input type = "text" name ="grand-total-actual" value = "0"  style="text-align: center;"></td>
 				<td></td> 
 				<td></td>
 			</tr>
@@ -485,10 +485,10 @@ td {
         <tr>
           <td>
 			<select name ="tax-cell" id ="tax-cell">
+				<option value ="NO TAX" data-tax-percentage-amount= 0%>NO TAX</option>
 				<option value ="WHT-21" data-tax-percentage-amount = 2.5%>TAX - WHT21</option>
 				<option value ="WHT-23" data-tax-percentage-amount = 2%>TAX - WHT23</option>
 				<option value ="VAT" data-tax-percentage-amount = 1.1%>TAX - VAT</option>
-				<option value ="NO TAX" data-tax-percentage-amount= 0%>NO TAX</option>
 				<option value ="TAX" data-tax-percentage-amount=0%>TAX</option>
 
 			</select>
@@ -562,7 +562,7 @@ td {
 			<td>CHECKLIST BOQ ACTUAL					
 			</td>
 			<td style="text-align:left">
-				<input type="file" name="checklist_boq_actual_attachment">
+				<input type="file" name="checklist_boq_actual_attachment" id ="checklist_boq_actual_attachment">
 				<button type="button" onclick="clearFileInput('checklist_boq_actual_attachment')" id="removeButton">Remove</button>				
 
 			</td>
@@ -571,7 +571,7 @@ td {
 			<td>COVER ACCEPTANCE SIGN BY CUSTOMER, PROJECT & COMPANY					
 			</td>
 			<td style="text-align:left">
-				<input type="file" name="cover_acceptance_attachment">
+				<input type="file" name="cover_acceptance_attachment" id ="cover_acceptance_attachment">
 				<button type="button" onclick="clearFileInput('cover_acceptance_attachment')" id="removeButton">Remove</button>				
 
 			</td>
@@ -580,7 +580,7 @@ td {
 			<td>COVER OPM & OTDR TEST					
 			</td>
 			<td style="text-align:left">
-				<input type="file" name="cover_opm_attachment">
+				<input type="file" name="cover_opm_attachment" id ="cover_opm_attachment">
 				<button type="button" onclick="clearFileInput('cover_opm_attachment')" id="removeButton">Remove</button>				
 
 			</td>
@@ -589,7 +589,7 @@ td {
 			<td>FAC CERTIFICATE					
 			</td>
 			<td style="text-align:left">
-				<input type="file" name="fac_certificate">
+				<input type="file" name="fac_certificate" id ="fac_certificate">
 				<button type="button" onclick="clearFileInput('fac_certificate')" id="removeButton">Remove</button>				
 
 			</td>
@@ -598,7 +598,7 @@ td {
 			<td>NO ISSUE AGREEMENT					
 			</td>
 			<td style="text-align:left">
-				<input type="file" name="no_issue_agreement">
+				<input type="file" name="no_issue_agreement" id ="no_issue_agreement">
 				<button type="button" onclick="clearFileInput('no_issue_agreement')" id="removeButton">Remove</button>				
 
 			</td>
@@ -607,7 +607,7 @@ td {
 			<td>INVOICE / RECEIPT				
 			</td>
 			<td style="text-align:left">
-				<input type="file" name="invoice">
+				<input type="file" name="invoice" id ="invoice">
 				<button type="button" onclick="clearFileInput('invoice')" id="removeButton">Remove</button>				
 
 			</td>
@@ -1121,11 +1121,16 @@ function add() {
 			selection.appendChild(option14);
 
 			var option15 = document.createElement("option");
-			option15.value = "Splicing";
+			option15.value = "Splicing FDT / JC";
 			option15.setAttribute('data-price', 20000)
-			option15.text = "Splicing";
+			option15.text = "Splicing FDT / JC";
 			selection.appendChild(option15);
 
+			var option17 = document.createElement("option");
+			option17.value = "INSTALL JC";
+			option17.setAttribute('data-price', 50000)
+			option17.text = "INSTALL JC";
+			selection.appendChild(option17);
 			// User create custom object 
 			var option16 = document.createElement("option");
 			option16.value = "Add Custom Scope Of Work";
@@ -1279,10 +1284,16 @@ function add() {
 			selection.appendChild(option14);
 
 			var option15 = document.createElement("option");
-			option15.value = "Splicing";
+			option15.value = "Splicing FDT / JC";
 			option15.setAttribute('data-price', 20000)
-			option15.text = "Splicing";
+			option15.text = "Splicing FDT / JC";
 			selection.appendChild(option15);
+
+			var option17 = document.createElement("option");
+			option17.value = "INSTALL JC";
+			option17.setAttribute('data-price', 50000)
+			option17.text = "INSTALL JC";
+			selection.appendChild(option17);
 
 			// User create custom object 
 			var option16 = document.createElement("option");
@@ -1423,6 +1434,12 @@ function add() {
 			option12.setAttribute('data-price', 2000)
 			option12.text = "Install Label BOX";
 			selection.appendChild(option12);
+
+			var option52 = document.createElement("option");
+			option52.value = "Install OLT";
+			option52.setAttribute('data-price', 500000)
+			option52.text = "Install OLT";
+			selection.appendChild(option52);
 
 			var option13 = document.createElement("option");
 			option13.value = "Pole Installation (Pole Provided by LN), Incl. Foundation / Reinstatment";

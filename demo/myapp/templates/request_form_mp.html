@@ -393,16 +393,15 @@ td {
 	</div>
 	
 	{% endif%}
+
+	{% if order.grandTotalActual %}
+
 	<table class="line-items-container" id="scopeOfWork" >
 		<thead>
 			<tr>
 				<th style ="width : 4%">NO</th>
-				<th style ="width: 26%;">SCOPE OF WORK</th>
-				<th style ="width : 10%">QTY (BOQ)</th>
-				<th style ="width : 10%">QTY (ACTUAL)</th>
-				<th style ="width : 10%">UNIT PRICE</th>
-				<th style ="width : 10%">TOTAL (BOQ)</th>
-				<th style ="width : 10%">TOTAL (ACTUAL)</th>
+				<th style ="width: 56%;">SCOPE OF WORK</th>
+				<th style ="width : 20%">TOTAL (ACTUAL)</th>
 				<th style ="width : 20%">REMARKS</th>
 				<th style ="width : 0%;"></th>
 			</tr>
@@ -412,30 +411,54 @@ td {
       <tr>
         <td style = "text-align: center; padding: 8px 0;">{{ forloop.counter }}</td> <!-- This will auto-increment the row number -->
         <td style="text-align: left;">{{ scope.scopeOfWork }}</td>
-        <td>{{ scope.qtyBoq }}</td>
-        <td>{{ scope.qtyActual }}</td>
-        <td>{{ scope.unitPrice }}</td>
-        <td>{{ scope.totalBoq }}</td>
         <td>{{ scope.totalActual }}</td>
         <td style="text-align: left;">{{ scope.remarks }}</td>
-      </tr>
+		<td></td>
+      </tr>	  
       {% endfor %}
+	</tbody>
+	<tfoot>
+		<tr>
+			<td></td>
+			<td></td>
+			<td id="grand-total-actual">{{order.grandTotalActual}}</td>
+			<td></td> 
+		</tr>
+	</tfoot>
+</table>
 
-		</tbody>
-		<tfoot>
+	  {%else%}
+	  <table class="line-items-container" id="scopeOfWork" >
+		<thead>
 			<tr>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td id="grand-total-boq">{{order.grandTotalBoq}}</td>
-				<td id="grand-total-actual">{{order.grandTotalActual}}</td>
-				<td></td> 
-				<td></td>
+				<th style ="width : 4%">NO</th>
+				<th style ="width: 54%;">SCOPE OF WORK</th>
+				<th style ="width : 20%">TOTAL (BOQ)</th>
+				<th style ="width : 20%">REMARKS</th>
+				<th style ="width : 0%;"></th>
 			</tr>
-		</tfoot>
-	</table>
+		</thead>
+		<tbody>
+      {%for scope in order.workOrder.all%}
+      <tr>
+        <td style = "text-align: center; padding: 8px 0;">{{ forloop.counter }}</td> <!-- This will auto-increment the row number -->
+        <td style="text-align: left;">{{ scope.scopeOfWork }}</td>
+        <td>{{ scope.totalBoq }}</td>
+        <td style="text-align: left;">{{ scope.remarks }}</td>
+      </tr>	  
+      {% endfor %}
+	</tbody>
+	<tfoot>
+		<tr>
+			<td></td>
+			<td></td>
+			<td id="grand-total-boq">{{order.grandTotalBoq}}</td>
+			<td></td>
+		</tr>
+	</tfoot>
+</table>
+	  {%endif%}
+
 
 
   <!-- PAYMENT -->

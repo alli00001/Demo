@@ -480,7 +480,7 @@ td {
 				<td></td>
 				<td></td>
 				<td></td>
-				<td id="grand-total-actual"> <input type = "text" name ="grand-total-actual" value = "{{order.grandTotalActual}}"></td>
+				<td id="grand-total-actual"> <input type = "text" name ="grand-total-actual" value = "{{order.grandTotalActual}}"  style="text-align: center;"></td>
 				<td></td>
 				<td></td>
 			</tr>
@@ -527,10 +527,10 @@ td {
         <tr>
           <td>
 			<select name ="tax-cell" id ="tax-cell">
+				<option value ="NO TAX" data-tax-percentage-amount = 0% {% if order.paymentTax == 'NO TAX' %}selected{% endif %}>NO TAX</option>
 				<option value ="WHT-21" data-tax-percentage-amount = 2.5% {% if order.paymentTax == 'WHT-21' %}selected{% endif %}>TAX - WHT21</option>
 				<option value ="WHT-23" data-tax-percentage-amount = 2% {% if order.paymentTax == 'WHT-23' %}selected{% endif %}>TAX - WHT23</option>
 				<option value ="VAT" data-tax-percentage-amount = 1.1% {% if order.paymentTax == 'VAT' %}selected{% endif %}>TAX - VAT</option>
-				<option value ="NO TAX" data-tax-percentage-amount = 0% {% if order.paymentTax == 'NO TAX' %}selected{% endif %}>NO TAX</option>
 				<option value ="TAX" data-tax-percentage-amount = {{order.taxPercentage}} {% if order.paymentTax == 'TAX' %}selected{% endif %}>TAX</option>
 
 			</select>
@@ -1177,6 +1177,11 @@ function add() {
 			option3.text = "Meter";
 			select2.appendChild(option3);
             
+			var option4 = document.createElement("option");
+			option4.value = "-";
+			option4.text = "-";
+			select2.appendChild(option4);
+
 			cell.appendChild(select2);
 		}
 		if (i == 3) {

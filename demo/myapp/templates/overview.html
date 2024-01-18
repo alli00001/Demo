@@ -4,6 +4,30 @@
   {% if user.is_authenticated %}
 
   <style>
+    .custom-checkbox {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.custom-checkbox .checkmark {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    background: #eee;
+    border: 1px solid #ddd;
+    position: relative;
+}
+
+/* When the checkbox is checked, add an 'x' */
+.custom-checkbox input:checked + .checkmark::after {
+    content: '×'; /* Unicode character for 'x' */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: black;
+    font-size: 18px;
+}
   #example th {
     text-align: center;
   }
@@ -66,7 +90,7 @@
         <div class="col-lg-14 mx-auto">
           <div class="card rounded shadow border-0">
             <div class="card-body p-5 bg-white rounded">
-              <div class="table-responsive">
+              <div >
                   <table id="example"class="table table-striped table-bordered">
                     <thead>
                       <tr>
@@ -108,18 +132,35 @@
                           <td>
                             <label class="container">
                               <input type="checkbox" {%if is_pa%}name="paCheck"{%endif%} {% if order.personalAssistantCheck %}checked="checked"{% endif %} {% if not is_pa %}disabled{% endif %}>
+
                               <span class="checkmark"></span>
                             </label>
+                            <label class="custom-checkbox">
+                              <input hidden type="checkbox" {%if is_pa%}name="paReject"{%endif%} {% if order.personalAssistantReject %}checked="checked"{% endif %} {% if not is_pa %}disabled{% endif %}>
+                              <span class="checkmark"></span>
+                            </label>
+
                           </td>
                           <td>
                             <label class="container">
                               <input type="checkbox" {%if is_rightHand%}name="rightHandCheck"{%endif%}{% if order.rightHandCheck %}checked="checked"{% endif %} {% if not is_rightHand %}disabled{% endif %}>
                               <span class="checkmark"></span>
+
+                            </label>
+
+                              <label class="custom-checkbox">
+                                <input hidden type="checkbox" {%if is_rightHand%}name="rightHandReject"{%endif%} {% if order.rightHandReject %}checked="checked"{% endif %} {% if not is_rightHand %}disabled{% endif %}>
+                                <span class="checkmark">
+                                </span>
                             </label>
                           </td>
                           <td>
                             <label class="container">
                               <input type="checkbox" {%if is_ceo%}name="ceoCheck"{%endif%}{% if order.ceoCheck %}checked="checked"{% endif %} {% if not is_ceo %}disabled{% endif %}>
+
+                            </label>
+                            <label class="custom-checkbox">
+                              <input hidden type="checkbox" {%if is_ceo%}name="ceoReject"{%endif%}{% if order.ceoReject %}checked="checked"{% endif %} {% if not is_ceo %}disabled{% endif %}>
                               <span class="checkmark"></span>
                             </label>
                           </td>
@@ -127,11 +168,17 @@
                             <label class="container">
                               <input type="checkbox" 
                               {% if is_finance and order.ceoCheck and order.rightHandCheck and order.personalAssistantCheck %}name="financeCheck" {% endif %} 
+                              
                               {% if order.financeCheck %}checked="checked"{% endif %} 
-                              {% if not is_finance or not order.ceoCheck or not order.rightHandCheck or not order.personalAssistantCheck %}disabled{% endif %}>                       
+                              {% if not is_finance or not order.ceoCheck or not order.rightHandCheck or not order.personalAssistantCheck %}disabled{% endif %}>        
+
+                            </label>
+                            <label class="custom-checkbox">
+                              <input hidden type="checkbox" {%if is_finance%}name="financeReject"{%endif%}{% if order.financeReject %}checked="checked"{% endif %} {% if not is_finance %}disabled{% endif %}>
+            
                               <span class="checkmark"></span>
                             </label>
-                          </td>
+                            </td>
                           <td>
                             <input type="hidden" name="order" value="{{ order.id }}">
                             <input type="hidden" name="order_category" value="{{ order.category }}">

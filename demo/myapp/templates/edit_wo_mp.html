@@ -443,7 +443,7 @@ td {
 			<tbody>
 				<tr>
 					<td><textarea style="width: 100%;" class="clusterName" name="clusterName">{{order.clusterName}}</textarea></td>
-					<td><textarea style="width: 100%;" class="odbId" name="odbId"></textarea>{{order.odbId}}</td>
+					<td><textarea style="width: 100%;" class="odbId" name="odbId">{{order.odbId}}</textarea></td>
 					<td><textarea style="width: 100%;" class="suffixId" name="suffixId">{{order.suffixId}}</textarea></td>
 
 					<td>
@@ -503,8 +503,10 @@ td {
                     <option value ="Instal Sling Wire" data-price = 2500 {% if scope.scopeOfWork == 'Instal Sling Wire' %}selected{% endif %}>Instal Sling Wire</option>
                     <option value ="Instal FDT" data-price = 130000 {% if scope.scopeOfWork == 'Instal FDT' %}selected{% endif %}>Instal FDT</option>
                     <option value ="Instal FAT include the Splicing & Splitter" data-price = 150000 {% if scope.scopeOfWork == 'Instal FAT include the Splicing & Splitter' %}selected{% endif %}>Instal FAT include the Splicing & Splitter</option>
-                    <option value ="Splicing" data-price = 20000 {% if scope.scopeOfWork == 'Splicing' %}selected{% endif %}>Splicing</option>
-                </select></td>
+                    <option value ="Splicing FDT / JC" data-price = 20000 {% if scope.scopeOfWork == 'Splicing FDT / JC' %}selected{% endif %}>Splicing FDT / JC</option>
+					<option value ="Install JC" data-price = 50000 {% if scope.scopeOfWork == 'Install JC' %}selected{% endif %}>Install JC</option>
+
+				</select></td>
                 <td><input class="line-items-container" type="number" name ="qtyB_{{ forloop.counter|add:"-1" }}" value="{{ scope.qtyBoq }}"></td>
                 <td><input class="line-items-container" type="number" name ="qtyA_{{ forloop.counter|add:"-1" }}" value="{{ scope.qtyActual }}"></td>
                 <td><input class="line-items-container" type ="text"name ="unitPrice_{{ forloop.counter|add:"-1" }}" value="{{ scope.unitPrice }}"></td>
@@ -531,8 +533,10 @@ td {
                 <option value ="Instal Sling Wire" data-price = 1600 {% if scope.scopeOfWork == 'Instal Sling Wire' %}selected{% endif %}>Instal Sling Wire</option>
                 <option value ="Instal FDT" data-price = 120000 {% if scope.scopeOfWork == 'Instal FDT' %}selected{% endif %}>Instal FDT</option>
                 <option value ="Instal FAT include the Splicing & Splitter" data-price = 130000 {% if scope.scopeOfWork == 'Instal FAT include the Splicing & Splitter' %}selected{% endif %}>Instal FAT include the Splicing & Splitter</option>
-                <option value ="Splicing" data-price = 20000 {% if scope.scopeOfWork == 'Splicing' %}selected{% endif %}>Splicing</option>
-            </select></td>
+                <option value ="Splicing FDT / JC" data-price = 20000 {% if scope.scopeOfWork == 'Splicing FDT / JC' %}selected{% endif %}>Splicing FDT / JC</option>
+				<option value ="Install JC" data-price = 50000 {% if scope.scopeOfWork == 'Install JC' %}selected{% endif %}>Install JC</option>
+
+			</select></td>
             <td><input class="line-items-container" type="number" name ="qtyB_{{ forloop.counter|add:"-1" }}" value="{{ scope.qtyBoq }}"></td>
             <td><input class="line-items-container" type="number" name ="qtyA_{{ forloop.counter|add:"-1" }}" value="{{ scope.qtyActual }}"></td>
             <td><input class="line-items-container" type ="text"name ="unitPrice_{{ forloop.counter|add:"-1" }}" value="{{ scope.unitPrice }}"></td>
@@ -557,7 +561,8 @@ td {
                     <option value="Install Cross-section Frame" data-price="15000" {% if scope.scopeOfWork == 'Install Cross-section Frame' %}selected{% endif %}>Install Cross-section Frame</option>
                     <option value="Install Label Cable" data-price="2000" {% if scope.scopeOfWork == 'Install Label Cable' %}selected{% endif %}>Install Label Cable</option>
                     <option value="Install Label BOX" data-price="2000" {% if scope.scopeOfWork == 'Install Label BOX' %}selected{% endif %}>Install Label BOX</option>
-                    <option value="Pole Installation (Pole Provided by LN), Incl. Foundation / Reinstatment" data-price="120000" {% if scope.scopeOfWork == 'Pole Installation (Pole Provided by LN), Incl. Foundation / Reinstatment' %}selected{% endif %}>Pole Installation (Pole Provided by LN), Incl. Foundation / Reinstatment</option>
+					<option value="Install OLT" data-price="500000" {% if scope.scopeOfWork == 'Install OLT' %}selected{% endif %}>Install OLT</option>
+					<option value="Pole Installation (Pole Provided by LN), Incl. Foundation / Reinstatment" data-price="120000" {% if scope.scopeOfWork == 'Pole Installation (Pole Provided by LN), Incl. Foundation / Reinstatment' %}selected{% endif %}>Pole Installation (Pole Provided by LN), Incl. Foundation / Reinstatment</option>
                     <option value="Supply and Install STAY Wire (Including BESI SENGKAND, SEKANG ULIR 12MM, THIMBLE, STEEL WIRE, BULAOG GRIP, KAWAT IKAT and Concrete k-225)" data-price="2000" {% if scope.scopeOfWork == 'Supply and Install STAY Wire (Including BESI SENGKAND, SEKANG ULIR 12MM, THIMBLE, STEEL WIRE, BULAOG GRIP, KAWAT IKAT and Concrete k-225)' %}selected{% endif %}>Supply and Install STAY Wire (Including BESI SENGKAND, SEKANG ULIR 12MM, THIMBLE, STEEL WIRE, BULAOG GRIP, KAWAT IKAT and Concrete k-225)</option>
                     <option value="Supply and Install Strand Wire & Buldog Grip" data-price="2000" {% if scope.scopeOfWork == 'Supply and Install Strand Wire & Buldog Grip' %}selected{% endif %}>Supply and Install Strand Wire & Buldog Grip</option>
                     <option value="Supply and Install Riser Pipe 1,5 inch (Including GI Pipe-3M and Clamps)" data-price="50000" {% if scope.scopeOfWork == 'Supply and Install Riser Pipe 1,5 inch (Including GI Pipe-3M and Clamps)' %}selected{% endif %}>Supply and Install Riser Pipe 1,5 inch (Including GI Pipe-3M and Clamps)</option>
@@ -616,8 +621,8 @@ td {
 				<td></td>
 				<td></td>
 				<td></td>
-				<td id="grand-total-boq"><input type = "text" name ="grand-total-boq" value = "{{order.grandTotalBoq}}"></td>
-				<td id="grand-total-actual"> <input type = "text" name ="grand-total-actual" value = "{{order.grandTotalActual}}"></td>
+				<td id="grand-total-boq"><input type = "text" name ="grand-total-boq" value = "{{order.grandTotalBoq}}" style="text-align: center;"></td>
+				<td id="grand-total-actual"> <input type = "text" name ="grand-total-actual" value = "{{order.grandTotalActual}}"  style="text-align: center;"></td>
 				<td></td> 
 				<td></td>
 			</tr>
@@ -645,12 +650,12 @@ td {
         <tr>
           <td>
             <select name = "terms-selection" id ="terms-selection">
-                <option value = "DP" data-percentage-amount =30% data-remarks = '' {% if order.paymentTerm == 'DP' %}selected{% endif %}> DP </option>
+				<option  value ="FULL" data-percentage-amount = 100% data-remarks = '' {% if order.paymentTerm == 'FULL' %}selected{% endif %} >FULL</option>
+				<option value = "DP" data-percentage-amount =30% data-remarks = '' {% if order.paymentTerm == 'DP' %}selected{% endif %}> DP </option>
                 <option  value ="TERM 2" data-percentage-amount =40%  data-remarks = 'Implementation Done' {% if order.paymentTerm == 'TERM 2 - Implementation Done' %}selected{% endif %}>TERM 2</option>
                 <option  value ="TERM 3" data-percentage-amount =20% data-remarks = 'ATP Done' {% if order.paymentTerm == 'TERM 3 - ATP Done' %}selected{% endif %}>TERM 3</option>
                 <option  value ="TERM 4" data-percentage-amount =10% data-remarks = 'FAC Done' {% if order.paymentTerm == 'TERM 4 - FAC Done' %}selected{% endif %}>TERM 4</option>
                 <option  value ="CASHBON" data-percentage-amount =0% data-remarks = '' {% if order.paymentTerm == 'CASHBON' %}selected{% endif %}>CASHBON</option>
-                <option  value ="FULL" data-percentage-amount = 100% data-remarks = '' {% if order.paymentTerm == 'FULL' %}selected{% endif %} >FULL</option>
                 <option  value ="REMAINING" data-percentage-amount =0% data-remarks = ''  {% if order.paymentTerm == 'REMAINING' %}selected{% endif %}>REMAINING</option>
                 <option  value ="CREATE" data-percentage-amount = 0% data-remarks = '' >CREATE</option>  
             </select>
@@ -664,10 +669,10 @@ td {
         <tr>
           <td>
 			<select name ="tax-cell" id ="tax-cell">
+				<option value ="NO TAX" data-tax-percentage-amount = 0% {% if order.paymentTax == 'NO TAX' %}selected{% endif %}>NO TAX</option>
 				<option value ="WHT-21" data-tax-percentage-amount = 2.5% {% if order.paymentTax == 'WHT-21' %}selected{% endif %}>TAX - WHT21</option>
 				<option value ="WHT-23" data-tax-percentage-amount = 2% {% if order.paymentTax == 'WHT-23' %}selected{% endif %}>TAX - WHT23</option>
 				<option value ="VAT" data-tax-percentage-amount = 1.1% {% if order.paymentTax == 'VAT' %}selected{% endif %}>TAX - VAT</option>
-				<option value ="NO TAX" data-tax-percentage-amount = 0% {% if order.paymentTax == 'NO TAX' %}selected{% endif %}>NO TAX</option>
 				<option value ="TAX" data-tax-percentage-amount = {{order.taxPercentage}} {% if order.paymentTax == 'TAX' %}selected{% endif %}>TAX</option>
 
 			</select>
@@ -1518,10 +1523,16 @@ function add() {
 			selection.appendChild(option14);
 
 			var option15 = document.createElement("option");
-			option15.value = "Splicing";
+			option15.value = "Splicing FDT / JC";
 			option15.setAttribute('data-price', 20000)
-			option15.text = "Splicing";
+			option15.text = "Splicing FDT / JC";
 			selection.appendChild(option15);
+
+			var option17 = document.createElement("option");
+			option17.value = "INSTALL JC";
+			option17.setAttribute('data-price', 50000)
+			option17.text = "INSTALL JC";
+			selection.appendChild(option17);
 
 			// User create custom object 
 			var option16 = document.createElement("option");
@@ -1696,10 +1707,16 @@ function add() {
 			selection.appendChild(option14);
 
 			var option15 = document.createElement("option");
-			option15.value = "Splicing";
+			option15.value = "Splicing FDT / JC";
 			option15.setAttribute('data-price', 20000)
-			option15.text = "Splicing";
+			option15.text = "Splicing FDT / JC";
 			selection.appendChild(option15);
+
+			var option17 = document.createElement("option");
+			option17.value = "INSTALL JC";
+			option17.setAttribute('data-price', 50000)
+			option17.text = "INSTALL JC";
+			selection.appendChild(option17);
 
 			// User create custom object 
 			var option16 = document.createElement("option");
@@ -1860,7 +1877,12 @@ function add() {
 			option12.setAttribute('data-price', 2000)
 			option12.text = "Install Label BOX";
 			selection.appendChild(option12);
-
+			
+			var option52 = document.createElement("option");
+			option52.value = "Install OLT";
+			option52.setAttribute('data-price', 500000)
+			option52.text = "Install OLT";
+			selection.appendChild(option52);
 			var option13 = document.createElement("option");
 			option13.value = "Pole Installation (Pole Provided by LN), Incl. Foundation / Reinstatment";
 			option13.setAttribute('data-price', 120000)
@@ -2263,9 +2285,9 @@ function add() {
 			selection.appendChild(option14);
 
 			var option15 = document.createElement("option");
-			option15.value = "Splicing";
+			option15.value = "Splicing FDT / JC";
 			option15.setAttribute('data-price', 20000)
-			option15.text = "Splicing";
+			option15.text = "Splicing FDT / JC";
 			selection.appendChild(option15);
 
 			// User create custom object 
@@ -2421,9 +2443,9 @@ function add() {
 			selection.appendChild(option14);
 
 			var option15 = document.createElement("option");
-			option15.value = "Splicing";
+			option15.value = "Splicing FDT / JC";
 			option15.setAttribute('data-price', 20000)
-			option15.text = "Splicing";
+			option15.text = "Splicing FDT / JC";
 			selection.appendChild(option15);
 
 			// User create custom object 
