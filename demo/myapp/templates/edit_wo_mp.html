@@ -301,8 +301,11 @@ td {
 		<tr>
 			<td style="text-align: left; width: 25px;">PROJECT</td>
 			<td>:</td>
-			<td style="text-align: left;"><input  value="{{order.project}}" name="project" type="text" style=" height : 30px" value="EMR"> </strong></td>
-			<td></td>
+			{% if order.project == "EMR" %}
+			<td style="text-align: left;"><input name="project" type="text" style=" height : 30px ; display: none;" value="EMR"> </strong> EMR</td>
+			{% else %}
+			<td style="text-align: left;"><input name="project" type="text" style=" height : 30px ; display: none;" value="LN"> </strong> LN</td>
+			{%endif%}			<td></td>
 
 			<td>BANK</td>
 			<td>:</td>
@@ -505,6 +508,7 @@ td {
                     <option value ="Instal FAT include the Splicing & Splitter" data-price = 150000 {% if scope.scopeOfWork == 'Instal FAT include the Splicing & Splitter' %}selected{% endif %}>Instal FAT include the Splicing & Splitter</option>
                     <option value ="Splicing FDT / JC" data-price = 20000 {% if scope.scopeOfWork == 'Splicing FDT / JC' %}selected{% endif %}>Splicing FDT / JC</option>
 					<option value ="Install JC" data-price = 50000 {% if scope.scopeOfWork == 'Install JC' %}selected{% endif %}>Install JC</option>
+					<option value ="Testcomm OPM / OTDR" data-price = 10000 {% if scope.scopeOfWork == 'Testcomm OPM / OTDR' %}selected{% endif %}>Testcomm OPM / OTDR</option>
 
 				</select></td>
                 <td><input class="line-items-container" type="number" name ="qtyB_{{ forloop.counter|add:"-1" }}" value="{{ scope.qtyBoq }}"></td>
@@ -535,6 +539,7 @@ td {
                 <option value ="Instal FAT include the Splicing & Splitter" data-price = 130000 {% if scope.scopeOfWork == 'Instal FAT include the Splicing & Splitter' %}selected{% endif %}>Instal FAT include the Splicing & Splitter</option>
                 <option value ="Splicing FDT / JC" data-price = 20000 {% if scope.scopeOfWork == 'Splicing FDT / JC' %}selected{% endif %}>Splicing FDT / JC</option>
 				<option value ="Install JC" data-price = 50000 {% if scope.scopeOfWork == 'Install JC' %}selected{% endif %}>Install JC</option>
+				<option value ="Testcomm OPM / OTDR" data-price = 10000 {% if scope.scopeOfWork == 'Testcomm OPM / OTDR' %}selected{% endif %}>Testcomm OPM / OTDR</option>
 
 			</select></td>
             <td><input class="line-items-container" type="number" name ="qtyB_{{ forloop.counter|add:"-1" }}" value="{{ scope.qtyBoq }}"></td>
@@ -1529,10 +1534,16 @@ function add() {
 			selection.appendChild(option15);
 
 			var option17 = document.createElement("option");
-			option17.value = "INSTALL JC";
+			option17.value = "Install JC";
 			option17.setAttribute('data-price', 50000)
-			option17.text = "INSTALL JC";
+			option17.text = "Install JC";
 			selection.appendChild(option17);
+			
+			var option18 = document.createElement("option");
+			option18.value = "Testcomm OPM / OTDR";
+			option18.setAttribute('data-price', 10000)
+			option18.text = "Testcomm OPM / OTDR";
+			selection.appendChild(option18);
 
 			// User create custom object 
 			var option16 = document.createElement("option");
@@ -1713,9 +1724,9 @@ function add() {
 			selection.appendChild(option15);
 
 			var option17 = document.createElement("option");
-			option17.value = "INSTALL JC";
+			option17.value = "Install JC";
 			option17.setAttribute('data-price', 50000)
-			option17.text = "INSTALL JC";
+			option17.text = "Install JC";
 			selection.appendChild(option17);
 
 			// User create custom object 

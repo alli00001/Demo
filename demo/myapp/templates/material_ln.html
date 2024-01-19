@@ -303,7 +303,11 @@ td {
 		<tr>
 			<td style="text-align: left; width: 25px;">PROJECT</td>
 			<td>:</td>
-			<td style="text-align: left;"><input name="project" type="text" style=" height : 30px" value="LN"> </strong></td>
+			{% if project_type == "EMR" %}
+			<td style="text-align: left;"><input name="project" type="text" style=" height : 30px ; display: none;" value="EMR"> </strong> EMR</td>
+			{% else %}
+			<td style="text-align: left;"><input name="project" type="text" style=" height : 30px ; display: none;" value="LN"> </strong> LN</td>
+			{%endif%}
 			<td></td>
 
 			<td>BANK</td>

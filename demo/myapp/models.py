@@ -53,6 +53,8 @@ class WorkOrder(models.Model):
     company = models.CharField(blank = True, max_length = 100, default ="")
     pricing_type = models.CharField(blank = True, max_length = 100, default ="")
 
+    otherCost = models.CharField(blank = True, max_length = 100, default ="")
+
     ceoCheck = models.BooleanField(default = False)
     rightHandCheck = models.BooleanField(default = False)
     personalAssistantCheck = models.BooleanField(default = False)

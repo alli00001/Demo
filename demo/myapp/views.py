@@ -461,6 +461,7 @@ def oc_ln(request, company_type, project_type) :
             return render(request, "oc_ln.html", context)
 
         workOrder = WorkOrder(
+            otherCost = request.POST.get('otherCost'),
             company = request.POST.get('company'),
             wo_date = request.POST.get('wo_date'),
             shortdate = request.POST.get('shortdate'),
@@ -550,6 +551,7 @@ def oc_emr(request, company_type , project_type) :
             return render(request, "oc_emr.html", context)
 
         workOrder = WorkOrder(
+            otherCost = request.POST.get('otherCost'),
             company = request.POST.get('company'),
             wo_date = request.POST.get('wo_date'),
             shortdate = request.POST.get('shortdate'),
@@ -966,7 +968,7 @@ def overview(request):
                 work_order.save()
             if request.user.groups.filter(name='rightHand').exists():
                 work_order.rightHandReject = 'rightHandReject' in request.POST
-                work_order.save()
+                work_order.save()   
             if request.user.groups.filter(name='Personal Assistant').exists():
                 work_order.personalAssistantReject = 'paReject' in request.POST
                 work_order.save()
@@ -1804,6 +1806,7 @@ def edit_wo(request, id, category, project):
             obj = WorkOrder.objects.get(id = id)
             if (obj.extendable and obj.project == 'EMR') :
                 workOrder = WorkOrder(
+                otherCost = request.POST.get('otherCost'),
                 company = request.POST.get('company'),
                 wo_date = request.POST.get('wo_date'),
                 shortdate = request.POST.get('shortdate'),
@@ -1881,6 +1884,7 @@ def edit_wo(request, id, category, project):
                 return render(request, "wo_submitted.html", context)
             if (obj.extendable and obj.project == 'LN') :
                 workOrder = WorkOrder(
+                otherCost = request.POST.get('otherCost'),
                 company = request.POST.get('company'),
                 wo_date = request.POST.get('wo_date'),
                 shortdate = request.POST.get('shortdate'),
@@ -1956,6 +1960,7 @@ def edit_wo(request, id, category, project):
                     workOrder.paymentInformation.add(paymentObject)     
                 return render(request, "wo_submitted.html", context)
             elif(obj) :
+                obj.otherCost = request.POST.get('otherCost')
                 obj.company = request.POST.get('company')
                 wo_date_str = request.POST.get('wo_date')
                 obj.wo_date = parse_date(wo_date_str)

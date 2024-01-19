@@ -360,7 +360,7 @@ td {
 					<td>{{order.siteId |linebreaksbr}}</td>
 					<td>{{order.type}}</td>
 					<td>{{order.workType}}</td>
-					<td>{{order.type}}</td>
+					<td>{{order.hp}}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -401,7 +401,7 @@ td {
 			<tr>
 				<th style ="width : 4%">NO</th>
 				<th style ="width: 56%;">SCOPE OF WORK</th>
-				<th style ="width : 20%">TOTAL (ACTUAL)</th>
+				<th style ="width : 20%">TOTAL</th>
 				<th style ="width : 20%">REMARKS</th>
 				<th style ="width : 0%;"></th>
 			</tr>
@@ -432,8 +432,8 @@ td {
 		<thead>
 			<tr>
 				<th style ="width : 4%">NO</th>
-				<th style ="width: 54%;">SCOPE OF WORK</th>
-				<th style ="width : 20%">TOTAL (BOQ)</th>
+				<th style ="width: 56%;">SCOPE OF WORK</th>
+				<th style ="width : 20%">TOTAL</th>
 				<th style ="width : 20%">REMARKS</th>
 				<th style ="width : 0%;"></th>
 			</tr>
@@ -562,8 +562,7 @@ td {
       </thead>
       <tbody>
         <tr>
-          <td ><img src="{{ MEDIA_URL }}agung_sign.jpg" style="height: 30%; width: 30%;"></td>
-
+        <td><img src="{{ MEDIA_URL }}agung_sign.jpg" style="height: 40%; width: 40%;"></td>
 		  {% if order.rightHandCheck%}
           <td><img src="{{ MEDIA_URL }}sunny_sign.jpg" style="height: 20%; width: 20%;"></td>
 		  {%else%}
@@ -624,7 +623,7 @@ td {
     </thead>
     <tbody>
       <tr>
-        <td><img src="{{ MEDIA_URL }}agung_sign.jpg" style="height: 20%; width: 20%;"></td>
+        <td><img src="{{ MEDIA_URL }}agung_sign.jpg" style="height: 40%; width: 40%;"></td>
 		
 		
 		{% if order.ceoCheck%}
