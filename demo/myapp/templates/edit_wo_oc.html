@@ -296,13 +296,16 @@ td {
 				
 			<td>CATEGORY</td>
 			<td style="width: 2%;">:</td>
-			<td style ="width:20%"><input value="{{order.category}}" name="category" type="text" style="text-align: left; height: 30px; display: none;" >{{order.category}}</td>
+			<td style ="width:20%"><input value="{{order.category}}" name="category" type="text" style="text-align: left; height: 30px; display: none;" >{{order.category}} <input style="width: calc(100% - 100px); height: 30px;" id = "otherCost" name ="otherCost" type = "text" value ="{{order.otherCost}}"></td>
 		</tr>
 		<tr>
 			<td style="text-align: left; width: 25px;">PROJECT</td>
 			<td>:</td>
-			<td style="text-align: left;"><input  value="{{order.project}}" name="project" type="text" style=" height : 30px" value="EMR"> </strong></td>
-			<td></td>
+			{% if order.project == "EMR" %}
+			<td style="text-align: left;"><input name="project" type="text" style=" height : 30px ; display: none;" value="EMR"> </strong> EMR</td>
+			{% else %}
+			<td style="text-align: left;"><input name="project" type="text" style=" height : 30px ; display: none;" value="LN"> </strong> LN</td>
+			{%endif%}			<td></td>
 
 			<td>BANK</td>
 			<td>:</td>
@@ -1422,13 +1425,7 @@ this.value = this.value.toUpperCase();
 });document.getElementsByName('siteId')[0].addEventListener('input', function () {
 this.value = this.value.toUpperCase();
 });
-document.getElementsByName('hp')[0].addEventListener('input', function () {
-this.value = this.value.toUpperCase();
-});
-document.getElementsByName('odbId')[0].addEventListener('input', function () {
-this.value = this.value.toUpperCase();
-});
-document.getElementsByName('suffixId')[0].addEventListener('input', function () {
+document.getElementsByName('otherCost')[0].addEventListener('input', function () {
 this.value = this.value.toUpperCase();
 });
 </script>
