@@ -4,6 +4,16 @@
   {% if user.is_authenticated %}
 
   <style>
+    #removeButton {
+    margin-top: 10px; /* Adjust as necessary for your layout */
+    padding: .25rem .80rem; /* Similar padding to bootstrap's btn class */
+    border-radius: .25rem; /* Rounded borders */
+    border: 1px solid #ced4da; /* Similar to default file input button */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 0.9rem; /* Adjust font size as needed */
+    line-height: 0.9; /* For proper text alignment */
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out; /* Smooth transition for hover effects */
+}
     .custom-checkbox {
     display: inline-block;
     cursor: pointer;
@@ -75,7 +85,7 @@
     width: 8%;
 
   }
-  #example td:nth-child(11){
+  #example td:nth-child(12){
     text-align: center;
     width: 44%;
 
@@ -105,6 +115,9 @@
                         <th>CONFIRM CHECK</th>
                         <th>REJECTION</th>
                         <th>REMARKS</th>
+                        <th>PAYMENT DATE</th>
+                        <th>DUE DATE</th>
+                        <th>PROOF OF PAYMENT</th>
                         <th>DELETE WO</th>
 
 
@@ -113,7 +126,7 @@
                     </thead>
                     <tbody>
                       {% for order in page_obj %}
-                      <form method = "post">
+                      <form method = "post" enctype="multipart/form-data">
                         {% csrf_token%}
                         <tr>
                           <td>
@@ -167,10 +180,10 @@
                           <td>
                             <label class="container">
                               <input type="checkbox" 
-                              {% if is_finance and order.ceoCheck and order.rightHandCheck and order.personalAssistantCheck %}name="financeCheck" {% endif %} 
+                              {% if is_finance and order.ceoCheck and order.rightHandCheck and order.personalAssistantCheck  %}name="financeCheck" {% endif %} 
                               
                               {% if order.financeCheck %}checked="checked"{% endif %} 
-                              {% if not is_finance or not order.ceoCheck or not order.rightHandCheck or not order.personalAssistantCheck %}disabled{% endif %}>        
+                              {% if not is_finance or not order.ceoCheck or not order.rightHandCheck or not order.personalAssistantCheck or not order.paymentDate %}disabled{% endif %}>        
 
                             </label>
                             <label class="custom-checkbox">
@@ -198,7 +211,7 @@
                           <td>
                             <button type="submit" name="action" value="reject"> REJECT </button>
                           </td>
-                        
+    
                           <td>
                             {% if is_pa or is_rightHand or is_ceo or is_finance %}
                               <textarea name="remarksOverview" style="width: 100%;">{{ order.remarksOverview }}</textarea>
@@ -206,6 +219,22 @@
                               <textarea name="remarksOverview" disabled style="width: 100%;">{{ order.remarksOverview }}</textarea>
                             {% endif %}
                           </td>
+                          <td>
+                            <input type ="date" id ="paymentDate" name ="paymentDate" value ="{{order.paymentDate |date:'Y-m-d'}}">
+                           </td>
+                           <td>
+                            <input type ="date" id ="dueDate" name ="dueDate" value ="{{order.dueDate |date:'Y-m-d'}}">
+                           </td>
+                           <td>
+                            {% if order.proofOfPayment %}
+                            <a href="{{ order.proofOfPayment.url }}">Download Attachment</a>
+                            <input type="file" name="proofOfPayment" id="proofOfPayment">
+                          {% else %}
+                            No attachment
+                            <input type="file" name="proofOfPayment" id="proofOfPayment">
+                            <button type="button" onclick="clearFileInput('proofOfPayment')" id="removeButton">Remove</button>
+                          {% endif %}
+                           </td>
                           <td>
                             <input type="hidden" name="order" value="{{ order.id }}">
                             <button type="submit" name="action" value="delete" onclick="return confirm('Delete Work Order?')"> DELETE </button>
@@ -228,7 +257,9 @@
                         <td></td>
                         <td></td>
                         <td></td>
-
+                        <td></td>
+                        <td></td>
+                        <td></td>
 
                       </tr>
                        {% endfor %}
@@ -256,7 +287,15 @@
               </div>
       </div>
     </div>
-
+    <script>
+      // Define the function in the global scope so it's always available
+      function clearFileInput(id) {
+        var input = document.getElementById(id);
+        if (input) {
+          input.value = "";
+        }
+      }
+    </script>
   {% else %}
     {% with 'login' as login_url %}
       {% load static %}
@@ -264,8 +303,7 @@
       {% load tz %}
 
       <script>
-        window.location.href = "{% url login_url %}";
-
+  window.location.href = "{% url login_url %}";
       </script>
 
     {% endwith %}

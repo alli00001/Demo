@@ -828,13 +828,13 @@ def finished_wo(request):
         if request.user.groups.filter(name='rightHand').exists():
             work_order.extendable = extendable            
             work_order.save()
-            
+                
     finished_work_orders = WorkOrder.objects.filter(
         personalAssistantCheck=True,
         ceoCheck=True,
         rightHandCheck=True,
         financeCheck=True
-    ).order_by('-wo_date')
+    ).order_by('-paymentDate')
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         project = request.GET.get('project', None)
         dates = request.GET.getlist('dates[]')
@@ -857,8 +857,8 @@ def finished_wo(request):
                 try:
                     date_obj = parse_date(date_str)
                     if date_obj:
-                        date_queries |= Q(wo_date=date_obj)
-                    else:
+                        date_queries |= Q(paymentDate=date_obj)
+                    else:       
                         raise ValueError(f"Invalid date format: {date_str}")
                 except ValidationError:
                     print(f"Invalid date string: {date_str}")
@@ -889,9 +889,11 @@ def finished_wo(request):
             query &= Q(workType__icontains=workType)
         if paymentTerm:
             query &= Q(paymentTerm__icontains=paymentTerm)
-        finished_filtered_orders = finished_work_orders.filter(query).order_by('wo_date')
+        finished_filtered_orders = finished_work_orders.filter(query).order_by('paymentDate')
         data = [
             {
+                'proofOfPayment' :order.proofOfPayment.url if order.proofOfPayment else None,
+                'paymentDate' : order.paymentDate,
                 'project' : order.project,
                 'id' : order.id,
                 'project' : order.project,
@@ -915,7 +917,6 @@ def finished_wo(request):
                 'url': reverse('view_wo', args=[order.wo_number, order.category, order.company, order.project]), 
                 'is_rightHand': request.user.groups.filter(name='rightHand').exists(),
                 'extendable' : order.extendable,
-
             }
             for order in finished_filtered_orders
         ]
@@ -934,7 +935,7 @@ def finished_wo(request):
         'starting_index': starting_index,
         'finished': finished_work_orders,
         'is_rightHand': request.user.groups.filter(name='rightHand').exists(),
-
+        'is_pa' :  request.user.groups.filter(name='Personal Assistant').exists(),
     }
     return render(request, 'finished_wo.html', context)
 @login_required
@@ -944,6 +945,18 @@ def overview(request):
         work_order = get_object_or_404(WorkOrder, id= wo_id)
         action = request.POST.get("action")
         if (action == "delete") :
+            work_order.proofOfPayment.delete()
+            work_order.invoice.delete()
+            work_order.team_list.delete()
+            work_order.picture_of_team.delete()
+            work_order.checklist_boq_actual_attachment.delete()
+            work_order.cover_acceptance_attachment.delete()
+            work_order.cover_opm_attachment.delete()
+            work_order.fac_certificate.delete()
+            work_order.no_issue_agreement.delete()
+            work_order.bak.delete()
+            work_order.capture_approval.delete()
+            work_order.capture_drm.delete()
             work_order.delete()
             return redirect('overview')
         
@@ -961,6 +974,25 @@ def overview(request):
                 work_order.save()
             if request.user.groups.filter(name='Finance').exists():
                 work_order.financeCheck = 'financeCheck' in request.POST
+                payment_date_str = request.POST['paymentDate']
+                if payment_date_str :         
+                    payment_date = datetime.fromisoformat(payment_date_str)
+                    work_order.paymentDate = payment_date
+                else:
+                    work_order.paymentDate = None 
+                newProof = request.FILES.get('proofOfPayment')
+                if newProof :
+                    if work_order.proofOfPayment :
+                        work_order.proofOfPayment.delete()
+                    work_order.proofOfPayment = newProof
+                work_order.save()
+            due_date_str = request.POST['dueDate']
+            if due_date_str :
+                due_date = datetime.fromisoformat(due_date_str)
+                work_order.dueDate = due_date
+                work_order.save()
+            else :
+                work_order.dueDate = None
                 work_order.save()
         if (action == "reject")    :
             if request.user.groups.filter(name='CEO').exists():
@@ -975,13 +1007,14 @@ def overview(request):
             if request.user.groups.filter(name='Finance').exists():
                 work_order.financeReject = 'financeReject' in request.POST
                 work_order.save()
-    work_order_list = WorkOrder.objects.exclude(
-        ceoCheck=True,
-        rightHandCheck=True,
-        personalAssistantCheck=True,
-        financeCheck=True
+
+    work_order_list = WorkOrder.objects.filter(
+        Q(ceoCheck=False) |
+        Q(rightHandCheck=False) |
+        Q(personalAssistantCheck=False) |
+        Q(financeCheck=False) |
+        Q(proofOfPayment = '')
     ).order_by('-wo_date')
-    
     paginator = Paginator(work_order_list, 20)  
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)

@@ -156,7 +156,10 @@ class WorkOrder(models.Model):
     scopeOfWorkCount = models.IntegerField(default = 0, blank = True)
     deductionCount = models.IntegerField(default = 0, blank = True)
     paymentCount = models.IntegerField(default = 0, blank = True)
- 
+
+    proofOfPayment = models.FileField(upload_to='proof_of_payment/' , blank=True, null=True)
+    paymentDate = models.DateField(blank = True, default=None , null = True)
+    dueDate =  models.DateField(blank = True, default=None , null = True)
     def __str__(self) -> str:
         return f"{self.wo_date.strftime('%Y-%m-%d')} - {self.wo_number} - {self.category} - {self.project}"
     def wo_string(self):

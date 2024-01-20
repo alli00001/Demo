@@ -136,7 +136,7 @@
                     <th>REQUEST FORM</th>
                     <th >
                       <button type="button" class="btn btn-info" data-toggle="modal" data-target="#dateFilterModal">
-                        DATE
+                        PAYMENT DATE
                       </button>
                       </th>
                     <th >
@@ -188,7 +188,8 @@
                       <input type="text" name="paymentTerm" style="width: 100%;">
                     </th> 
                     <th >%</th>
-                    <th >GRAND TOTAL</button></th>
+                    <th >GRAND TOTAL</th>
+                    <th>TF RECORD</th>
                     <th >PD</th>
                     <th >SUBMIT</th>
                     <th >EXTEND WO</th>
@@ -215,7 +216,7 @@
                       <a href="{% url 'request_form' order.id order.category order.company order.project %}">REQUEST FORM</a>
                     </td>
                     <td>
-                      {{ order.wo_date|date:"Y-m-d" }}                         
+                      {{ order.paymentDate|date:"Y-m-d" }}                         
                       </td>
                     <td>
                       {{order.category}}
@@ -262,6 +263,13 @@
                     <td>
                       {{order.finalGrandTotal}}
                     </td>
+                    <td>
+                      {% if order.proofOfPayment %}
+                      <a href="{{ order.proofOfPayment.url}}">RECORD</a>
+                      {%else%}
+                      NO RECORD FOUND
+                      {%endif%}
+                    </td>
                   </form>  
                     <form method ="POST">
                       {% csrf_token%}
@@ -270,23 +278,23 @@
                         <input name ="extendable" type="checkbox" {%if is_rightHand%} name="extendable"{%endif%} {% if order.extendable %}checked="checked"{% endif %} {% if not is_rightHand %}disabled{% endif %}>
                         <span class="checkmark"></span>
                       </td>
-                    <td>  
-                      <button type="submit" {% if not is_rightHand %}disabled{% endif %}> Confirm </button>
-                    </td>
-                  </form>
-                  <td>
-                    <input type="hidden" name="order" value="{{ order.id }}">
-                            <input type="hidden" name="order_category" value="{{ order.category }}">
-                            <input type="hidden" name="order_project" value="{{ order.project }}">
-                            {% if order.extendable %}
-                            <a href="{% url 'edit_wo' order.id order.category order.project %}">EXTEND WO</a>
-                          {% else %}
-                            <span class="disabled-link">EXTEND WO</span>
-                          {% endif %}                 
-                  </td>     
+                      <td>  
+                        <button type="submit" {% if not is_rightHand %}disabled{% endif %}> Confirm </button>
+                      </td>
+                      <td>
+                        <input type="hidden" name="order" value="{{ order.id }}">
+                                <input type="hidden" name="order_category" value="{{ order.category }}">
+                                <input type="hidden" name="order_project" value="{{ order.project }}">
+                                {% if order.extendable %}
+                                <a href="{% url 'edit_wo' order.id order.category order.project %}">EXTEND WO</a>
+                              {% else %}
+                                <span class="disabled-link">EXTEND WO</span>
+                              {% endif %}  
+                      </td>
+                    </form>
                 </tr>
                 {% empty %}
-                <tr><td colspan="21">No work orders available.</td></tr>
+                <tr><td colspan="25">No work orders available.</td></tr>
                   {% endfor %}
               </tbody>
           </table>
@@ -620,7 +628,7 @@ function updateTable(data) {
     reqFormLink.href = '/request_form/' + order.id + '/' + order.category + '/' +order.company + '/'+ order.project; // Update URL as needed
     reqFormLink.textContent = 'REQUEST FORM';
     reqFormCell.appendChild(reqFormLink);
-    row.insertCell().textContent = order.wo_date;
+    row.insertCell().textContent = order.paymentDate;
     row.insertCell().textContent = order.category; // WO
 
     row.insertCell().textContent = order.customer; // Customer
@@ -639,6 +647,17 @@ function updateTable(data) {
     row.insertCell().textContent = order.paymentTerm; // paymentTerm
     row.insertCell().textContent = order.termPercentage; // termPercentage
     row.insertCell().textContent = order.finalGrandTotal; // finalGrandTotal
+    
+    var proofCell = row.insertCell();
+    if (order.proofOfPayment) {
+    var proofLink = document.createElement('a');
+    proofLink.href = order.proofOfPayment; // 'proofOfPayment' is the URL
+    proofLink.textContent = 'RECORD';
+    proofCell.appendChild(proofLink);
+} else {
+    proofCell.textContent = 'NO RECORD FOUND';
+}
+
     var checkboxCell = row.insertCell();
     var checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
@@ -646,9 +665,6 @@ function updateTable(data) {
     checkbox.name = 'extendable'
     checkbox.disabled = !is_rightHand; // Assuming is_rightHand determines if checkbox is enabled
     checkboxCell.appendChild(checkbox);    
-
-
-    
     
     var submitCell = row.insertCell();
     var submitButton = document.createElement('button');
@@ -659,11 +675,8 @@ function updateTable(data) {
     submitButton.addEventListener('click', function() {
       // AJAX POST request to submit the data
       var formData = new FormData();
-      // Retrieve the order number from the button dataset
       formData.append('order', this.dataset.orderId);
-      // Check the checkbox state and set 'extendable' accordingly
       formData.append('extendable', checkbox.checked ? 'on' : 'off');
-
       fetch('/finished_wo/', {
         method: 'POST',
         body: formData,
@@ -690,7 +703,6 @@ function updateTable(data) {
     hiddenId.type = 'hidden';
     hiddenId.name = 'id';
     hiddenId.value = order.id;
-    console.log(hiddenId)
     extendCell.appendChild(hiddenId);
 
     var hiddenCategory = document.createElement('input');
@@ -719,7 +731,12 @@ function updateTable(data) {
         disabledSpan.textContent = 'EXTEND WO';
         extendCell.appendChild(disabledSpan);
     }
-  } );
+    
+
+
+  } 
+  );
+  
 
 
 
@@ -785,7 +802,6 @@ document.getElementById('filter-form').addEventListener('input', function(event)
   })
   .catch(error => console.error('Error:', error));
 }
-
 </script>
   {% else %}
     {% with 'login' as login_url %}
