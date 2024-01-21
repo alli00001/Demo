@@ -93,14 +93,15 @@
     width: 5%;
 
   }
-  #example td:nth-child(11){
-    text-align: center;
-    width: 100%;
-
-  }
+  
   #example td:nth-child(10){
     text-align: center;
     width: 5%;
+
+  }
+  #example td:nth-child(11){
+    text-align: center;
+    width: 100%;
 
   }
   #example td:nth-child(12){
@@ -258,7 +259,7 @@
                             <input style="width: 100%;" type="file" name="proofOfPayment" id="proofOfPayment">
                           {% else %}
                             No attachment
-                            <input  type="file" name="proofOfPayment" id="proofOfPayment">
+                            <input  style="width: 100%;" type="file" name="proofOfPayment" id="proofOfPayment">
                             <button type="button" onclick="clearFileInput('proofOfPayment')" id="removeButton">Remove</button>
                           {% endif %}
                            </td>
