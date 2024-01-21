@@ -7,36 +7,44 @@
     #removeButton {
     margin-top: 10px; /* Adjust as necessary for your layout */
     padding: .25rem .80rem; /* Similar padding to bootstrap's btn class */
-    border-radius: .25rem; /* Rounded borders */
+    border-radius: 10px; /* Rounded borders */
     border: 1px solid #ced4da; /* Similar to default file input button */
     cursor: pointer; /* Pointer cursor on hover */
     font-size: 0.9rem; /* Adjust font size as needed */
     line-height: 0.9; /* For proper text alignment */
     transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out; /* Smooth transition for hover effects */
 }
-    .custom-checkbox {
+.custom-checkbox {
     display: inline-block;
     cursor: pointer;
 }
 
 .custom-checkbox .checkmark {
     display: inline-block;
-    width: 15px;
-    height: 15px;
-    background: #eee;
-    border: 1px solid #ddd;
+    width: 13px; /* Adjust the width if necessary */
+    height: 13px; /* Adjust the height if necessary */
+    background: #fff; /* Change to the desired background color */
+    border: 1px solid grey; /* Adjust the border color and size as needed */
     position: relative;
+    transition: background 0.3s, border-color 0.3s; /* Smooth transition for background and border color */
 }
 
-/* When the checkbox is checked, add an 'x' */
+/* When the checkbox is checked, add a blue background and an 'x' */
+.custom-checkbox input:checked + .checkmark {
+    background: red; /* This should match the blue background in the image when checked */
+    border-color: red; /* Border color should also match */
+}
+
 .custom-checkbox input:checked + .checkmark::after {
-    content: '×'; /* Unicode character for 'x' */
+    content: '✕'; /* Unicode character for 'x' */
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: black;
-    font-size: 18px;
+    color: white; /* This should contrast with the blue background */
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; /* Ensure the 'x' is displayed correctly */
+    font-size: 14px; /* Adjust the size of the 'x' as necessary */
+    line-height: 1;
 }
   #example th {
     text-align: center;
@@ -47,7 +55,7 @@
   }
   #example td:nth-child(2){
     text-align: left;
-    width: 20%;
+    width: 15%;
   }
   #example td:nth-child(3){
     text-align: center;
@@ -82,19 +90,37 @@
 
   #example td:nth-child(9){
     text-align: center;
-    width: 8%;
+    width: 5%;
 
   }
-  #example td:nth-child(12){
+  #example td:nth-child(11){
     text-align: center;
-    width: 44%;
+    width: 100%;
 
   }
   #example td:nth-child(10){
     text-align: center;
+    width: 5%;
+
   }
   #example td:nth-child(12){
     text-align: center;
+    width: 5%;
+  }
+  #example td:nth-child(13){
+    text-align: center;
+    width: 5%;
+
+  }
+  #example td:nth-child(14){
+    text-align: center;
+    width: 5%;
+
+  }
+  #example td:nth-child(15){
+    text-align: center;
+    width: 5%;
+
   }
   </style>
         <div class="col-lg-14 mx-auto">
@@ -115,8 +141,8 @@
                         <th>CONFIRM CHECK</th>
                         <th>REJECTION</th>
                         <th>REMARKS</th>
-                        <th>PAYMENT DATE</th>
                         <th>DUE DATE</th>
+                        <th>PAYMENT DATE</th>
                         <th>PROOF OF PAYMENT</th>
                         <th>DELETE WO</th>
 
@@ -220,24 +246,25 @@
                             {% endif %}
                           </td>
                           <td>
-                            <input type ="date" id ="paymentDate" name ="paymentDate" value ="{{order.paymentDate |date:'Y-m-d'}}">
+                            <input style="width: 80%;" type ="date" id ="dueDate" name ="dueDate" value ="{{order.dueDate |date:'Y-m-d'}}">
                            </td>
-                           <td>
-                            <input type ="date" id ="dueDate" name ="dueDate" value ="{{order.dueDate |date:'Y-m-d'}}">
+                          <td>
+                            <input style="width: 80%;" type ="date" id ="paymentDate" name ="paymentDate" value ="{{order.paymentDate |date:'Y-m-d'}}">
                            </td>
+
                            <td>
                             {% if order.proofOfPayment %}
                             <a href="{{ order.proofOfPayment.url }}">Download Attachment</a>
-                            <input type="file" name="proofOfPayment" id="proofOfPayment">
+                            <input style="width: 100%;" type="file" name="proofOfPayment" id="proofOfPayment">
                           {% else %}
                             No attachment
-                            <input type="file" name="proofOfPayment" id="proofOfPayment">
+                            <input  type="file" name="proofOfPayment" id="proofOfPayment">
                             <button type="button" onclick="clearFileInput('proofOfPayment')" id="removeButton">Remove</button>
                           {% endif %}
                            </td>
                           <td>
                             <input type="hidden" name="order" value="{{ order.id }}">
-                            <button type="submit" name="action" value="delete" onclick="return confirm('Delete Work Order?')"> DELETE </button>
+                            <button type="submit" name="action" value="delete" onclick="return confirm('Delete Work Order?')" {% if not is_finance or not is_rightHand or not is_ceo %}disabled{% endif %}> DELETE </button>
                           </td>
                           
                           
