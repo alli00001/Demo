@@ -995,6 +995,8 @@ def overview(request):
                 work_order.dueDate = None
                 work_order.save()
         if (action == "reject")    :
+            if request.user.groups.filter(name__in=['CEO', 'rightHand', 'Personal Assistant', 'finance']).exists():
+                work_order.remarksOverview = request.POST.get('remarksOverview', work_order.remarksOverview)
             if request.user.groups.filter(name='CEO').exists():
                 work_order.ceoReject = 'ceoReject' in request.POST
                 work_order.save()
