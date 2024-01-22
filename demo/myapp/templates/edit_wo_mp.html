@@ -491,7 +491,10 @@ td {
             {% if order.pricing_type == 'traditional'%}
             <tr>
                 <td style = "text-align: center;" class="line-items-container">{{ forloop.counter }}</td> <!-- This will auto-increment the row number -->
-                <td style="text-align: left;"><select style="text-align: left;" class="line-items-container" name ="scopeOfWork_{{ forloop.counter|add:"-1" }}">
+                <td style="text-align: left;">
+					{% with options="Pulling Cable-24 core (AE) include install the Accessory,Pulling Cable-48 core (AE) include install the Accessory,Pulling Cable-96 core (AE) include install the Accessory,Pulling Cable-144 core (AE) include install the Accessory,Instal Label Cable (on pole, in Handhole),Instal Label FDT,Instal Label FAT,Instal Label Pole,Instal pole 7 & 9 meter 4 inch include the foundation,Instal pole 7 meter 3 inch include the foundation,Instal Cable Hanger,Instal Sling Wire,Instal FDT,Instal FAT include the Splicing & Splitter,Splicing FDT / JC,Install JC,Testcomm OPM / OTDR" %}
+                    {% if scope.scopeOfWork in options %}
+					<select style="text-align: left;" class="line-items-container" name ="scopeOfWork_{{ forloop.counter|add:"-1" }}" >
                     <option value ="Pulling Cable-24 core (AE) include install the Accessory" data-price = 2500  {% if scope.scopeOfWork == 'Pulling Cable-24 core (AE) include install the Accessory' %}selected{% endif %}>Pulling Cable-24 core (AE) include install the Accessory</option>
                     <option value ="Pulling Cable-48 core (AE) include install the Accessory" data-price = 2500  {% if scope.scopeOfWork == 'Pulling Cable-48 core (AE) include install the Accessory' %}selected{% endif %}>Pulling Cable-48 core (AE) include install the Accessory</option>
                     <option value ="Pulling Cable-96 core (AE) include install the Accessory" data-price = 2500  {% if scope.scopeOfWork == 'Pulling Cable-96 core (AE) include install the Accessory' %}selected{% endif %}>Pulling Cable-96 core (AE) include install the Accessory</option>
@@ -509,8 +512,13 @@ td {
                     <option value ="Splicing FDT / JC" data-price = 20000 {% if scope.scopeOfWork == 'Splicing FDT / JC' %}selected{% endif %}>Splicing FDT / JC</option>
 					<option value ="Install JC" data-price = 50000 {% if scope.scopeOfWork == 'Install JC' %}selected{% endif %}>Install JC</option>
 					<option value ="Testcomm OPM / OTDR" data-price = 10000 {% if scope.scopeOfWork == 'Testcomm OPM / OTDR' %}selected{% endif %}>Testcomm OPM / OTDR</option>
-
-				</select></td>
+				</select>
+				{%else%}
+				<input type="text" id="scopeOfWork_{{ forloop.counter|add:'-1' }}" name="scopeOfWork_{{ forloop.counter|add:'-1' }}" value="{{scope.scopeOfWork}}" style="display:block;">
+				{%endif%}
+				{%endwith%}
+			
+			</td>
                 <td><input class="line-items-container" type="number" name ="qtyB_{{ forloop.counter|add:"-1" }}" value="{{ scope.qtyBoq }}"></td>
                 <td><input class="line-items-container" type="number" name ="qtyA_{{ forloop.counter|add:"-1" }}" value="{{ scope.qtyActual }}"></td>
                 <td><input class="line-items-container" type ="text"name ="unitPrice_{{ forloop.counter|add:"-1" }}" value="{{ scope.unitPrice }}"></td>
@@ -522,7 +530,10 @@ td {
             {% elif order.pricing_type == 'internal'%}
             <tr>
             <td style = "text-align: center;" class="line-items-container">{{ forloop.counter }}</td> <!-- This will auto-increment the row number -->
-            <td style="text-align: left;"><select style="text-align: left;" class="line-items-container" name ="scopeOfWork_{{ forloop.counter|add:"-1" }}">
+            <td style="text-align: left;">
+				{% with options="Pulling Cable-24 core (AE) include install the Accessory,Pulling Cable-48 core (AE) include install the Accessory,Pulling Cable-96 core (AE) include install the Accessory,Pulling Cable-144 core (AE) include install the Accessory,Instal Label Cable (on pole, in Handhole),Instal Label FDT,Instal Label FAT,Instal Label Pole,Instal pole 7 & 9 meter 4 inch include the foundation,Instal pole 7 meter 3 inch include the foundation,Instal Cable Hanger,Instal Sling Wire,Instal FDT,Instal FAT include the Splicing & Splitter,Splicing FDT / JC,Install JC,Testcomm OPM / OTDR" %}
+				{% if scope.scopeOfWork in options %}
+				<select style="text-align: left;" class="line-items-container" name ="scopeOfWork_{{ forloop.counter|add:"-1" }}">
                 <option value ="Pulling Cable-24 core (AE) include install the Accessory" data-price = 1600  {% if scope.scopeOfWork == 'Pulling Cable-24 core (AE) include install the Accessory' %}selected{% endif %}>Pulling Cable-24 core (AE) include install the Accessory</option>
                 <option value ="Pulling Cable-48 core (AE) include install the Accessory" data-price = 1600  {% if scope.scopeOfWork == 'Pulling Cable-48 core (AE) include install the Accessory' %}selected{% endif %}>Pulling Cable-48 core (AE) include install the Accessory</option>
                 <option value ="Pulling Cable-96 core (AE) include install the Accessory" data-price = 1600  {% if scope.scopeOfWork == 'Pulling Cable-96 core (AE) include install the Accessory' %}selected{% endif %}>Pulling Cable-96 core (AE) include install the Accessory</option>
@@ -540,8 +551,12 @@ td {
                 <option value ="Splicing FDT / JC" data-price = 20000 {% if scope.scopeOfWork == 'Splicing FDT / JC' %}selected{% endif %}>Splicing FDT / JC</option>
 				<option value ="Install JC" data-price = 50000 {% if scope.scopeOfWork == 'Install JC' %}selected{% endif %}>Install JC</option>
 				<option value ="Testcomm OPM / OTDR" data-price = 10000 {% if scope.scopeOfWork == 'Testcomm OPM / OTDR' %}selected{% endif %}>Testcomm OPM / OTDR</option>
-
-			</select></td>
+			</select>
+				{%else%}
+			<input type="text" id="scopeOfWork_{{ forloop.counter|add:'-1' }}" name="scopeOfWork_{{ forloop.counter|add:'-1' }}" value="{{scope.scopeOfWork}}" style="display:block;">
+				{%endif%}
+				{%endwith%}
+		</td>
             <td><input class="line-items-container" type="number" name ="qtyB_{{ forloop.counter|add:"-1" }}" value="{{ scope.qtyBoq }}"></td>
             <td><input class="line-items-container" type="number" name ="qtyA_{{ forloop.counter|add:"-1" }}" value="{{ scope.qtyActual }}"></td>
             <td><input class="line-items-container" type ="text"name ="unitPrice_{{ forloop.counter|add:"-1" }}" value="{{ scope.unitPrice }}"></td>
@@ -549,11 +564,14 @@ td {
             <td><input class="line-items-container" type="text" name ="totalA_{{ forloop.counter|add:"-1" }}" value="{{ scope.totalActual }}"></td>
             <td><input class="line-items-container" type="text" name ="remarks_{{ forloop.counter|add:"-1" }}" value="{{ scope.remarks }}"></td>
             <td><button class ="button add-new-button removeRowButton" id ="removeRow" >-</button></td>       
-            </tr>
+        </tr>
             {%else%}
             <tr>
                 <td style = "text-align: center;" class="line-items-container">{{ forloop.counter }}</td> <!-- This will auto-increment the row number -->
-                <td style="text-align: left;"><select style="text-align: left;" class="line-items-container" name ="scopeOfWork_{{ forloop.counter|add:"-1" }}">
+                <td style="text-align: left;">
+					{% with options="MPO HUB FebS-D06,ODB HUB FebS-H05,Cascaded Box FebS-S11 (70/30),Cascaded Box FebS-S11(50/50),End Box FebS-F10,Expansion Box FebS-E09,48C Inline Joint Closure,24C Inline Joint Closure,12C Inline Joint Closure,Install Cross-section Frame,Install Label Cable,Install Label BOX,Install OLT,Pole Installation (Pole Provided by LN), Incl. Foundation / Reinstatment,Supply and Install STAY Wire (Including BESI SENGKAND, SEKANG ULIR 12MM, THIMBLE, STEEL WIRE, BULAOG GRIP, KAWAT IKAT and Concrete k-225),Supply and Install Strand Wire & Buldog Grip,Supply and Install Riser Pipe 1,5 inch (Including GI Pipe-3M and Clamps),30m DLC Cable (12LC/UPC-6LC/UPC+6FC/UPC),100m DLC Cable (12LC/UPC-6LC/UPC+6FC/UPC),100m MPO Cable (MPO- SC/UPC*8),200m MPO Cable (MPO- SC/UPC*8),300m MPO Cable (MPO- SC/UPC*8),400m MPO Cable (MPO- SC/UPC*8),500m MPO Cable (MPO- SC/UPC*8),600m MPO Cable (MPO- SC/UPC*8),10m MPO Cable(MPO-MPO),50m MPO Cable (MPO-MPO),100m MPO Cable (MPO-MPO),200m MPO Cable (MPO-MPO),300m MPO Cable (MPO-MPO),400m MPO Cable (MPO-MPO),500m MPO Cable (MPO-MPO),600m MPO Cable (MPO-MPO),700m MPO Cable (MPO-MPO),800m MPO Cable (MPO-MPO),5m Single-Core Cable (5mm Round Cable ZTE-ZTE),10m Single-Core Cable (5mm Round Cable ZTE-ZTE),250m Single-Core Cable (5mm Round Cable ZTE-ZTE),50m Single-Core Cable (5mm Round Cable ZTE-ZTE),80m Single-Core Cable (5mm Round Cable ZTE-ZTE),100m Single-Core Cable (5mm Round Cable ZTE-ZTE),120m Single-Core Cable (5mm Round Cable ZTE-ZTE),150m Single-Core Cable (5mm Round Cable ZTE-ZTE),200m Single-Core Cable (5mm Round Cable ZTE-ZTE),350m Single-Core Cable (5mm Round Cable ZTE-ZTE),400m Single-Core Cable (5mm Round Cable ZTE-ZTE),Penempatan FO (AE), Including Lashing,Penempatan FO (AE), Including Lashing (48 cores),Splicing FO Cable,Test & Comm for Distribution Optical Fiber,Test & Comm for Feeder Optical Fiber,Test & Comm for Backbone Optical Fiber" %}
+					{% if scope.scopeOfWork in options %}					
+					<select style="text-align: left;" class="line-items-container" name ="scopeOfWork_{{ forloop.counter|add:"-1" }}">
                     <option value="MPO HUB FebS-D06" data-price="10000" {% if scope.scopeOfWork == 'MPO HUB FebS-D06' %}selected{% endif %}>MPO HUB FebS-D06</option>
                     <option value="ODB HUB FebS-H05" data-price="10000" {% if scope.scopeOfWork == 'ODB HUB FebS-H05' %}selected{% endif %}>ODB HUB FebS-H05</option>
                     <option value="Cascaded Box FebS-S11 (70/30)" data-price="10000" {% if scope.scopeOfWork == 'Cascaded Box FebS-S11 (70/30)' %}selected{% endif %}>Cascaded Box FebS-S11 (70/30)</option>
@@ -607,7 +625,12 @@ td {
                     <option value="Test & Comm for Feeder Optical Fiber" data-price="10000" {% if scope.scopeOfWork == 'Test & Comm for Feeder Optical Fiber' %}selected{% endif %}>Test & Comm for Feeder Optical Fiber</option>
                     <option value="Test & Comm for Backbone Optical Fiber" data-price="10000" {% if scope.scopeOfWork == 'Test & Comm for Backbone Optical Fiber' %}selected{% endif %}>Test & Comm for Backbone Optical Fiber</option>
                     
-                </select></td>
+                </select>
+				{%else%}
+				<input type="text" id="scopeOfWork_{{ forloop.counter|add:'-1' }}" name="scopeOfWork_{{ forloop.counter|add:'-1' }}" value="{{scope.scopeOfWork}}" style="display:block;">
+				{%endif%}
+				{%endwith%}
+			</td>
                 <td><input class="line-items-container" type="number" name ="qtyB_{{ forloop.counter|add:"-1" }}" value="{{ scope.qtyBoq }}"></td>
                 <td><input class="line-items-container" type="number" name ="qtyA_{{ forloop.counter|add:"-1" }}" value="{{ scope.qtyActual }}"></td>
                 <td><input class="line-items-container" type ="text"name ="unitPrice_{{ forloop.counter|add:"-1" }}" value="{{ scope.unitPrice }}"></td>
@@ -617,7 +640,7 @@ td {
                 <td><button class ="button add-new-button removeRowButton" id ="removeRow" >-</button></td>       
             </tr>
             {%endif%}
-              {%endfor%}
+        {%endfor%}
 		</tbody>
 		<tfoot>
 			<tr>
@@ -654,6 +677,8 @@ td {
         </tr>
         <tr>
           <td>
+			{% with options="FULL,DP,TERM 2 - Implementation Done,TERM 3 - ATP Done,TERM 4 - FAC Done,CASHBON,REMAINING" %}
+			{%if order.paymentTerm in options%}
             <select name = "terms-selection" id ="terms-selection">
 				<option  value ="FULL" data-percentage-amount = 100% data-remarks = '' {% if order.paymentTerm == 'FULL' %}selected{% endif %} >FULL</option>
 				<option value = "DP" data-percentage-amount =30% data-remarks = '' {% if order.paymentTerm == 'DP' %}selected{% endif %}> DP </option>
@@ -662,8 +687,13 @@ td {
                 <option  value ="TERM 4" data-percentage-amount =10% data-remarks = 'FAC Done' {% if order.paymentTerm == 'TERM 4 - FAC Done' %}selected{% endif %}>TERM 4</option>
                 <option  value ="CASHBON" data-percentage-amount =0% data-remarks = '' {% if order.paymentTerm == 'CASHBON' %}selected{% endif %}>CASHBON</option>
                 <option  value ="REMAINING" data-percentage-amount =0% data-remarks = ''  {% if order.paymentTerm == 'REMAINING' %}selected{% endif %}>REMAINING</option>
-                <option  value ="CREATE" data-percentage-amount = 0% data-remarks = '' >CREATE</option>  
-            </select>
+				<option  value ="CREATE" data-percentage-amount = 0% data-remarks = ''>CREATE</option>  
+
+			</select>
+			{%else%}
+			<input type="text" id="terms-selection" name="terms-selection" value="{{order.paymentTerm}}" style="display:block;">
+			{%endif%}
+			{%endwith%}
             </td>
 			<td><input type="text" id="terms-percentage-cell" name="terms-percentage-cell" value="{{order.termPercentage}}"></td>          
 			<td id = "terms-amount-cell"><input type="text" id="terms-amount-cell" name="terms-amount-cell"value="{{order.termAmount}}"></td>
@@ -1010,6 +1040,7 @@ td {
 
 <script type="text/javascript">
 
+
 	document.addEventListener("DOMContentLoaded", function(){
             document.getElementById("submitBtn").addEventListener("click", function(e){
                 var woNumber = document.getElementById("wo_number").value;
@@ -1022,6 +1053,7 @@ td {
 </script>
 
 <script>
+
 function deleteAttachment(orderId, action) {
     if (!confirm('Are you sure you want to delete the attachment?')) {
         return; // Do nothing if the user cancels the confirmation dialog
@@ -1114,12 +1146,18 @@ document.addEventListener('input', function(event) {
 
 function termsAmountCalculation() {
   var selection = document.getElementById('terms-selection');
-  var selectedOption = selection.options[selection.selectedIndex];
-
+  if (selection.selectedIndex) {
+	var selectedOption = selection.options[selection.selectedIndex];
   // Get the percentage either from the dropdown or from the custom input
   var percentageInput = document.getElementById('terms-percentage-cell').value;
   var percentageString = percentageInput !== '' ? percentageInput : selectedOption.getAttribute('data-percentage-amount');
-  
+  }
+  else {
+	var selectedOption = docucment.getElementById('terms-selection').value
+	var percentageInput = document.getElementById('terms-percentage-cell').value;
+	var percentageString = percentageInput 
+
+  }
   // Remove any non-numeric characters (e.g., '%') and parse the percentage
   var cleanedPercentageString = percentageString.replace('%', '');
   var percentageNumber = parseFloat(cleanedPercentageString) / 100;
@@ -2587,12 +2625,13 @@ function applyStyles(element, type) {
 }
 // CHANGING THE TERMS SELECTION CELL
 
+
 document.getElementById('terms-selection').onchange = function(){
   if (this.value == "CREATE") {
     var customInput = document.createElement("input");
     customInput.type = "text";
-    customInput.name = "terms-percentage-cell"; // Using the same name for consistency
-    customInput.id = "custom-terms-percentage-cell"; // Giving an ID for easier access
+    customInput.name = "terms-selection"; // Using the same name for consistency
+    customInput.id = "terms-selection"; // Giving an ID for easier access
 	customInput.textContent = ''
 
     // Hide the dropdown
@@ -2601,11 +2640,11 @@ document.getElementById('terms-selection').onchange = function(){
     // Insert the new input field after the dropdown
     this.parentNode.insertBefore(customInput, this.nextSibling);
 	}
-	var percentageAmount = this.options[this.selectedIndex].getAttribute('data-percentage-amount');
-	var thisRemarks = this.options[this.selectedIndex].getAttribute('data-remarks');
+  var percentageAmount = this.options[this.selectedIndex].getAttribute('data-percentage-amount');
+  var thisRemarks = this.options[this.selectedIndex].getAttribute('data-remarks');
 
-document.getElementsByName('terms-percentage-cell')[0].value = percentageAmount;
-document.getElementsByName('payment-remarks-cell')[0].value = thisRemarks;  
+  document.getElementsByName('terms-percentage-cell')[0].value = percentageAmount;
+  document.getElementsByName('payment-remarks-cell')[0].value = thisRemarks;  
 }
 
 document.getElementById('bank').onchange = function() {

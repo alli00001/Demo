@@ -454,7 +454,10 @@ td {
             {% if order.project == 'EMR'%}
             <tr>
                 <td style = "text-align: center;" class="line-items-container">{{ forloop.counter }}</td> <!-- This will auto-increment the row number -->
-                <td style="text-align: left;"><select style="text-align: left;" class="line-items-container" name ="scopeOfWork_{{ forloop.counter|add:"-1" }}">
+                <td style="text-align: left;">
+					{% with options="Clamp Pole Single 2,5 inch,Dead End Fitting / Fixed / clamp Buaya 25/50,Stopping M6,Clamp 8 (Clamp Gantung),Suspension Corong,Span Wartel M10,Plat Belt 20mm / Stainless Belt,Buldog Grip M8,Steel Clamp,Helical SET 24 Core,Helical SET 144 Core,Helical SET 288 Core,Bracket A (for Helical Dead End)" %}
+					{% if scope.scopeOfWork in options %}
+					<select style="text-align: left;" class="line-items-container" name ="scopeOfWork_{{ forloop.counter|add:"-1" }}">
 					<option value="Clamp Pole Single 2,5 inch" data-price="9000" {% if scope.scopeOfWork == 'Clamp Pole Single 2,5 inch' %}selected{% endif %}>Clamp Pole Single 2,5 inch</option>
 					<option value="Dead End Fitting / Fixed / clamp Buaya 25/50" data-price="13000" {% if scope.scopeOfWork == 'Dead End Fitting / Fixed / clamp Buaya 25/50' %}selected{% endif %}>Dead End Fitting / Fixed / clamp Buaya 25/50</option>
 					<option value="Stopping M6" data-price="500" {% if scope.scopeOfWork == 'Stopping M6' %}selected{% endif %}>Stopping M6</option>
@@ -468,7 +471,12 @@ td {
 					<option value="Helical SET 144 Core" data-price="18000" {% if scope.scopeOfWork == 'Helical SET 144 Core' %}selected{% endif %}>Helical SET 144 Core</option>
 					<option value="Helical SET 288 Core" data-price="20000" {% if scope.scopeOfWork == 'Helical SET 288 Core' %}selected{% endif %}>Helical SET 288 Core</option>
 					<option value="Bracket A (for Helical Dead End)" data-price="4500" {% if scope.scopeOfWork == 'Bracket A (for Helical Dead End)' %}selected{% endif %}>Bracket A (for Helical Dead End)</option>					
-                </select></td>
+                </select>
+			{%else%}
+			<input type="text" id="scopeOfWork_{{ forloop.counter|add:'-1' }}" name="scopeOfWork_{{ forloop.counter|add:'-1' }}" value="{{scope.scopeOfWork}}" style="display:block;">
+			{%endif%}
+			{%endwith%}
+		</td>
                 <td><input class="line-items-container" type="text" name ="unit_{{ forloop.counter|add:"-1" }}" value="{{ scope.unit }}"></td>
                 <td><input class="line-items-container" type="number" name ="qtyA_{{ forloop.counter|add:"-1" }}" value="{{ scope.qtyActual }}"></td>
                 <td><input class="line-items-container" type ="text"name ="unitPrice_{{ forloop.counter|add:"-1" }}" value="{{ scope.unitPrice }}"></td>
@@ -479,12 +487,21 @@ td {
             {% else%}
             <tr>
                 <td style = "text-align: center;" class="line-items-container">{{ forloop.counter }}</td> <!-- This will auto-increment the row number -->
-                <td style="text-align: left;"><select style="text-align: left;" class="line-items-container" name ="scopeOfWork_{{ forloop.counter|add:"-1" }}">
+                <td style="text-align: left;">
+					{% with options="Clamp Pole 2,5 inch Linknet Standard,Stopping M6,Span Wartel M10,Buldog Grip M8" %}
+					{% if scope.scopeOfWork in options %}
+
+					<select style="text-align: left;" class="line-items-container" name ="scopeOfWork_{{ forloop.counter|add:"-1" }}">
 					<option value="Clamp Pole 2,5 inch Linknet Standard" data-price="12000" {% if scope.scopeOfWork == 'Clamp Pole 2,5 inch Linknet Standard' %}selected{% endif %}>Clamp Pole 2,5 inch Linknet Standard</option>
 					<option value="Stopping M6" data-price="500" {% if scope.scopeOfWork == 'Stopping M6' %}selected{% endif %}>Stopping M6</option>
 					<option value="Span Wartel M10" data-price="8000" {% if scope.scopeOfWork == 'Span Wartel M10' %}selected{% endif %}>Span Wartel M10</option>
 					<option value="Buldog Grip M8" data-price="7500" {% if scope.scopeOfWork == 'Buldog Grip M8' %}selected{% endif %}>Buldog Grip M8</option>									
-                </select></td>
+                </select>
+				{%else%}
+				<input type="text" id="scopeOfWork_{{ forloop.counter|add:'-1' }}" name="scopeOfWork_{{ forloop.counter|add:'-1' }}" value="{{scope.scopeOfWork}}" style="display:block;">
+				{%endif%}
+				{%endwith%}
+			</td>
                 <td><input class="line-items-container" type="text" name ="unit_{{ forloop.counter|add:"-1" }}" value="{{ scope.unit }}"></td>
                 <td><input class="line-items-container" type="number" name ="qtyA_{{ forloop.counter|add:"-1" }}" value="{{ scope.qtyActual }}"></td>
                 <td><input class="line-items-container" type ="text"name ="unitPrice_{{ forloop.counter|add:"-1" }}" value="{{ scope.unitPrice }}"></td>
@@ -528,18 +545,25 @@ td {
           <td><input type ="text" name ="remarks1" value ="{{order.remarks1}}"></td>
         </tr>
         <tr>
-          <td>
-            <select name = "terms-selection" id ="terms-selection">
-				<option  value ="FULL" data-percentage-amount = 100% data-remarks = '' {% if order.paymentTerm == 'FULL' %}selected{% endif %} >FULL</option>
-				<option value = "DP" data-percentage-amount =30% data-remarks = '' {% if order.paymentTerm == 'DP' %}selected{% endif %}> DP </option>
-                <option  value ="TERM 2" data-percentage-amount =40%  data-remarks = 'Implementation Done' {% if order.paymentTerm == 'TERM 2 - Implementation Done' %}selected{% endif %}>TERM 2</option>
-                <option  value ="TERM 3" data-percentage-amount =20% data-remarks = 'ATP Done' {% if order.paymentTerm == 'TERM 3 - ATP Done' %}selected{% endif %}>TERM 3</option>
-                <option  value ="TERM 4" data-percentage-amount =10% data-remarks = 'FAC Done' {% if order.paymentTerm == 'TERM 4 - FAC Done' %}selected{% endif %}>TERM 4</option>
-                <option  value ="CASHBON" data-percentage-amount =0% data-remarks = '' {% if order.paymentTerm == 'CASHBON' %}selected{% endif %}>CASHBON</option>
-                <option  value ="REMAINING" data-percentage-amount =0% data-remarks = ''  {% if order.paymentTerm == 'REMAINING' %}selected{% endif %}>REMAINING</option>
-                <option  value ="CREATE" data-percentage-amount = 0% data-remarks = '' >CREATE</option>  
-            </select>
-            </td>
+			<td>
+				{% with options="FULL,DP,TERM 2 - Implementation Done,TERM 3 - ATP Done,TERM 4 - FAC Done,CASHBON,REMAINING" %}
+				{%if order.paymentTerm in options%}
+				<select name = "terms-selection" id ="terms-selection">
+					<option  value ="FULL" data-percentage-amount = 100% data-remarks = '' {% if order.paymentTerm == 'FULL' %}selected{% endif %} >FULL</option>
+					<option value = "DP" data-percentage-amount =30% data-remarks = '' {% if order.paymentTerm == 'DP' %}selected{% endif %}> DP </option>
+					<option  value ="TERM 2" data-percentage-amount =40%  data-remarks = 'Implementation Done' {% if order.paymentTerm == 'TERM 2 - Implementation Done' %}selected{% endif %}>TERM 2</option>
+					<option  value ="TERM 3" data-percentage-amount =20% data-remarks = 'ATP Done' {% if order.paymentTerm == 'TERM 3 - ATP Done' %}selected{% endif %}>TERM 3</option>
+					<option  value ="TERM 4" data-percentage-amount =10% data-remarks = 'FAC Done' {% if order.paymentTerm == 'TERM 4 - FAC Done' %}selected{% endif %}>TERM 4</option>
+					<option  value ="CASHBON" data-percentage-amount =0% data-remarks = '' {% if order.paymentTerm == 'CASHBON' %}selected{% endif %}>CASHBON</option>
+					<option  value ="REMAINING" data-percentage-amount =0% data-remarks = ''  {% if order.paymentTerm == 'REMAINING' %}selected{% endif %}>REMAINING</option>
+					<option  value ="CREATE" data-percentage-amount = 0% data-remarks = ''>CREATE</option>  
+
+				</select>
+				{%else%}
+				<input type="text" id="terms-selection" name="terms-selection" value="{{order.paymentTerm}}" style="display:block;">
+				{%endif%}
+				{%endwith%}
+				</td>
 			<td><input type="text" id="terms-percentage-cell" name="terms-percentage-cell" value="{{order.termPercentage}}"></td>          
 			<td id = "terms-amount-cell"><input type="text" id="terms-amount-cell" name="terms-amount-cell"value="{{order.termAmount}}"></td>
           <td style = "text-align: left;">
@@ -858,12 +882,18 @@ document.addEventListener('input', function(event) {
 
 function termsAmountCalculation() {
   var selection = document.getElementById('terms-selection');
-  var selectedOption = selection.options[selection.selectedIndex];
-
+  if (selection.selectedIndex) {
+	var selectedOption = selection.options[selection.selectedIndex];
   // Get the percentage either from the dropdown or from the custom input
   var percentageInput = document.getElementById('terms-percentage-cell').value;
   var percentageString = percentageInput !== '' ? percentageInput : selectedOption.getAttribute('data-percentage-amount');
-  
+  }
+  else {
+	var selectedOption = document.getElementById('terms-selection').value
+	var percentageInput = document.getElementById('terms-percentage-cell').value;
+	var percentageString = percentageInput 
+
+  }
   // Remove any non-numeric characters (e.g., '%') and parse the percentage
   var cleanedPercentageString = percentageString.replace('%', '');
   var percentageNumber = parseFloat(cleanedPercentageString) / 100;
@@ -874,7 +904,8 @@ function termsAmountCalculation() {
 
   // Calculate and update the terms amount
   var calculatedAmount = percentageNumber * grValue;
-  document.getElementById('terms-amount-cell').querySelector('input').value = calculatedAmount.toFixed(2);
+
+  document.getElementById('terms-amount-cell').querySelector('input').value = calculatedAmount.toFixed(2)
   document.getElementById('terms-percentage-cell').value= percentageString;
 
 }
@@ -1476,12 +1507,13 @@ function applyStyles(element, type) {
 	element.style.margin = "0"; // Remove margins to avoid unnecessary spacing
 }
 // CHANGING THE TERMS SELECTION CELL
+
 document.getElementById('terms-selection').onchange = function(){
   if (this.value == "CREATE") {
     var customInput = document.createElement("input");
     customInput.type = "text";
-    customInput.name = "terms-percentage-cell"; // Using the same name for consistency
-    customInput.id = "custom-terms-percentage-cell"; // Giving an ID for easier access
+    customInput.name = "terms-selection"; // Using the same name for consistency
+    customInput.id = "terms-selection"; // Giving an ID for easier access
 	customInput.textContent = ''
 
     // Hide the dropdown
@@ -1490,11 +1522,11 @@ document.getElementById('terms-selection').onchange = function(){
     // Insert the new input field after the dropdown
     this.parentNode.insertBefore(customInput, this.nextSibling);
 	}
-	var percentageAmount = this.options[this.selectedIndex].getAttribute('data-percentage-amount');
-	var thisRemarks = this.options[this.selectedIndex].getAttribute('data-remarks');
+  var percentageAmount = this.options[this.selectedIndex].getAttribute('data-percentage-amount');
+  var thisRemarks = this.options[this.selectedIndex].getAttribute('data-remarks');
 
-document.getElementsByName('terms-percentage-cell')[0].value = percentageAmount;
-document.getElementsByName('payment-remarks-cell')[0].value = thisRemarks;  
+  document.getElementsByName('terms-percentage-cell')[0].value = percentageAmount;
+  document.getElementsByName('payment-remarks-cell')[0].value = thisRemarks;  
 }
 
 document.getElementById('bank').onchange = function() {

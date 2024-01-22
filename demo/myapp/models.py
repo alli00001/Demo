@@ -161,7 +161,7 @@ class WorkOrder(models.Model):
     paymentDate = models.DateField(blank = True, default=None , null = True)
     dueDate =  models.DateField(blank = True, default=None , null = True)
     def __str__(self) -> str:
-        return f"{self.wo_date.strftime('%Y-%m-%d')} - {self.wo_number} - {self.category} - {self.project}"
+        return f"{self.wo_date.strftime('%Y-%m-%d')} - {self.wo_number} - {self.category} - {self.project}- {self.id}"
     def wo_string(self):
         wo_date_str = self.wo_date.strftime('%Y-%m-%d') if self.wo_date else ''
         category_str = self.category if self.category else ''
