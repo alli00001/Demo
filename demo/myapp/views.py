@@ -1371,7 +1371,13 @@ def edit_wo(request, id, category, project):
                     if obj.no_issue_agreement:
                         obj.no_issue_agreement.delete() 
                     obj.no_issue_agreement = new_no_issue_agreement  
-                
+
+                new_invoice = request.FILES.get('invoice')
+                if new_invoice:
+                    if obj.invoice:
+                        obj.invoice.delete() 
+                    obj.invoice = new_invoice  
+
                 obj.scopeOfWorkCount = request.POST.get('number_of_scopes')
                 obj.deductionCount = request.POST.get('number_of_deduction')
                 obj.paymentCount = request.POST.get('number_of_payment')
