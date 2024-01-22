@@ -393,7 +393,7 @@ td {
 			</thead>
 			<tbody>
 				<tr>
-					<td><textarea style="width: 100%;" class="clusterName" name="clusterName"> </textarea></td>
+					<td><textarea style="width: 100%;" class="clusterName" name="clusterName"></textarea></td>
 					<td><textarea style="width: 100%;" class="odbId" name="odbId" id ="odbId"></textarea></td>
                     <td><textarea style="width: 100%;" class="suffixId" name="suffixId" id ="suffixId"></textarea></td>
 
@@ -1694,6 +1694,10 @@ function add() {
 			option51.text = "Test & Comm for Backbone Optical Fiber";
 			selection.appendChild(option51);
 			// Updating the unit price when selecting items
+			var option52 = document.createElement("option");
+			option52.value = "Add Custom Scope Of Work";
+			option52.text = "Add Custom Scope Of Work"
+			selection.appendChild(option52)
 			selection.onchange = function() {
 				var selectedOption = this.options[this.selectedIndex]
 				var selectedPrice = selectedOption.getAttribute('data-price')
@@ -1819,8 +1823,8 @@ document.getElementById('terms-selection').onchange = function(){
   if (this.value == "CREATE") {
     var customInput = document.createElement("input");
     customInput.type = "text";
-    customInput.name = "terms-percentage-cell"; // Using the same name for consistency
-    customInput.id = "custom-terms-percentage-cell"; // Giving an ID for easier access
+    customInput.name = "terms-selection"; // Using the same name for consistency
+    customInput.id = "terms-selection"; // Giving an ID for easier access
 	customInput.textContent = ''
 
     // Hide the dropdown

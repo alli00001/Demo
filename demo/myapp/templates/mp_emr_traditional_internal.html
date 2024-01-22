@@ -399,7 +399,7 @@ td {
 			</thead>
 			<tbody>
 				<tr>
-					<td><textarea style="width: 100%;" class="clusterName" name="clusterName"> </textarea></td>
+					<td><textarea style="width: 100%;" class="clusterName" name="clusterName"></textarea></td>
 					<td><textarea style="width: 100%;" class="siteId" name="siteId"></textarea></td>
 					<td>
 						<select class = "type" name="type" id ="type">
@@ -1458,8 +1458,8 @@ document.getElementById('terms-selection').onchange = function(){
   if (this.value == "CREATE") {
     var customInput = document.createElement("input");
     customInput.type = "text";
-    customInput.name = "terms-percentage-cell"; // Using the same name for consistency
-    customInput.id = "custom-terms-percentage-cell"; // Giving an ID for easier access
+    customInput.name = "terms-selection"; // Using the same name for consistency
+    customInput.id = "terms-selection"; // Giving an ID for easier access
 	customInput.textContent = ''
 
     // Hide the dropdown
