@@ -411,13 +411,13 @@ td {
 		<tbody>
       {%for scope in order.workOrder.all%}
       <tr>
-        <td style = "text-align: center; padding: 8px 0;">{{ forloop.counter }}</td> <!-- This will auto-increment the row number -->
-        <td style="text-align: left;">{{ scope.scopeOfWork }}</td>
+        <td style = "text-align: center; padding: 8px 0;" >{{ forloop.counter }}</td> <!-- This will auto-increment the row number -->
+        <td style="text-align: left;" >{{ scope.scopeOfWork }}</td>
         <td>{{ scope.qtyBoq }}</td>
         <td>{{ scope.qtyActual }}</td>
-        <td>{{ scope.unitPrice }}</td>
-        <td>{{ scope.totalBoq }}</td>
-        <td>{{ scope.totalActual }}</td>
+        <td name ="unitPrice_{{ forloop.counter|add:"-1" }}">{{ scope.unitPrice }}</td>
+        <td name ="totalB_{{ forloop.counter|add:"-1" }}">{{ scope.totalBoq }}</td>
+        <td name ="totalA_{{ forloop.counter|add:"-1" }}">{{ scope.totalActual }}</td>
         <td style="text-align: left;"> {{ scope.remarks }}</td>
       </tr>
       {% endfor %}
@@ -475,7 +475,7 @@ td {
         <tr id ="deduction-row">
           <td>{{ deduction.deductOrAddition }}</td>
 		  <td></td>
-          <td>{{ deduction.deductionAmount }}</td>
+          <td name ="dedadd_{{ forloop.counter|add:"-1" }}">{{ deduction.deductionAmount }}</td>
           <td>{{ deduction.deductionRemarks }}</td>
         </tr>
         {%endfor%}
@@ -740,16 +740,79 @@ td {
 </form>
 
 <script>
-    var wo = {
-        type: "{{ order.type }}",
-        cluster: "{{ order.cluster }}",
-        odbId: "{{ order.odbId }}",
-        siteId: "{{ order.siteId }}",
-		suffixId: "{{order.suffixId}}",
-		workType: "{{order.workType}}",
-		paymentTerm : "{{order.paymentTerm}}",
-		termPercentage : "{{order.termPercentage}}"
-    };
+function countElementsWithPrefix(prefix) {
+    return document.querySelectorAll(`[name^=${prefix}_]`).length;
+
+}
+function formatElements() {
+    const prefixes = ['unitPrice', 'totalB', 'totalA', 'dedadd'];
+    let maxNum = 0;
+
+    // Find the maximum 'i' across all prefixes
+    prefixes.forEach(prefix => {
+        const count = countElementsWithPrefix(prefix);
+        if (count > maxNum) {
+            maxNum = count;
+        }
+    });
+
+    for (let i = 0; i < maxNum; i++) { // Start from 0 as your naming starts from 0
+        prefixes.forEach(prefix => {
+            let elements = document.getElementsByName(`${prefix}_${i}`);
+            if (elements.length > 0) {
+                elements[0].textContent = formatNumber(elements[0].textContent);
+            }
+        });
+    }
+}
+
+function formatNumber(num) {
+    // Convert to a number with two decimal places
+    num = Number(num).toFixed(2);
+
+    // Split the number into the integer and decimal parts
+    let parts = num.toString().split(".");
+
+    // Format the integer part with thousand separators
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+    return parts.join(".");
+}
+
+// Usage example: 
+window.onload = function() {
+    var grandTotalBoqElement = document.getElementById('grand-total-boq');
+    grandTotalBoqElement.textContent = formatNumber(grandTotalBoqElement.textContent);
+	
+	var grandTotalActualElement = document.getElementById('grand-total-actual');
+	grandTotalActualElement.textContent = formatNumber(grandTotalActualElement.textContent)
+
+	var grandTotalPayment = document.getElementById('grand-total-payment')
+	grandTotalPayment.textContent = formatNumber(grandTotalPayment.textContent)
+
+	var termsAmount = document.getElementById('terms-amount-cell')
+	termsAmount.textContent = formatNumber(termsAmount.textContent)	
+	
+	var taxAmount = document.getElementById('tax-amount-cell')
+	taxAmount.textContent = formatNumber(taxAmount.textContent)	
+
+	var gt2 = document.getElementById('grand-total-payment2')
+	gt2.textContent = formatNumber(gt2.textContent)	
+	formatElements()
+};
+function sanitizeInput(input) {
+    return input.replace(/\n/g, " ").replace(/[^a-zA-Z0-9- ]/g, "");
+}
+var wo = {
+    type: "{{ order.type }}",
+    cluster: sanitizeInput("{{ order.cluster }}"),
+    odbId: sanitizeInput(`{{ order.odbId }}`),
+    siteId: sanitizeInput(`{{ order.siteId }}`), 
+	suffixId: sanitizeInput(`{{ order.suffixId }}`),
+    workType: "{{ order.workType }}",
+    paymentTerm : "{{ order.paymentTerm }}",
+    termPercentage : "{{ order.termPercentage }}"
+};
 async function generatePDF(event) {
 	event.preventDefault(); // Prevent the default form action
 	const {

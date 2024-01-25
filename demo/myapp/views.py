@@ -834,7 +834,7 @@ def finished_wo(request):
         ceoCheck=True,
         rightHandCheck=True,
         financeCheck=True
-    ).order_by('-paymentDate')
+    ).order_by('-id')
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         project = request.GET.get('project', None)
         dates = request.GET.getlist('dates[]')
@@ -889,7 +889,7 @@ def finished_wo(request):
             query &= Q(workType__icontains=workType)
         if paymentTerm:
             query &= Q(paymentTerm__icontains=paymentTerm)
-        finished_filtered_orders = finished_work_orders.filter(query).order_by('paymentDate')
+        finished_filtered_orders = finished_work_orders.filter(query).order_by('id')
         data = [
             {
                 'proofOfPayment' :order.proofOfPayment.url if order.proofOfPayment else None,
@@ -1016,7 +1016,7 @@ def overview(request):
         Q(personalAssistantCheck=False) |
         Q(financeCheck=False) |
         Q(proofOfPayment = '')
-    ).order_by('-wo_date')
+    ).order_by('-id')
     paginator = Paginator(work_order_list, 20)  
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)

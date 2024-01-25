@@ -381,8 +381,8 @@ Create New List
         <td>{{order.odbId |linebreaksbr}}</td>
         <td>{{order.suffixId |linebreaksbr}}</td>
 		<td>{{order.hpD}}</td>
-        <td>{{order.unitPriceD}}</td>
-        <td>{{order.amountD}}</td>
+        <td id ="unitPrice">{{order.unitPriceD}}</td>
+        <td id ="amount">{{order.amountD}}</td>
         <td>{{order.remarkD}}</td>
     </tbody>
 
@@ -604,14 +604,46 @@ Create New List
 </form>
 
 <script>
-    var wo = {
-        type: "{{ order.type }}",
-        cluster: "{{ order.cluster }}",
-        odbId: "{{ order.odbId }}",
-        siteId: "{{ order.siteId }}",
-		suffixId: "{{order.suffixId}}",
-		workType: "{{order.workType}}",
-    };
+			function countElementsWithPrefix(prefix) {
+    return document.querySelectorAll(`[name^=${prefix}_]`).length;
+
+}
+
+function formatNumber(num) {
+    // Convert to a number with two decimal places
+    num = Number(num).toFixed(2);
+
+    // Split the number into the integer and decimal parts
+    let parts = num.toString().split(".");
+
+    // Format the integer part with thousand separators
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+    return parts.join(".");
+}
+
+// Usage example: 
+window.onload = function() {
+	var unitPrice = document.getElementById('unitPrice');
+	unitPrice.textContent = formatNumber(unitPrice.textContent)
+
+	var amount = document.getElementById('amount')
+	amount.textContent = formatNumber(amount.textContent)
+
+};
+function sanitizeInput(input) {
+    return input.replace(/\n/g, " ").replace(/[^a-zA-Z0-9- ]/g, "");
+}
+var wo = {
+    type: "{{ order.type }}",
+    cluster: sanitizeInput("{{ order.cluster }}"),
+    odbId: sanitizeInput(`{{ order.odbId }}`),
+    siteId: sanitizeInput(`{{ order.siteId }}`), 
+	suffixId: sanitizeInput(`{{ order.suffixId }}`),
+    workType: "{{ order.workType }}",
+    paymentTerm : "{{ order.paymentTerm }}",
+    termPercentage : "{{ order.termPercentage }}"
+};
 async function generatePDF(event) {
 	event.preventDefault(); // Prevent the default form action
 	const {
