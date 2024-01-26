@@ -206,7 +206,7 @@
                       <input type="hidden" name="order_category" value="{{ order.category }}">
                       <input type="hidden" name="order_company" value="{{ order.company }}">
                       <input type="hidden" name="order_project" value="{{ order.project }}">  <!-- Hidden field to carry the ID -->
-                      <a href="{% url 'view_wo' order.id order.category order.company order.project%}">{{ order.wo_string }}</a>
+                      <a href="{% url 'view_wo' order.id order.category order.company order.project%}">{{ order.wo_string | safe }}</a>
                     </td>
                     <td>
                       <input type="hidden" name="order" value="{{ order.id }}">
@@ -260,9 +260,15 @@
                     <td>
                       {{order.termPercentage}}
                     </td>
+                    {% if order.category == 'DONATION' %}
                     <td>
-                      {{order.finalGrandTotal}}
+                      {{ order.amountD }}
                     </td>
+                    {% else %}
+                    <td>
+                      {{ order.finalGrandTotal }}
+                    </td>
+                    {% endif %}
                     <td>
                       {% if order.proofOfPayment %}
                       <a href="{{ order.proofOfPayment.url}}">RECORD</a>
@@ -458,6 +464,7 @@ function applyDateFilter() {
 
 
 $(document).ready(function() {
+
   $(document).on('click', '.nested-checklist .dropdown-toggle', function() {
     const parentLi = this.parentElement;
     const year = this.textContent.trim();
@@ -466,6 +473,7 @@ $(document).ready(function() {
       populateMonths(year, monthUl);
     }
     parentLi.classList.toggle('expanded');
+    
   });
 
     $(document).on('change', 'input[type="checkbox"]', function() {
@@ -473,7 +481,6 @@ $(document).ready(function() {
     daysCheckboxes.prop('checked', this.checked);
   });
 
-// When a day is checked or unchecked, toggle the month's checkbox (excluding 'extendable')
   $(document).on('change', '.nested .nested input[type="checkbox"]', function() {
     const monthCheckbox = $(this).closest('.nested').siblings('input[type="checkbox"]');
     const isAnyDayChecked = $(this).closest('.nested').find('input[type="checkbox"]:checked').length > 0;
@@ -584,6 +591,35 @@ function populateDays(year, month, daysUl, isChecked) {
     }
   }
 }
+
+$(document).ready(function() {
+  // Assuming the table has an ID of 'myTable'
+  $('#example tr').each(function() {
+    var td = $(this).find('td:nth-child(18)');
+    var text = td.text();
+
+    // Check if the text is a number using your formatNumber function
+    // Assuming formatNumber returns false if the text is not a number
+    var formattedNumber = formatNumber(text);
+    if (formattedNumber !== false) {
+      // Replace the text in the <td> with the formatted number
+      td.text(formattedNumber);
+    }
+  });
+});
+function formatNumber(num) {
+    // Convert to a number with two decimal places
+    num = Number(num).toFixed(2);
+
+    // Split the number into the integer and decimal parts
+    let parts = num.toString().split(".");
+
+    // Format the integer part with thousand separators
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+    return parts.join(".");
+}
+
 function updateTable(data) {
   // Get the table body element where the orders will be listed
   var tbody = document.querySelector('#example tbody');
@@ -646,7 +682,14 @@ function updateTable(data) {
     row.insertCell().textContent = order.workType; // workType
     row.insertCell().textContent = order.paymentTerm; // paymentTerm
     row.insertCell().textContent = order.termPercentage; // termPercentage
-    row.insertCell().textContent = order.finalGrandTotal; // finalGrandTotal
+    if (order.category == 'DONATION') {
+      row.insertCell().textContent = formatNumber(order.amountD); // finalGrandTotal
+
+    }
+    else {
+      row.insertCell().textContent = formatNumber(order.finalGrandTotal); // finalGrandTotal
+
+    }
     
     var proofCell = row.insertCell();
     if (order.proofOfPayment) {
@@ -731,26 +774,16 @@ function updateTable(data) {
         disabledSpan.textContent = 'EXTEND WO';
         extendCell.appendChild(disabledSpan);
     }
-    
-
-
   } 
   );
-  
-
-
-
-
   // If data is empty, show a message
   if (data.length === 0) {
     var row = tbody.insertRow();
     var cell = row.insertCell(0);
     cell.textContent = 'No work orders available.';
     cell.colSpan = 21; // Span across all columns
-  
   }
 }
-
 function getCsrfToken() {
   // Assuming you have the CSRF token in a cookie
   return document.cookie.split('; ').find(row => row.startsWith('csrftoken')).split('=')[1];

@@ -833,8 +833,8 @@ def finished_wo(request):
         personalAssistantCheck=True,
         ceoCheck=True,
         rightHandCheck=True,
-        financeCheck=True
-    ).order_by('-id')
+        financeCheck=True,
+    ).exclude(proofOfPayment='').order_by('-paymentDate')
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         project = request.GET.get('project', None)
         dates = request.GET.getlist('dates[]')
@@ -889,7 +889,7 @@ def finished_wo(request):
             query &= Q(workType__icontains=workType)
         if paymentTerm:
             query &= Q(paymentTerm__icontains=paymentTerm)
-        finished_filtered_orders = finished_work_orders.filter(query).order_by('id')
+        finished_filtered_orders = finished_work_orders.filter(query).order_by('paymentDate')
         data = [
             {
                 'proofOfPayment' :order.proofOfPayment.url if order.proofOfPayment else None,
@@ -917,9 +917,10 @@ def finished_wo(request):
                 'url': reverse('view_wo', args=[order.wo_number, order.category, order.company, order.project]), 
                 'is_rightHand': request.user.groups.filter(name='rightHand').exists(),
                 'extendable' : order.extendable,
+                'amountD' : order.amountD,
             }
             for order in finished_filtered_orders
-        ]
+        ]   
         return JsonResponse(data, safe=False)
 
 

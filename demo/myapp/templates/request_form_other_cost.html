@@ -257,27 +257,9 @@ td {
 			
 			<td style ="width:10%"></td>
 
-			<td style ="width:18%">WO NUMBER</td>
-			<td style="width: 2%;">:</td>
-			{% if order.company == 'aci' %}
-				{% if order.project == 'EMR' %}
-				<td style ="width:30%">WO / ACI / EMR / {{order.shortdate}} / {{order.wo_number}}</td>
-				{%else%}
-				<td style ="width:30%">WO / ACI / LN / {{order.shortdate}} / {{order.wo_number}}</td>
-				{%endif%}
-			{% elif order.company == 'bks' %}
-				{% if order.project == 'EMR' %}
-				<td style ="width:30%">WO / BKS / EMR / {{order.shortdate}} / {{order.wo_number}}</td>
-				{%else%}
-				<td style ="width:30%">WO / BKS / LN / {{order.shortdate}} / {{order.wo_number}}</td>
-				{%endif%}
-			{% else %}
-				{% if order.project == 'EMR' %}
-				<td style ="width:30%">WO / LKI / EMR / {{order.shortdate}} / {{order.wo_number}}</td>
-				{% else %}
-				<td style ="width:30%">WO / LKI / LN / {{order.shortdate}} / {{order.wo_number}}</td>
-				{%endif%}
-			{%endif%}	
+			<td style ="width:18%"></td>
+			<td style="width: 2%;"></td>
+			<td></td>
     </tr>
 		<tr>
 			<td style="width: 18%;">REQUEST BY</td>
@@ -355,20 +337,14 @@ td {
 		<table class="line-items-container">
 			<thead>
 				<tr>
-					<th class="heading-description" style ="width : 20%" >CLUSTER NAME</th>
-					<th class="heading-description" style ="width : 20%">SITE ID</th>
-					<th class="heading-description" style ="width : 20%">TYPE</th>
-					<th class="heading-description" style ="width : 20%">WORK TYPE</th>
-					<th class="heading-description" style ="width : 20%">HP</th>
+					<th class="heading-description" style ="width : 50%" >CLUSTER NAME</th>
+					<th class="heading-description" style ="width : 50%">SITE ID</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
 					<td>{{order.clusterName |linebreaksbr}}</td>
 					<td>{{order.siteId |linebreaksbr}}</td>
-					<td>{{order.type}}</td>
-					<td>{{order.workType}}</td>
-					<td>{{order.type}}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -379,12 +355,9 @@ td {
 		<table class="line-items-container">
 			<thead>
 				<tr>
-					<th class="heading-description" style ="width : 20%" >CLUSTER NAME</th>
-					<th class="heading-description" style ="width : 20%">ODB ID</th>
-					<th class="heading-description" style ="width : 20%">SUFFIX ID</th>
-					<th class="heading-description" style ="width : 20%">TYPE</th>
-					<th class="heading-description" style ="width : 20%">WORK TYPE</th>
-					<th class="heading-description" style ="width : 20%">HP</th>
+					<th class="heading-description"  >CLUSTER NAME</th>
+					<th class="heading-description" >ODB ID</th>
+					<th class="heading-description" >SUFFIX ID</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -392,9 +365,6 @@ td {
 					<td>{{order.clusterName |linebreaksbr}}</td>
 					<td>{{order.odbId |linebreaksbr}}</td>
 					<td>{{order.suffixId |linebreaksbr}}</td>
-					<td>{{order.type}}</td>
-					<td>{{order.workType}}</td>
-					<td>{{order.hp}}</td>
 				</tr>
 			</tbody>
 		</table>

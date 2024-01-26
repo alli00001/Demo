@@ -166,7 +166,7 @@
                             <input type="hidden" name="order_category" value="{{ order.category }}">
                             <input type="hidden" name="order_company" value="{{ order.company }}">
                             <input type="hidden" name="order_project" value="{{ order.project }}">
-                            <a href="{% url 'view_wo' order.id order.category order.company order.project%}">{{ order.wo_string }}</a>
+                            <a href="{% url 'view_wo' order.id order.category order.company order.project%}">{{ order.wo_string | safe }}</a>
                           </td>
                           <td>
                             <label class="container">

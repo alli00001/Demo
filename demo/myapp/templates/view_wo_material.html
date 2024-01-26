@@ -492,7 +492,7 @@ td {
 		<tr>
 			<td >{{paymentType.pType}}</td>
 			<td >{{paymentType.pPercentage}}</td>
-			<td > {{paymentType.pAmount}}</td>
+			<td name ="pAmount_{{ forloop.counter|add:"-1" }}"> {{paymentType.pAmount}}</td>
 			<td>{{paymentType.pStatus}}</td>
 
 			<td>{{paymentType.pDate}}</td>
@@ -661,7 +661,7 @@ td {
 
 }
 function formatElements() {
-    const prefixes = ['unitPrice', 'totalA', 'dedadd'];
+    const prefixes = ['unitPrice', 'totalA', 'dedadd' , 'pAmount'];
     let maxNum = 0;
 
     // Find the maximum 'i' across all prefixes
@@ -698,7 +698,6 @@ function formatNumber(num) {
 
 // Usage example: 
 window.onload = function() {
-	console.log("here")
 	var grandTotalActualElement = document.getElementById('grand-total-actual');
 	grandTotalActualElement.textContent = formatNumber(grandTotalActualElement.textContent)
 

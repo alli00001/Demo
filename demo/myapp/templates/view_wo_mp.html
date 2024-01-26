@@ -507,7 +507,7 @@ td {
 		<tr>
 			<td >{{paymentType.pType}}</td>
 			<td >{{paymentType.pPercentage}}</td>
-			<td > {{paymentType.pAmount}}</td>
+			<td name ="pAmount_{{ forloop.counter|add:"-1" }}" > {{paymentType.pAmount}}</td>
 			<td>{{paymentType.pStatus}}</td>
 
 			<td>{{paymentType.pDate}}</td>
@@ -745,7 +745,7 @@ function countElementsWithPrefix(prefix) {
 
 }
 function formatElements() {
-    const prefixes = ['unitPrice', 'totalB', 'totalA', 'dedadd'];
+    const prefixes = ['unitPrice', 'totalB', 'totalA', 'dedadd' , 'pAmount'];
     let maxNum = 0;
 
     // Find the maximum 'i' across all prefixes
