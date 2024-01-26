@@ -248,27 +248,9 @@ td {
 			
 			<td style ="width:10%"></td>
 
-			<td style ="width:18%">WO NUMBER</td>
-			<td style="width: 2%;">:</td>
-			{% if order.company == 'aci' %}
-				{% if order.project == 'EMR' %}
-				<td style ="width:30%">WO / ACI / EMR / {{order.shortdate}} / {{order.wo_number}}</td>
-				{%else%}
-				<td style ="width:30%">WO / ACI / LN / {{order.shortdate}} / {{order.wo_number}}</td>
-				{%endif%}
-			{% elif order.company == 'bks' %}
-				{% if order.project == 'EMR' %}
-				<td style ="width:30%">WO / BKS / EMR / {{order.shortdate}} / {{order.wo_number}}</td>
-				{%else%}
-				<td style ="width:30%">WO / BKS / LN / {{order.shortdate}} / {{order.wo_number}}</td>
-				{%endif%}
-			{% else %}
-				{% if order.project == 'EMR' %}
-				<td style ="width:30%">WO / LKI / EMR / {{order.shortdate}} / {{order.wo_number}}</td>
-				{% else %}
-				<td style ="width:30%">WO / LKI / LN / {{order.shortdate}} / {{order.wo_number}}</td>
-				{%endif%}
-			{%endif%}	
+			<td style ="width:18%"></td>
+			<td style="width: 2%;"></td>
+			<td></td>
     </tr>
 		<tr>
 			<td style="width: 18%;">REQUEST BY</td>
