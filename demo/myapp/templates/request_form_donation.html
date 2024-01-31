@@ -347,7 +347,7 @@ td {
 			<td>1</td>
 			<td>{{order.clusterName |linebreaksbr}}</td>
 			<td>{{order.siteId |linebreaksbr}}</td>
-			<td>{{order.amountD}}</td>
+			<td  id ="amountD">{{order.amountD}}</td>
 			<td>{{order.remarkD}}</td>
 		</tbody>
 	</table>
@@ -370,7 +370,7 @@ td {
 			<td>{{order.clusterName |linebreaksbr}}</td>
 			<td>{{order.odbId |linebreaksbr}}</td>
 			<td>{{order.suffixId |linebreaksbr}}</td>
-			<td>{{order.amountD}}</td>
+			<td id ="amount">{{order.amountD}}</td>
 			<td style="text-align: left;">{{order.remarkD}}</td>
 		</tbody>
 	</table>
@@ -511,6 +511,23 @@ td {
 
 </form>
 <script>
+window.onload = function() {
+	var amountD = document.getElementById('amount');
+	amountD.textContent = formatNumber(amountD.textContent)
+};
+
+function formatNumber(num) {
+    // Convert to a number with two decimal places
+    num = Number(num).toFixed(2);
+
+    // Split the number into the integer and decimal parts
+    let parts = num.toString().split(".");
+
+    // Format the integer part with thousand separators
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+    return parts.join(".");
+}
     var wo = {
         type: "{{ order.type }}",
         cluster: "{{ order.cluster }}",

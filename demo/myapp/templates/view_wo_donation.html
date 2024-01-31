@@ -3,7 +3,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Create New List
+View Work Order
 {% endblock %}
 
 {% block content %}
@@ -381,8 +381,8 @@ Create New List
         <td>{{order.odbId |linebreaksbr}}</td>
         <td>{{order.suffixId |linebreaksbr}}</td>
 		<td>{{order.hpD}}</td>
-        <td id ="unitPrice">{{order.unitPriceD}}</td>
-        <td id ="amount">{{order.amountD}}</td>
+        <td id ="unitPriceD">{{order.unitPriceD}}</td>
+        <td id ="amountD">{{order.amountD}}</td>
         <td>{{order.remarkD}}</td>
     </tbody>
 
@@ -604,10 +604,6 @@ Create New List
 </form>
 
 <script>
-			function countElementsWithPrefix(prefix) {
-    return document.querySelectorAll(`[name^=${prefix}_]`).length;
-
-}
 
 function formatNumber(num) {
     // Convert to a number with two decimal places
@@ -622,15 +618,13 @@ function formatNumber(num) {
     return parts.join(".");
 }
 
-// Usage example: 
 window.onload = function() {
-	var unitPrice = document.getElementById('unitPrice');
-	unitPrice.textContent = formatNumber(unitPrice.textContent)
-
-	var amount = document.getElementById('amount')
-	amount.textContent = formatNumber(amount.textContent)
-
+	var amountD = document.getElementById('amountD');
+	amountD.textContent = formatNumber(amountD.textContent)
+	var up = document.getElementById('unitPriceD');
+	up.textContent = formatNumber(up.textContent)
 };
+
 function sanitizeInput(input) {
     return input.replace(/\n/g, " ").replace(/[^a-zA-Z0-9- ]/g, "");
 }
@@ -762,6 +756,39 @@ function isNotEmpty(str) {
     return str && str.trim() !== '';
 }
 
+function formatElements() {
+    const prefixes = ['amountD', 'unitPriceD'];
+    let maxNum = 0;
 
+    // Find the maximum 'i' across all prefixes
+    prefixes.forEach(prefix => {
+        const count = countElementsWithPrefix(prefix);
+        if (count > maxNum) {
+            maxNum = count;
+        }
+    });
+
+    for (let i = 0; i < maxNum; i++) { // Start from 0 as your naming starts from 0
+        prefixes.forEach(prefix => {
+            let elements = document.getElementsByName(`${prefix}_${i}`);
+            if (elements.length > 0) {
+                elements[0].textContent = formatNumber(elements[0].textContent);
+            }
+        });
+    }
+}
+
+function formatNumber(num) {
+    // Convert to a number with two decimal places
+    num = Number(num).toFixed(2);
+
+    // Split the number into the integer and decimal parts
+    let parts = num.toString().split(".");
+
+    // Format the integer part with thousand separators
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+    return parts.join(".");
+}
 </script>
 {%endblock%}
