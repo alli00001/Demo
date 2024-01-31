@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
-
+{% block title %}
+Finished WO
+{% endblock %}
 {% block content %}
 
   {% if user.is_authenticated %}
@@ -78,15 +80,16 @@
   }
   #example td:nth-child(11){
     text-align: center;
-    width: 10%;
+    width: 8%;
   }
   #example td:nth-child(12){
     text-align: left;
-    width: 10%;
+    width: 8%;
   }
   #example td:nth-child(13){
     text-align: center;
-    width: 2%;
+    white-space: nowrap;
+    width: 8%;
 
   }
   #example td:nth-child(14){
@@ -140,19 +143,19 @@
                       </button>
                       </th>
                     <th >
-                      CATEGORY
+                      CAT
                       <input type="text" name="category" style="width: 100%;">
                     </th>
                     <th >
-                      CUSTOMER
+                      CUST
                       <input type="text" name="customer" style="width: 100%;">
                     </th>
                     <th >
-                      PROJECT
+                      PROJ
                       <input type="text" name="project" style="width: 100%;">
                     </th>
                     <th >
-                      REGION
+                      REG
                       <input type="text" name="region" style="width: 100%;">
                     </th>
                     <th >
