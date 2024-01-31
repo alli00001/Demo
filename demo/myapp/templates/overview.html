@@ -264,7 +264,7 @@
                            </td>
                           <td>
                             <input type="hidden" name="order" value="{{ order.id }}">
-                            <button type="submit" name="action" value="delete" onclick="return confirm('Delete Work Order?')" {% if not is_pa and not is_rightHand and not is_ceo %}disabled{% endif %}> DELETE </button>
+                            <button type="submit" name="action" value="delete" onclick="return confirm('Delete Work Order?')" {% if is_finance %}disabled{% endif %}> DELETE </button>
                           </td>
                           
                           

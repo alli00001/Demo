@@ -682,9 +682,9 @@ td {
             <select name = "terms-selection" id ="terms-selection">
 				<option  value ="FULL" data-percentage-amount = 100% data-remarks = '' {% if order.paymentTerm == 'FULL' %}selected{% endif %} >FULL</option>
 				<option value = "DP" data-percentage-amount =30% data-remarks = '' {% if order.paymentTerm == 'DP' %}selected{% endif %}> DP </option>
-                <option  value ="TERM 2" data-percentage-amount =40%  data-remarks = 'Implementation Done' {% if order.paymentTerm == 'TERM 2 - Implementation Done' %}selected{% endif %}>TERM 2</option>
-                <option  value ="TERM 3" data-percentage-amount =20% data-remarks = 'ATP Done' {% if order.paymentTerm == 'TERM 3 - ATP Done' %}selected{% endif %}>TERM 3</option>
-                <option  value ="TERM 4" data-percentage-amount =10% data-remarks = 'FAC Done' {% if order.paymentTerm == 'TERM 4 - FAC Done' %}selected{% endif %}>TERM 4</option>
+                <option  value ="TERM 2" data-percentage-amount =40%  data-remarks = 'Implementation Done' {% if order.paymentTerm == 'TERM 2' %}selected{% endif %}>TERM 2</option>
+                <option  value ="TERM 3" data-percentage-amount =20% data-remarks = 'ATP Done' {% if order.paymentTerm == 'TERM 3' %}selected{% endif %}>TERM 3</option>
+                <option  value ="TERM 4" data-percentage-amount =10% data-remarks = 'FAC Done' {% if order.paymentTerm == 'TERM 4' %}selected{% endif %}>TERM 4</option>
                 <option  value ="CASHBON" data-percentage-amount =0% data-remarks = '' {% if order.paymentTerm == 'CASHBON' %}selected{% endif %}>CASHBON</option>
                 <option  value ="REMAINING" data-percentage-amount =0% data-remarks = ''  {% if order.paymentTerm == 'REMAINING' %}selected{% endif %}>REMAINING</option>
 				<option  value ="CREATE" data-percentage-amount = 0% data-remarks = ''>CREATE</option>  
