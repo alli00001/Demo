@@ -373,24 +373,30 @@ Finished WO
 <script lang="javascript" src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
 
 <script>
-  /** Function to export table data to XSLX file **/
 function prepareTable(table) {
 
 var newTable = table.cloneNode(true);
 
-// Exclude irrelevant columns for xlsx export
+// Exclude the 3rd column and the last 4 columns for xlsx export
+var excludeColumns = [2]; // 0-based index, 2 represents the 3rd column
 var lastColumnIndex = newTable.rows[0].cells.length - 1;
-for (var i = lastColumnIndex; i > lastColumnIndex - 3; i--) {
-    for (var j = 0; j < newTable.rows.length; j++) {
-        newTable.rows[j].deleteCell(i);
-    }
+for (var i = lastColumnIndex; i > lastColumnIndex - 4; i--) {
+    excludeColumns.push(i);
 }
 
-// Define custom header names for xlsx export
+// Deleting the excluded columns from the end towards the beginning to avoid indexing issues
+excludeColumns.sort((a, b) => b - a);
+for (var i = 0; i < newTable.rows.length; i++) {
+    excludeColumns.forEach(columnIndex => {
+        newTable.rows[i].deleteCell(columnIndex);
+    });
+}
+
+// Define custom header names for xlsx export, excluding the 3rd and the last 4 columns
 var customHeaderNames = [
     'No',
     'Work Orders',
-    'Date',
+    // 'Date', // This is the excluded 3rd column
     'Category',
     'Customer',
     'Project',
@@ -405,24 +411,30 @@ var customHeaderNames = [
     'Payment Term',
     'Percentage',
     'Grand Total'
-  ];
-for (var i = 0; i < customHeaderNames.length; i++) {
-    newTable.rows[0].cells[i].textContent = customHeaderNames[i];
+];
+
+// Re-adding the headers with the updated list
+var headerRowIndex = 0;
+var headerCells = newTable.rows[headerRowIndex].cells;
+for (var i = 0, headerIndex = 0; i < headerCells.length; i++) {
+    if (!excludeColumns.includes(i)) {
+        headerCells[i].textContent = customHeaderNames[headerIndex++];
+    }
 }
 
 return newTable;
 }
 
 function exportTableToXSLX(tableID, filename) {
-    const table = prepareTable(document.getElementById(tableID));
+const table = prepareTable(document.getElementById(tableID));
 
-    // Convert HTML table to XSLX workbook
-    var worksheet = XLSX.utils.table_to_sheet(table);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Work Orders");
+// Convert HTML table to XSLX workbook
+var worksheet = XLSX.utils.table_to_sheet(table);
+const workbook = XLSX.utils.book_new();
+XLSX.utils.book_append_sheet(workbook, worksheet, "Work Orders");
 
-    // Download the XSLX file
-    XLSX.writeFile(workbook, filename, { compression: true });
+// Download the XSLX file
+XLSX.writeFile(workbook, filename, { compression: true });
 }
 var is_rightHand = {{ is_rightHand|yesno:"true,false" }};
 
