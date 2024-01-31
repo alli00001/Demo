@@ -181,8 +181,9 @@ class WorkOrder(models.Model):
         wo_number_str = str(self.wo_number) if self.wo_number else ''
         company_str = self.company.upper() if self.company else ''
         project_str = self.project if self.project else ''
+        other_cost_str = self.otherCost if self.otherCost else ''
         wo_num = f" <strong>WO / {company_str} / {project_str} / {shortdate_str} / {wo_number_str} </strong>"
-        parts = [wo_num, convertDate(wo_date_str),category_str ,customer_str,project_str ,type_str,cluster_name_str,siteid_str,odbid_str,suffixid_str,worktype_str , payment_term_str, term_percentage_str]
+        parts = [wo_num, convertDate(wo_date_str),category_str ,other_cost_str,customer_str,project_str ,type_str,cluster_name_str,siteid_str,odbid_str,suffixid_str,worktype_str , payment_term_str, term_percentage_str]
         returnString = '-'.join(part for part in parts if part)        
         return returnString   
     def delete(self, *args, **kwargs):
