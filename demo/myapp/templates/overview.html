@@ -206,8 +206,7 @@ Overview{% endblock %}
                           </td>
                           <td>
                             <label class="container">
-                              <input type="checkbox" 
-                              {% if is_finance and order.ceoCheck and order.rightHandCheck and order.personalAssistantCheck  %}name="financeCheck" {% endif %} 
+                              <input type="checkbox" name="financeCheck"
                               
                               {% if order.financeCheck %}checked="checked"{% endif %} 
                               {% if not is_finance or not order.ceoCheck or not order.rightHandCheck or not order.personalAssistantCheck or not order.paymentDate %}disabled{% endif %}>        
@@ -233,10 +232,10 @@ Overview{% endblock %}
                             <a href="{% url 'edit_wo' order.id order.category order.project%}">Edit WO</a>
                           </td>
                           <td>
-                            <button type="submit" name="action" value="confirm"> CONFIRM </button>
+                            <button type="submit" name="action" value="confirm" class="action-btn" data-orderId = "{{order.id}}" > CONFIRM </button>
                           </td>
                           <td>
-                            <button type="submit" name="action" value="reject"> REJECT </button>
+                            <button type="submit" name="action" value="reject"class="action-btn" data-orderId="{{order.id}}"> REJECT </button>
                           </td>
     
                           <td>
@@ -265,7 +264,7 @@ Overview{% endblock %}
                            </td>
                           <td>
                             <input type="hidden" name="order" value="{{ order.id }}">
-                            <button type="submit" name="action" value="delete" onclick="return confirm('Delete Work Order?')" {% if is_finance %}disabled{% endif %}> DELETE </button>
+                            <button type="submit" name="action" data-orderId="{{order.id}}" class="action-btn" value="delete" onclick="return confirm('Delete Work Order?')" {% if not is_ceo or not is_rightHand or not is_pa %}disabled{% endif %}> DELETE </button>
                           </td>
                           
                           
@@ -322,6 +321,161 @@ Overview{% endblock %}
           input.value = "";
         }
       }
+
+
+
+        document.querySelectorAll('.action-btn').forEach(button => {
+    button.addEventListener('click', function(event) {
+      event.preventDefault(); // Prevent the default form submission
+
+      // Find the closest parent row or container
+      const parentContainer = this.closest('tr'); // or use '.container-class' if your structure requires
+      // Within that container, find the textarea for remarksOverview
+      const remarksTextarea = parentContainer.querySelector('textarea[name="remarksOverview"]');
+
+      const paCheck = parentContainer.querySelector('input[type="checkbox"][name="paCheck"]');   
+      const rightHandCheck = parentContainer.querySelector('input[type="checkbox"][name="rightHandCheck"]');   
+      const ceoCheck = parentContainer.querySelector('input[type="checkbox"][name="ceoCheck"]');   
+      const financeCheck = parentContainer.querySelector('input[type="checkbox"][name="financeCheck"]');   
+      const paReject = parentContainer.querySelector('input[type="checkbox"][name="paReject"]');   
+      const rightHandReject = parentContainer.querySelector('input[type="checkbox"][name="rightHandReject"]');   
+      const ceoReject = parentContainer.querySelector('input[type="checkbox"][name="ceoReject"]');   
+      const financeReject = parentContainer.querySelector('input[type="checkbox"][name="financeReject"]');   
+
+      const dueDate = parentContainer.querySelector('input[type="date"][name="dueDate"]');
+      const paymentDate = parentContainer.querySelector('input[type="date"][name="paymentDate"]');
+
+      const proofOfPayment = parentContainer.querySelector('input[type="file"][name="proofOfPayment"]');
+      console.log(proofOfPayment.files[0])
+      // Check if the textarea is found and log its value
+      if (this.value == "confirm") {
+
+        // Prepare the data for sending in the AJAX request
+        const formData = new FormData();
+        formData.append('remarksOverview', remarksTextarea.value);
+        formData.append('action', this.value); 
+        formData.append('orderId', this.getAttribute('data-orderId'));
+        if(paCheck) {
+          formData.append('paCheck' , paCheck.checked);
+        }
+        if(ceoCheck) {
+          formData.append('ceoCheck' , ceoCheck.checked);
+        }
+        if(rightHandCheck){
+          formData.append('rightHandCheck' , rightHandCheck.checked);
+        }
+        if(financeCheck) {
+          formData.append('financeCheck' , financeCheck.checked);
+
+        }
+
+
+
+        formData.append('paymentDate', paymentDate.value);
+        formData.append('dueDate', dueDate.value);
+
+        if (proofOfPayment.files[0]) {  // Check if there is at least one file selected
+        formData.append('proofOfPayment', proofOfPayment.files[0]);
+        }
+
+        console.log(formData)
+        // Initialize and send an AJAX request
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/overview/', true);
+        const csrftoken = getCSRFToken();
+        xhr.setRequestHeader('X-CSRFToken', csrftoken);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+        xhr.send(formData);
+
+        xhr.onload = function() {
+          if (this.status >= 200 && this.status < 300) {
+            console.log(this.responseText);
+            // Update UI based on response
+          } else {
+            console.error('Request failed with status: ' + this.status);
+          }
+        };
+      } 
+      else if (this.value == "reject"){
+        const formData = new FormData();
+        formData.append('action', this.value); 
+        formData.append('orderId', this.getAttribute('data-orderId'));
+
+        if(paReject){
+          formData.append('paReject' , paReject.checked);
+        }
+        if(ceoReject){
+          formData.append('ceoReject' , ceoReject.checked);
+
+        }
+        if(rightHandReject){
+          formData.append('rightHandReject' , rightHandReject.checked);
+
+        }
+        if(financeReject){
+          formData.append('financeReject' , financeReject.checked);
+        }
+
+        formData.append('remarksOverview', remarksTextarea.value);
+        // Initialize and send an AJAX request
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/overview/', true);
+        const csrftoken = getCSRFToken();
+        xhr.setRequestHeader('X-CSRFToken', csrftoken);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+        xhr.send(formData);
+
+        xhr.onload = function() {
+          if (this.status >= 200 && this.status < 300) {
+            console.log(this.responseText);
+            // Update UI based on response
+          } else {
+            console.error('Request failed with status: ' + this.status);
+          }
+        };
+      }
+      else {
+        const formData = new FormData();
+        formData.append('action', this.value); 
+        formData.append('orderId', this.getAttribute('data-orderId'));
+
+        // Initialize and send an AJAX request
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/overview/', true);
+        const csrftoken = getCSRFToken();
+        xhr.setRequestHeader('X-CSRFToken', csrftoken);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+        xhr.send(formData);
+
+        xhr.onload = function() {
+          if (this.status >= 200 && this.status < 300) {
+            console.log(this.responseText);
+            // Update UI based on response
+          } else {
+            console.error('Request failed with status: ' + this.status);
+          }
+        };
+      }
+    });
+  });
+  function getCSRFToken() {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Check if the cookie is the CSRF token cookie
+            if (cookie.substring(0, 'csrftoken'.length + 1) === ('csrftoken' + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring('csrftoken'.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
     </script>
   {% else %}
     {% with 'login' as login_url %}

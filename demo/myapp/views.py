@@ -12,6 +12,7 @@ from django.urls import reverse
 from django.db.models import Q
 from datetime import datetime
 from django.core.exceptions import ValidationError
+from urllib.parse import parse_qs
 # Create your views here.
 
 def delete_attachment(request, id):
@@ -941,40 +942,25 @@ def finished_wo(request):
     return render(request, 'finished_wo.html', context)
 @login_required
 def overview(request):
-    if request.method == "POST" :     
-        wo_id = request.POST.get("order")
-        work_order = get_object_or_404(WorkOrder, id= wo_id)
-        action = request.POST.get("action")
-        if (action == "delete") :
-            work_order.proofOfPayment.delete()
-            work_order.invoice.delete()
-            work_order.team_list.delete()
-            work_order.picture_of_team.delete()
-            work_order.checklist_boq_actual_attachment.delete()
-            work_order.cover_acceptance_attachment.delete()
-            work_order.cover_opm_attachment.delete()
-            work_order.fac_certificate.delete()
-            work_order.no_issue_agreement.delete()
-            work_order.bak.delete()
-            work_order.capture_approval.delete()
-            work_order.capture_drm.delete()
-            work_order.delete()
-            return redirect('overview')
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         
-        if (action == "confirm") : 
+        # Get 'action' and 'order' from parsed data
+        action = request.POST.get('action')
+        orderId = request.POST.get('orderId')
+
+        if(action == "confirm") :
+            print("succes")
+            work_order = get_object_or_404(WorkOrder, id= orderId)
             if request.user.groups.filter(name__in=['CEO', 'rightHand', 'Personal Assistant', 'Finance']).exists():
                 work_order.remarksOverview = request.POST.get('remarksOverview', work_order.remarksOverview)
             if request.user.groups.filter(name='CEO').exists():
-                work_order.ceoCheck = 'ceoCheck' in request.POST
-                work_order.save()
+                work_order.ceoCheck = request.POST.get('ceoCheck', 'false') == 'true'
             if request.user.groups.filter(name='rightHand').exists():
-                work_order.rightHandCheck = 'rightHandCheck' in request.POST
-                work_order.save()
+                work_order.rightHandCheck = request.POST.get('rightHandCheck', 'false') == 'true'
             if request.user.groups.filter(name='Personal Assistant').exists():
-                work_order.personalAssistantCheck = 'paCheck' in request.POST
-                work_order.save()
+                work_order.personalAssistantCheck = request.POST.get('paCheck', 'false') == 'true'
             if request.user.groups.filter(name='Finance').exists():
-                work_order.financeCheck = 'financeCheck' in request.POST
+                work_order.financeCheck = request.POST.get('financeCheck', 'false') == 'true'
                 payment_date_str = request.POST['paymentDate']
                 if payment_date_str :         
                     payment_date = datetime.fromisoformat(payment_date_str)
@@ -995,22 +981,42 @@ def overview(request):
             else :
                 work_order.dueDate = None
                 work_order.save()
-        if (action == "reject")    :
+            return JsonResponse({'status': 'success', 'message': 'Action processed successfully'})
+        elif (action == 'reject') :
+            work_order = get_object_or_404(WorkOrder, id= orderId)
             if request.user.groups.filter(name__in=['CEO', 'rightHand', 'Personal Assistant', 'Finance']).exists():
                 work_order.remarksOverview = request.POST.get('remarksOverview', work_order.remarksOverview)
             if request.user.groups.filter(name='CEO').exists():
-                work_order.ceoReject = 'ceoReject' in request.POST
+                work_order.ceoReject = request.POST.get('ceoReject', 'false') == 'true'               
                 work_order.save()
             if request.user.groups.filter(name='rightHand').exists():
-                work_order.rightHandReject = 'rightHandReject' in request.POST
+                work_order.rightHandReject = request.POST.get('rightHandReject', 'false') == 'true'   
                 work_order.save()   
             if request.user.groups.filter(name='Personal Assistant').exists():
-                work_order.personalAssistantReject = 'paReject' in request.POST
+                work_order.personalAssistantReject = request.POST.get('paReject', 'false') == 'true'     
                 work_order.save()
             if request.user.groups.filter(name='Finance').exists():
-                work_order.financeReject = 'financeReject' in request.POST
+                work_order.financeReject = request.POST.get('financeReject', 'false') == 'true' 
                 work_order.save()
-
+            return JsonResponse({'status': 'success', 'message': 'Action processed successfully'})
+        elif (action == 'delete') :
+            print("here")
+            work_order = get_object_or_404(WorkOrder, id= orderId)
+            work_order.proofOfPayment.delete()
+            work_order.invoice.delete()
+            work_order.team_list.delete()
+            work_order.picture_of_team.delete()
+            work_order.checklist_boq_actual_attachment.delete()
+            work_order.cover_acceptance_attachment.delete()
+            work_order.cover_opm_attachment.delete()
+            work_order.fac_certificate.delete()
+            work_order.no_issue_agreement.delete()
+            work_order.bak.delete()
+            work_order.capture_approval.delete()
+            work_order.capture_drm.delete()
+            work_order.delete()
+            return JsonResponse({'status': 'success', 'message': 'Action processed successfully'})
+    
     work_order_list = WorkOrder.objects.filter(
         Q(ceoCheck=False) |
         Q(rightHandCheck=False) |
