@@ -877,7 +877,7 @@ td {
 			<button type="button" onclick="deleteAttachment({{ order.id }}, 'delete_cover_opm_attachment')" id="removeButton">Remove</button>				
 			{% else %}
             No attachment
-            <input type="file" name="cover_opm" id ="cover_opm_attachment">
+            <input type="file" name="cover_opm_attachment" id ="cover_opm_attachment">
 			<button type="button" onclick="clearFileInput('cover_opm_attachment')" id="removeButton">Remove</button>				
 
         {% endif %}
@@ -1148,17 +1148,14 @@ document.addEventListener('input', function(event) {
 
 function termsAmountCalculation() {
   var selection = document.getElementById('terms-selection');
-  if (selection.selectedIndex) {
+  console.log(selection.selectedIndex)
+  if (selection.selectedIndex >= 0) {
+
 	var selectedOption = selection.options[selection.selectedIndex];
+	console.log(selectedOption)
   // Get the percentage either from the dropdown or from the custom input
   var percentageInput = document.getElementById('terms-percentage-cell').value;
   var percentageString = percentageInput !== '' ? percentageInput : selectedOption.getAttribute('data-percentage-amount');
-  }
-  else {
-	var selectedOption = docucment.getElementById('terms-selection').value
-	var percentageInput = document.getElementById('terms-percentage-cell').value;
-	var percentageString = percentageInput 
-
   }
   // Remove any non-numeric characters (e.g., '%') and parse the percentage
   var cleanedPercentageString = percentageString.replace('%', '');

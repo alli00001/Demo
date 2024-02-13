@@ -862,17 +862,11 @@ function clearFileInput(id) {
 }
 function termsAmountCalculation() {
   var selection = document.getElementById('terms-selection');
-  if (selection.selectedIndex) {
+  if (selection.selectedIndex >= 0) {
 	var selectedOption = selection.options[selection.selectedIndex];
   // Get the percentage either from the dropdown or from the custom input
   var percentageInput = document.getElementById('terms-percentage-cell').value;
   var percentageString = percentageInput !== '' ? percentageInput : selectedOption.getAttribute('data-percentage-amount');
-  }
-  else {
-	var selectedOption = document.getElementById('terms-selection').value
-	var percentageInput = document.getElementById('terms-percentage-cell').value;
-	var percentageString = percentageInput 
-
   }
   // Remove any non-numeric characters (e.g., '%') and parse the percentage
   var cleanedPercentageString = percentageString.replace('%', '');
