@@ -198,6 +198,7 @@ Finished WO
                     <th >EXTEND WO</th>
                   </tr>
               </thead>
+          </form>
               <tbody>
                 {% for order in page_obj %}
                   <tr>
@@ -279,7 +280,6 @@ Finished WO
                       NO RECORD FOUND
                       {%endif%}
                     </td>
-                  </form>  
                     <form method ="POST">
                       {% csrf_token%}
                       <input type="hidden" name="order" value="{{ order.id }}">
@@ -733,8 +733,6 @@ function updateTable(data) {
     submitButton.addEventListener('click', function() {
       // AJAX POST request to submit the data
       var formData = new FormData();
-      formData.append('order', this.dataset.orderId);
-      formData.append('extendable', checkbox.checked ? 'on' : 'off');
       fetch('/finished_wo/', {
         method: 'POST',
         body: formData,
@@ -810,7 +808,7 @@ document.getElementById('filter-form').addEventListener('input', function(event)
   }
 });
 
-  function updateTableWithFilters() {
+function updateTableWithFilters() {
   var queryString = '?';
 
   var selectedDates = $('#year-list input[type="checkbox"]:checked').map(function() {
@@ -823,20 +821,32 @@ document.getElementById('filter-form').addEventListener('input', function(event)
     queryString += selectedDates + '&';
   }
 
+  // Initialize an object to hold form element names and values
+  var params = {};
+
   // Construct Other Filters
   var formElements = document.getElementById('filter-form').elements;
-  for (let element of formElements) {
-    if (element.name && element.value) {
-      if (element.name.includes('year') || element.name.includes('month') || element.name.includes('day')) {
-        // Skip individual year, month, day dropdowns; handle them separately
-        continue;
+
+  // Iterate through each element in the form
+  for (var i = 0; i < formElements.length; i++) {
+      var element = formElements[i];
+
+      // Check if the element does not have the 'hidden' attribute and has a name and value
+      if (!element.hasAttribute('hidden') && element.name && element.value) {
+          // Further check to skip individual year, month, day dropdowns
+          if (element.name.includes('year') || element.name.includes('month') || element.name.includes('day')) {
+              continue; // Skip this element
+          }
+
+          // Store the element's name and value in the params object
+          params[encodeURIComponent(element.name)] = encodeURIComponent(element.value);
       }
-      queryString += `${encodeURIComponent(element.name)}=${encodeURIComponent(element.value)}&`;
-    }
   }
 
-  // Remove the trailing '&'
-  queryString = queryString.replace(/&$/, '');
+  // Convert the params object to a query string
+  queryString += Object.keys(params).map(key => key + '=' + params[key]).join('&');
+
+  console.log(queryString);
 
   // Perform the fetch request to the backend
   fetch('/finished_wo/' + queryString, {
