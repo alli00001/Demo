@@ -868,6 +868,11 @@ function termsAmountCalculation() {
   var percentageInput = document.getElementById('terms-percentage-cell').value;
   var percentageString = percentageInput !== '' ? percentageInput : selectedOption.getAttribute('data-percentage-amount');
   }
+  else {
+	var percentageInput = document.getElementById('terms-percentage-cell').value;
+	var percentageString = percentageInput 
+
+  }
   // Remove any non-numeric characters (e.g., '%') and parse the percentage
   var cleanedPercentageString = percentageString.replace('%', '');
   var percentageNumber = parseFloat(cleanedPercentageString) / 100;
