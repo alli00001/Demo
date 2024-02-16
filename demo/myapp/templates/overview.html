@@ -264,9 +264,7 @@ Overview{% endblock %}
                            </td>
                           <td>
                             <input type="hidden" name="order" value="{{ order.id }}">
-                            <button type="submit" name="action" data-orderId="{{order.id}}" class="action-btn" value="delete" onclick="return confirm('Delete Work Order?')" {% if not is_ceo or not is_rightHand or not is_pa %}disabled{% endif %}> DELETE </button>
-                          </td>
-                          
+                            <button type="submit" name="action" data-orderId="{{order.id}}" class="action-btn" value="delete" onclick="return confirm('Delete Work Order?')" {% if not is_ceo and not is_rightHand and not is_pa %}disabled{% endif %}> DELETE </button>                          
                           
                         </tr>                        
                       </form>
