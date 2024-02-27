@@ -724,36 +724,47 @@ function updateTable(data) {
     checkbox.disabled = !is_rightHand; // Assuming is_rightHand determines if checkbox is enabled
     checkboxCell.appendChild(checkbox);    
     
-    var submitCell = row.insertCell();
-    var submitButton = document.createElement('button');
-    submitButton.type = 'button'; // Change to 'button' to prevent form submission
-    submitButton.textContent = 'Confirm';
-    submitButton.disabled = !is_rightHand;
-    submitButton.dataset.orderId = order.id;
-    submitButton.addEventListener('click', function() {
-      // AJAX POST request to submit the data
-      var formData = new FormData();
-      fetch('/finished_wo/', {
+ 
+var submitCell = row.insertCell();
+var submitButton = document.createElement('button');
+submitButton.type = 'button'; // Changed to 'button' to prevent form submission
+submitButton.textContent = 'Confirm';
+submitButton.disabled = !is_rightHand;
+submitButton.dataset.orderId = order.id;
+submitButton.addEventListener('click', function() {
+    // Create a FormData object to hold the data
+    var formData = new FormData();
+    formData.append('csrfmiddlewaretoken', getCsrfToken()); // Include CSRF token
+    formData.append('order', this.dataset.orderId); // Use the order ID stored in the button's dataset
+    formData.append('extendable', checkbox.checked ? 'on' : 'off'); // Add 'extendable' based on the checkbox state
+
+    // Send the AJAX POST request
+    fetch('/finished_wo/', {
         method: 'POST',
         body: formData,
         headers: {
-          'X-CSRFToken': getCsrfToken()
-        },
-        credentials: 'include'
-      })
-      .then(response => {
-        if (!response.ok) {
+            'X-Requested-With': 'XMLHttpRequest', // Necessary for Django to recognize AJAX request
+            'X-CSRFToken': getCsrfToken() // Include CSRF token in the request header
         }
-        return response.json(); // or handle the response as needed
-      })
-      .then(data => {
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json(); // Assuming your view returns JSON
+    })
+    .then(data => {
         console.log('Success:', data);
-      })
-      .catch(error => {
+        // Handle success, for example, show a message or update the UI
+    })
+    .catch(error => {
         console.error('Error:', error);
-      });
+        // Handle error, for example, show an error message
     });
-    submitCell.appendChild(submitButton);
+});
+submitCell.appendChild(submitButton);
+
+
     var extendCell = row.insertCell();
     var hiddenId = document.createElement('input');
     hiddenId.type = 'hidden';
@@ -798,10 +809,19 @@ function updateTable(data) {
   }
 }
 function getCsrfToken() {
-  // Assuming you have the CSRF token in a cookie
-  return document.cookie.split('; ').find(row => row.startsWith('csrftoken')).split('=')[1];
+    let csrfToken = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, 10) === ('csrftoken=')) {
+                csrfToken = decodeURIComponent(cookie.substring(10));
+                break;
+            }
+        }
+    }
+    return csrfToken;
 }
-
 document.getElementById('filter-form').addEventListener('input', function(event) {
   if (event.target.tagName === 'SELECT' || event.target.tagName === 'INPUT' && event.target.name != 'extendable') {
     updateTableWithFilters();
