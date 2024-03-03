@@ -135,7 +135,9 @@ Finished WO
               <thead>
                   <tr>
                     <th >NO</th>
-                    <th>WORK ORDERS </th> 
+                    <th>WORK ORDERS 
+                      <input type = "text" name ="wo" style ="width:100%;">
+                    </th> 
                     <th>REQUEST FORM</th>
                     <th >
                       <button type="button" class="btn btn-info" data-toggle="modal" data-target="#dateFilterModal">
@@ -841,28 +843,30 @@ function updateTableWithFilters() {
     queryString += selectedDates + '&';
   }
 
-  // Initialize an object to hold form element names and values
-  var params = {};
 
   // Construct Other Filters
   var formElements = document.getElementById('filter-form').elements;
 
-  // Iterate through each element in the form
-  for (var i = 0; i < formElements.length; i++) {
-      var element = formElements[i];
+// Initialize an object to hold form element names and values
+var params = {};
 
-      // Check if the element does not have the 'hidden' attribute and has a name and value
-      if (!element.hasAttribute('hidden') && element.name && element.value) {
-          // Further check to skip individual year, month, day dropdowns
-          if (element.name.includes('year') || element.name.includes('month') || element.name.includes('day')) {
-              continue; // Skip this element
-          }
+// Iterate through each element in the form
+for (var i = 0; i < formElements.length; i++) {
+    var element = formElements[i];
 
-          // Store the element's name and value in the params object
-          params[encodeURIComponent(element.name)] = encodeURIComponent(element.value);
-      }
-  }
+    // Skip hidden elements, elements without a name, or elements without a value
+    if (element.type === 'hidden' || !element.name || !element.value || element.name == 'extendable') {
+        continue;
+    }
 
+    // Further check to skip individual year, month, day dropdowns
+    if (element.name.includes('year') || element.name.includes('month') || element.name.includes('day')) {
+        continue; // Skip this element
+    }
+
+    // Store the element's name and value in the params object
+    params[encodeURIComponent(element.name)] = encodeURIComponent(element.value);
+}
   // Convert the params object to a query string
   queryString += Object.keys(params).map(key => key + '=' + params[key]).join('&');
 
