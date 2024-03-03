@@ -13,6 +13,7 @@ from django.db.models import Q
 from datetime import datetime
 from django.core.exceptions import ValidationError
 from urllib.parse import parse_qs
+import re
 # Create your views here.
 
 def delete_attachment(request, id):
@@ -820,6 +821,15 @@ def logout_user(request) :
     logout(request)
     messages.success(request,("You have been logged out"))
     return redirect("login")
+def remove_html_tags(text):
+    # Use a regular expression to remove any HTML tags from the text
+    clean_text = re.sub('<[^<]+?>', '', text)
+    return clean_text
+
+def normalize_string(s):
+    # First, remove HTML tags, then proceed with the existing normalization steps
+    s = remove_html_tags(s)
+    return s.replace("–", "-").strip().lower() 
 @login_required
 def finished_wo(request):
     if request.method == "POST" :
@@ -837,6 +847,7 @@ def finished_wo(request):
         financeCheck=True,
     ).exclude(proofOfPayment='').order_by('-paymentDate')
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        wo = request.GET.get('wo', None)
         project = request.GET.get('project', None)
         dates = request.GET.getlist('dates[]')
         category = request.GET.get('category', None)
@@ -890,7 +901,18 @@ def finished_wo(request):
             query &= Q(workType__icontains=workType)
         if paymentTerm:
             query &= Q(paymentTerm__icontains=paymentTerm)
-        finished_filtered_orders = finished_work_orders.filter(query).order_by('paymentDate')
+        finished_work_orders = finished_work_orders.filter(query).order_by('paymentDate')
+        if wo:
+            finished_filtered_orders = []
+            for order in finished_work_orders:
+                normalized_wo = normalize_string(wo.lower())
+                print(normalized_wo + "a")
+                normalized_order_string = normalize_string(order.wo_string().lower())
+                if normalized_wo in normalized_order_string:
+                    print(normalized_order_string + "b")
+                    finished_filtered_orders.append(order)
+        else:
+            finished_filtered_orders = finished_work_orders.order_by('paymentDate')
         data = [
             {
                 'proofOfPayment' :order.proofOfPayment.url if order.proofOfPayment else None,
