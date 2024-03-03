@@ -981,6 +981,12 @@ def overview(request):
                 work_order.rightHandCheck = request.POST.get('rightHandCheck', 'false') == 'true'
             if request.user.groups.filter(name='Personal Assistant').exists():
                 work_order.personalAssistantCheck = request.POST.get('paCheck', 'false') == 'true'
+                newProof = request.FILES.get('proofOfPayment')
+                if newProof :
+                    if work_order.proofOfPayment :
+                        work_order.proofOfPayment.delete()
+                    work_order.proofOfPayment = newProof
+                work_order.save()
             if request.user.groups.filter(name='Finance').exists():
                 work_order.financeCheck = request.POST.get('financeCheck', 'false') == 'true'
                 payment_date_str = request.POST['paymentDate']
