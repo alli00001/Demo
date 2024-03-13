@@ -873,6 +873,7 @@ def finished_wo(request):
                     else:       
                         raise ValueError(f"Invalid date format: {date_str}")
                 except ValidationError:
+                    print(f"Invalid date string: {date_str}")
             query &= date_queries
         if category:
             query &= Q(category__icontains=category)
