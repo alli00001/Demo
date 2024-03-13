@@ -831,9 +831,8 @@ document.getElementById('filter-form').addEventListener('input', function(event)
 });
 
 function updateTableWithFilters() {
-  var queryString = '?';
-
-  var selectedDates = $('#year-list input[type="checkbox"]:checked').map(function() {
+  let queryString = '?';
+  const selectedDates = $('#year-list input[type="checkbox"]:checked').map(function() {
     return $(this).nextAll('.nested').find('input[type="checkbox"]:checked').map(function() {
       return 'dates[]=' + encodeURIComponent($(this).data('field-date'));
     }).get().join('&');
@@ -843,45 +842,32 @@ function updateTableWithFilters() {
     queryString += selectedDates + '&';
   }
 
+  const formElements = document.getElementById('filter-form').elements;
+  const params = {};
 
-  // Construct Other Filters
-  var formElements = document.getElementById('filter-form').elements;
-
-// Initialize an object to hold form element names and values
-var params = {};
-
-// Iterate through each element in the form
-for (var i = 0; i < formElements.length; i++) {
-    var element = formElements[i];
-
-    // Skip hidden elements, elements without a name, or elements without a value
-    if (element.type === 'hidden' || !element.name || !element.value || element.name == 'extendable') {
-        continue;
+  for (let i = 0; i < formElements.length; i++) {
+    const element = formElements[i];
+    if (element.type === 'hidden' || !element.name || !element.value || element.name === 'extendable') {
+      continue;
     }
-
-    // Further check to skip individual year, month, day dropdowns
     if (element.name.includes('year') || element.name.includes('month') || element.name.includes('day')) {
-        continue; // Skip this element
+      continue; // Skip these elements
     }
-
-    // Store the element's name and value in the params object
     params[encodeURIComponent(element.name)] = encodeURIComponent(element.value);
-}
-  // Convert the params object to a query string
+  }
+
   queryString += Object.keys(params).map(key => key + '=' + params[key]).join('&');
+
+  // Trim trailing '&' if present
+  queryString = queryString.endsWith('&') ? queryString.slice(0, -1) : queryString;
 
   console.log(queryString);
 
-  // Perform the fetch request to the backend
   fetch('/finished_wo/' + queryString, {
-    headers: {
-      'X-Requested-With': 'XMLHttpRequest'
-    }
+    headers: { 'X-Requested-With': 'XMLHttpRequest' }
   })
   .then(response => response.json())
-  .then(data => {
-    updateTable(data);  
-  })
+  .then(data => updateTable(data))
   .catch(error => console.error('Error:', error));
 }
 </script>
