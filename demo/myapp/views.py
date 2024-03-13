@@ -873,7 +873,6 @@ def finished_wo(request):
                     else:       
                         raise ValueError(f"Invalid date format: {date_str}")
                 except ValidationError:
-                    print(f"Invalid date string: {date_str}")
             query &= date_queries
         if category:
             query &= Q(category__icontains=category)
@@ -906,10 +905,8 @@ def finished_wo(request):
             finished_filtered_orders = []
             for order in finished_work_orders:
                 normalized_wo = normalize_string(wo.lower())
-                print(normalized_wo + "a")
                 normalized_order_string = normalize_string(order.wo_string().lower())
                 if normalized_wo in normalized_order_string:
-                    print(normalized_order_string + "b")
                     finished_filtered_orders.append(order)
         else:
             finished_filtered_orders = finished_work_orders.order_by('paymentDate')
@@ -919,7 +916,6 @@ def finished_wo(request):
                 'paymentDate' : order.paymentDate,
                 'project' : order.project,
                 'id' : order.id,
-                'project' : order.project,
                 'wo_number': order.wo_number,
                 'wo_string': order.wo_string(),
                 'wo_date': order.wo_date.strftime('%Y-%m-%d') if order.wo_date else '',
@@ -971,7 +967,6 @@ def overview(request):
         orderId = request.POST.get('orderId')
 
         if(action == "confirm") :
-            print("succes")
             work_order = get_object_or_404(WorkOrder, id= orderId)
             if request.user.groups.filter(name__in=['CEO', 'rightHand', 'Personal Assistant', 'Finance']).exists():
                 work_order.remarksOverview = request.POST.get('remarksOverview', work_order.remarksOverview)
@@ -1028,7 +1023,6 @@ def overview(request):
                 work_order.save()
             return JsonResponse({'status': 'success', 'message': 'Action processed successfully'})
         elif (action == 'delete') :
-            print("here")
             work_order = get_object_or_404(WorkOrder, id= orderId)
             work_order.proofOfPayment.delete()
             work_order.invoice.delete()
