@@ -847,7 +847,8 @@ def finished_wo(request):
         financeCheck=True,
     ).exclude(proofOfPayment='').order_by('-paymentDate')
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        wo = request.GET.get('wo', None)
+        company = request.GET.get('wo_company', None)
+        wo_number = request.GET.get('wo_number', None)
         project = request.GET.get('project', None)
         dates = request.GET.getlist('dates[]')
         category = request.GET.get('category', None)
@@ -901,16 +902,12 @@ def finished_wo(request):
             query &= Q(workType__icontains=workType)
         if paymentTerm:
             query &= Q(paymentTerm__icontains=paymentTerm)
+        if wo_number :
+            query &= Q(wo_number__icontains= wo_number)
+        if company :
+            query &= Q(company__icontains=company)
         finished_work_orders = finished_work_orders.filter(query).order_by('paymentDate')
-        if wo:
-            finished_filtered_orders = []
-            for order in finished_work_orders:
-                normalized_wo = normalize_string(wo.lower())
-                normalized_order_string = normalize_string(order.wo_string().lower())
-                if normalized_wo in normalized_order_string:
-                    finished_filtered_orders.append(order)
-        else:
-            finished_filtered_orders = finished_work_orders.order_by('paymentDate')
+
         data = [
             {
                 'proofOfPayment' :order.proofOfPayment.url if order.proofOfPayment else None,
@@ -939,7 +936,7 @@ def finished_wo(request):
                 'extendable' : order.extendable,
                 'amountD' : order.amountD,
             }
-            for order in finished_filtered_orders
+            for order in finished_work_orders
         ]   
         return JsonResponse(data, safe=False)
 

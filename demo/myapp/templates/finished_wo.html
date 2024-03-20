@@ -7,6 +7,10 @@ Finished WO
   {% if user.is_authenticated %}
 
   <style>
+#example th input[type="text"] {
+    width: 100%; /* Adjust as needed */
+    box-sizing: border-box;
+}
  .nested-checklist .dropdown-toggle::after {
   content: '▼'; /* Unicode character for a down arrow */
   font-size: 0.8em;
@@ -27,15 +31,13 @@ Finished WO
 .nested-checklist .expanded > .dropdown-toggle::after {
   content: '▲'; /* Unicode character for an up arrow */
 }
+
+
 #example th {
     text-align: center;
   }
-  #example td:nth-child(1){
-    text-align: center;
-    width: 4%;
-    word-wrap: break-word;
 
-  }
+
   #example td:nth-child(2){
     text-align: left;
     width: 5%;
@@ -107,7 +109,6 @@ Finished WO
     text-align: center;
     word-wrap: break-word;
     width: 8%;
-    word-wrap: break-word;
 
   }
   #example td:nth-child(14){
@@ -148,6 +149,21 @@ Finished WO
 
   }
 
+  .work-orders-header {
+  width: 20%; /* Set the desired width */
+  box-sizing: border-box; /* Include padding and borders in the element's total width */
+}
+
+.input-company,
+.input-number {
+  box-sizing: border-box;
+  width: 48%; /* Width is slightly less than half to fit both in the cell */
+  display: inline-block; /* Ensures inputs are lined up side by side */
+}
+
+.input-number {
+  margin-right: 0; /* No margin on the right for the second input */
+}
 </style>
 <div class="row py-5">
   <div class="col-lg-13 mx-auto"> 
@@ -159,8 +175,8 @@ Finished WO
               <thead>
                   <tr>
                     <th >NO</th>
-                    <th>WORK ORDERS 
-                      <input type = "text" name ="wo" style ="width:100%;">
+                    <th class="work-orders-header">WORK ORDERS 
+                      <input type = "text" name ="wo_company"   placeholder="CMP" class="input-company"> <input type ="text" name ="wo_number"  placeholder="NUM"class="input-number">
                     </th> 
                     <th>REQUEST FORM</th>
                     <th >
